@@ -56,7 +56,7 @@ To ensure our application credential's security I have created a `.env` which i 
 
 1. Add a `.env` file in your src directory
 2. Paste the configuration details inside it:
-   ``` JSON
+   ``` c
     REACT_APP_FIREBASE_API_KEY = "",
     REACT_APP_FIREBASE_AUTH_DOMAIN = "",
     REACT_APP_FIREBASE_PROJECT_ID = "",
