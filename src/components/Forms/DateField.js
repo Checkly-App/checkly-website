@@ -1,16 +1,10 @@
 import React from 'react';
-import { DatePicker, styled } from '@material-ui/core';
-import { useField, useFormikContext } from 'formik';
+import { TextField } from '@material-ui/core';
+import { useField } from 'formik';
 
 
 const DateField = ({ name, options, ...other }) => {
     const [field, data] = useField(name);
-    const { setFieldValue } = useFormikContext();
-
-    const handleChange = (e) => {
-        const { value } = e.target;
-        setFieldValue(name, value);
-    };
 
     const config = {
         ...field,
@@ -24,6 +18,9 @@ const DateField = ({ name, options, ...other }) => {
         InputLabelProps: {
             shrink: true
         },
+        InputProps: {
+            inputProps: { max: "2006-01-01" }
+        }
     };
 
     if (data && data.touched && data.error) {
@@ -32,7 +29,7 @@ const DateField = ({ name, options, ...other }) => {
     }
 
     return (
-        <DatePicker {...config} />
+        <TextField {...config} />
     );
 };
 
