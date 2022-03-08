@@ -1,7 +1,7 @@
 // import logo from './assets/images/logo.svg';
 import './App.css';
 import AddEmployee from './pages/AddEmployee';
-import { createTheme, ThemeProvider } from '@material-ui/core'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 
 const theme = createTheme({
