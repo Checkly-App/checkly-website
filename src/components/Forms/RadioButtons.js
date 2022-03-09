@@ -12,7 +12,6 @@ const RadioButtons = ({ name, ...other }) => {
     };
 
     const config = {
-        ...field,
         ...other,
         defaultValue: 'Female',
         onChange: handleChange

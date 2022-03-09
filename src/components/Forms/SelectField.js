@@ -9,6 +9,7 @@ const SelectField = ({ name, options, ...other }) => {
 
     const handleChange = (e) => {
         const { value } = e.target;
+        console.log(value)
         setFieldValue(name, value);
     };
 
@@ -34,12 +35,12 @@ const SelectField = ({ name, options, ...other }) => {
 
     return (
         <TextField {...config}>
-            {Object.keys(options).map((item, pos) => {
+            {options.map((option, pos) => {
                 return (
-                    <MenuItem key={pos} value={item}>
-                        {options[item]}
+                    <MenuItem key={pos} value={option.department}>
+                        {option.name}
                     </MenuItem>
-                )
+                );
             })}
         </TextField>
     );

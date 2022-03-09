@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import InputField from '../components/Forms/InputField';
@@ -6,15 +6,30 @@ import { MdOutlineAlternateEmail } from "react-icons/md";
 import { Container, Grid } from '@mui/material';
 import SelectField from '../components/Forms/SelectField';
 import RadioButtons from '../components/Forms/RadioButtons';
-import { set, ref } from 'firebase/database';
+import { set, ref, onValue } from 'firebase/database';
 import { database } from '../utilities/firebase';
 
 const AddEmployee = () => {
-    const departments = {
-        dep1: 'Enterprise Architecture',
-        dep2: 'Cyber Security',
-        dep3: 'Human Resources'
-    };
+    const [departments, setDepartments] = useState([{
+        department: 'dep_1',
+        name: 'test'
+    }]);
+
+    useEffect(() => {
+        onValue(ref(database, 'Department'), (snapshot) => {
+            const data = snapshot.val();
+            var departments = [];
+            for (let id in data) {
+                const department = {
+                    department: 'dep_' + data[id]['dep_id'],
+                    name: data[id]['name']
+                };
+                departments.push(department)
+            }
+            console.log(departments)
+            setDepartments(departments);
+        });
+    }, []);
 
     const initialValues = {
         fullName: '',
@@ -40,7 +55,7 @@ const AddEmployee = () => {
     Employee Id -> 10 length and integer only (required)
     Department -> From firebase (required)
     Position -> String (required)
-*/
+    */
 
 
     const validationSchema =
