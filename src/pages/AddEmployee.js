@@ -11,8 +11,8 @@ import { database } from '../utilities/firebase';
 
 const AddEmployee = () => {
     const [departments, setDepartments] = useState([{
-        department: 'dep_1',
-        name: 'test'
+        department: '',
+        name: ''
     }]);
 
     useEffect(() => {
@@ -20,11 +20,13 @@ const AddEmployee = () => {
             const data = snapshot.val();
             var departments = [];
             for (let id in data) {
-                const department = {
-                    department: 'dep_' + data[id]['dep_id'],
-                    name: data[id]['name']
-                };
-                departments.push(department)
+                if (data[id]['company_id'] == 'com1') { // TODO: - company's id
+                    const department = {
+                        department: 'dep_' + data[id]['dep_id'],
+                        name: data[id]['name']
+                    };
+                    departments.push(department)
+                }
             }
             console.log(departments)
             setDepartments(departments);
