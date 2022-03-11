@@ -12,7 +12,8 @@ const DateField = ({ name, ...other }) => {
     const { setFieldValue } = useFormikContext();
 
     const handleChange = (e) => {
-        console.log(e)
+        console.log(field)
+        console.log(e);
         setFieldValue(name, e);
     };
 
@@ -21,19 +22,20 @@ const DateField = ({ name, ...other }) => {
         ...other,
         clearable: true,
         inputFormat: 'dd/MM/yyyy',
-        mask: 'dd/mm/yyyy',
+        mask: '__/__/____',
         onChange: handleChange,
+        minDate: new Date('01/01/1920'),
         maxDate: new Date('01/01/2005'),
         openTo: 'year',
         views: ['year', 'month', 'day']
     };
 
     const textConfig = {
+        ...field,
         variant: 'outlined',
         size: 'small',
         fullWidth: true,
         margin: 'dense',
-        helperText: ' ',
         sx: { svg: { color: '#D7D7D7' } }
     };
 
@@ -49,7 +51,8 @@ const DateField = ({ name, ...other }) => {
                 {...config}
                 renderInput={(params) => <TextField {...params}
                     {...textConfig}
-
+                    error={textConfig.error}
+                    helperText={textConfig.error ? data.error : ' '}
                 />}
             />
         </LocalizationProvider>

@@ -9,6 +9,7 @@ import RadioButtons from '../components/Forms/RadioButtons';
 import { set, ref, onValue } from 'firebase/database';
 import { database } from '../utilities/firebase';
 import DateField from '../components/Forms/DateField';
+import { format, parse, isDate } from 'date-fns';
 
 const AddEmployee = () => {
     const [departments, setDepartments] = useState([{
@@ -67,19 +68,25 @@ const AddEmployee = () => {
             nationalID: Yup.string().matches(/^(?<=\s|^)\d+(?=\s|$)/, "consists of numbers only").min(10, 'must be 10 digits').max(10, 'must be 10 digits').required('National ID is required'),
             address: Yup.string().required('Address is required'),
             phoneNumber: Yup.string().matches(/^(?<=\s|^)\d+(?=\s|$)/, "consists of numbers only").min(10, 'must be 10 digits').max(10, 'must be 10 digits').required('Phone Number is required'),
-            birthdate: Yup.date('Birthdate is invalid or empty').required('Birthdate is required'),
+            birthdate: Yup.date().nullable().required('Birthdate is required').typeError("Date format must be: dd/MM/yyyy"),
             department: Yup.string().required('Department is required'),
             email: Yup.string().email('Invalid email').required('Email is required'),
             employeeID: Yup.string().required('Employee ID is required'),
             position: Yup.string().required('Position is required')
         });
 
+    function parseDateString(value, originalValue) {
+        const parsedDate = isDate(originalValue) ? originalValue : parse(originalValue, "dd/MM/yyyy", new Date());
+        return parsedDate;
+    }
+
     const addEmployee = (employee) => {
+        console.log(format(employee.birthdate, 'dd/MM/yyyy'))
         set(ref(database, 'test/' + employee.nationalID), {
             name: employee.fullName,
             national_id: employee.nationalID,
             phone_number: employee.phoneNumber,
-            birthdate: employee.birthdate,
+            birthdate: format(employee.birthdate, 'dd/MM/yyyy'),
             address: employee.address,
             gender: employee.gender,
             email: employee.email,
@@ -104,13 +111,6 @@ const AddEmployee = () => {
                 <Form>
                     <Grid container spacing={3} >
                         <Grid item xs={6}>
-                            <DateField
-                                name='birthdate'
-                                id='birthdate'
-                                label='Birthdate'
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
                             <InputField
                                 name='fullName'
                                 id='fullName'
@@ -129,6 +129,13 @@ const AddEmployee = () => {
                                 name='phoneNumber'
                                 id='phoneNumber'
                                 label='Phone Number'
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <DateField
+                                name='birthdate'
+                                id='birthdate'
+                                label='Birthdate'
                             />
                         </Grid>
                         <Grid item xs={6}>
