@@ -67,7 +67,7 @@ const AddEmployee = () => {
             fullName: Yup.string().required('Full Name is required'),
             nationalID: Yup.string().matches(/^(?<=\s|^)\d+(?=\s|$)/, "consists of numbers only").min(10, 'must be 10 digits').max(10, 'must be 10 digits').required('National ID is required'),
             address: Yup.string().required('Address is required'),
-            phoneNumber: Yup.string().matches(/^[0](\/?[0-9])*\/?$/, "consists of numbers only").min(10, 'must be 10 digits').max(10, 'must be 10 digits').required('Phone Number is required'),
+            phoneNumber: Yup.string().matches(/^[0](\/?[0-9])*\/?$/, "Invalid format").min(10, 'must be 10 digits').max(10, 'must be 10 digits').required('Phone Number is required'),
             birthdate: Yup.date().nullable().required('Birthdate is required').typeError("Date format must be: dd/MM/yyyy"),
             department: Yup.string().required('Department is required'),
             email: Yup.string().email('Invalid email').required('Email is required'),
@@ -75,10 +75,6 @@ const AddEmployee = () => {
             position: Yup.string().required('Position is required')
         });
 
-    function parseDateString(value, originalValue) {
-        const parsedDate = isDate(originalValue) ? originalValue : parse(originalValue, "dd/MM/yyyy", new Date());
-        return parsedDate;
-    }
 
     const addEmployee = (employee) => {
         console.log(format(employee.birthdate, 'dd/MM/yyyy'))
