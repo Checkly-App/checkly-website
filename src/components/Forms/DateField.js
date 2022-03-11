@@ -1,36 +1,61 @@
-import React from 'react';
-import { TextField } from '@mui/material';
-import { useField } from 'formik';
+import { React, useState } from 'react';
+import TextField from '@mui/material/TextField';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
+import { useField, useFormikContext } from 'formik';
 
 
-const DateField = ({ name, options, ...other }) => {
+
+const DateField = ({ name, ...other }) => {
     const [field, data] = useField(name);
+    const { setFieldValue } = useFormikContext();
+
+    const handleChange = (e) => {
+        console.log(e)
+        setFieldValue(name, e);
+    };
 
     const config = {
         ...field,
         ...other,
-        type: 'date',
-        helperText: ' ',
+        clearable: true,
+        inputFormat: 'dd/MM/yyyy',
+        mask: 'dd/mm/yyyy',
+        onChange: handleChange,
+        maxDate: new Date('01/01/2005')
+    };
+
+    const textConfig = {
+        ...field,
+
+        ...other,
         variant: 'outlined',
         size: 'small',
         fullWidth: true,
         margin: 'dense',
-        InputLabelProps: {
-            shrink: true
-        },
-        InputProps: {
-            inputProps: { max: "2006-01-01" }
-        }
-    };
-
-    if (data && data.touched && data.error) {
-        config.error = true;
-        config.helperText = data.error;
+        helperText: ' '
     }
 
+    if (data && data.touched && data.error) {
+        textConfig.error = true;
+        textConfig.helperText = data.error;
+    }
+
+
     return (
-        <TextField {...config} />
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker
+                {...config}
+                renderInput={(params) => <TextField {...params}
+                    {...textConfig}
+
+                />}
+            />
+        </LocalizationProvider>
+
     );
 };
 
-export default DateField;
+
+export default DateField

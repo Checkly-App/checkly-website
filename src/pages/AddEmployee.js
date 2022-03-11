@@ -8,6 +8,7 @@ import SelectField from '../components/Forms/SelectField';
 import RadioButtons from '../components/Forms/RadioButtons';
 import { set, ref, onValue } from 'firebase/database';
 import { database } from '../utilities/firebase';
+import DateField from '../components/Forms/DateField';
 
 const AddEmployee = () => {
     const [departments, setDepartments] = useState([{
@@ -37,7 +38,7 @@ const AddEmployee = () => {
         fullName: '',
         nationalID: '',
         phoneNumber: '',
-        birthdate: '',
+        birthdate: null,
         address: '',
         gender: 'Female',
         email: '',
@@ -66,7 +67,7 @@ const AddEmployee = () => {
             nationalID: Yup.string().matches(/^(?<=\s|^)\d+(?=\s|$)/, "consists of numbers only").min(10, 'must be 10 digits').max(10, 'must be 10 digits').required('National ID is required'),
             address: Yup.string().required('Address is required'),
             phoneNumber: Yup.string().matches(/^(?<=\s|^)\d+(?=\s|$)/, "consists of numbers only").min(10, 'must be 10 digits').max(10, 'must be 10 digits').required('Phone Number is required'),
-            birthdate: Yup.string().required('Birthdate is required'),
+            birthdate: Yup.date('Birthdate is invalid or empty').required('Birthdate is required'),
             department: Yup.string().required('Department is required'),
             email: Yup.string().email('Invalid email').required('Email is required'),
             employeeID: Yup.string().required('Employee ID is required'),
@@ -103,6 +104,13 @@ const AddEmployee = () => {
                 <Form>
                     <Grid container spacing={3} >
                         <Grid item xs={6}>
+                            <DateField
+                                name='birthdate'
+                                id='birthdate'
+                                label='Birthdate'
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
                             <InputField
                                 name='fullName'
                                 id='fullName'
@@ -121,13 +129,6 @@ const AddEmployee = () => {
                                 name='phoneNumber'
                                 id='phoneNumber'
                                 label='Phone Number'
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <InputField
-                                name='birthdate'
-                                id='birthdate'
-                                label='Birthdate'
                             />
                         </Grid>
                         <Grid item xs={6}>
