@@ -7,9 +7,10 @@ import { Container, Grid } from '@mui/material';
 import SelectField from '../components/Forms/SelectField';
 import RadioButtons from '../components/Forms/RadioButtons';
 import { set, ref, onValue } from 'firebase/database';
-import { database } from '../utilities/firebase';
+import { database, auth } from '../utilities/firebase';
 import DateField from '../components/Forms/DateField';
-import { format, parse, isDate } from 'date-fns';
+import { format } from 'date-fns';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 const AddEmployee = () => {
     const [departments, setDepartments] = useState([{
@@ -22,7 +23,7 @@ const AddEmployee = () => {
             const data = snapshot.val();
             var departments = [];
             for (let id in data) {
-                if (data[id]['company_id'] == 'com1') { // TODO: - company's id
+                if (data[id]['company_id'] === 'com1') { // TODO: - company's id
                     const department = {
                         department: 'dep_' + data[id]['dep_id'],
                         name: data[id]['name']
@@ -61,7 +62,6 @@ const AddEmployee = () => {
     Position -> String (required)
     */
 
-
     const validationSchema =
         Yup.object({
             fullName: Yup.string().required('Full Name is required'),
@@ -77,21 +77,28 @@ const AddEmployee = () => {
 
 
     const addEmployee = (employee) => {
-        console.log(format(employee.birthdate, 'dd/MM/yyyy'))
-        set(ref(database, 'test/' + employee.nationalID), {
-            name: employee.fullName,
-            national_id: employee.nationalID,
-            phone_number: employee.phoneNumber,
-            birthdate: format(employee.birthdate, 'dd/MM/yyyy'),
-            address: employee.address,
-            gender: employee.gender,
-            email: employee.email,
-            employee_id: employee.employeeID,
-            department: employee.department,
-            position: employee.position,
-            change_image: 0,
-            image_token: "null"
-        }).catch(alert);
+        createUserWithEmailAndPassword(auth, employee.email, '123456').then((result) => {
+            set(ref(database, 'test/' + result.user.uid), {
+                name: employee.fullName,
+                national_id: employee.nationalID,
+                phone_number: employee.phoneNumber,
+                birthdate: format(employee.birthdate, 'dd/MM/yyyy'),
+                address: employee.address,
+                gender: employee.gender,
+                email: employee.email,
+                employee_id: employee.employeeID,
+                department: employee.department,
+                position: employee.position,
+                change_image: 0,
+                image_token: "null"
+            });
+        }).catch((error) => {
+            // var errorCode = error.code;
+            var errorMessage = error.message;
+            alert(errorMessage);
+            console.log(error);
+            return;
+        });
     }
 
     return (

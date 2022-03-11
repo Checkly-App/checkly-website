@@ -2,7 +2,6 @@ import React from 'react';
 import { TextField, MenuItem } from '@mui/material';
 import { useField, useFormikContext } from 'formik';
 
-
 const SelectField = ({ name, options, ...other }) => {
     const [field, data] = useField(name);
     const { setFieldValue } = useFormikContext();

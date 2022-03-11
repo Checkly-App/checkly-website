@@ -1,11 +1,9 @@
-import { React, useState } from 'react';
+import { React } from 'react';
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import { useField, useFormikContext } from 'formik';
-
-
 
 const DateField = ({ name, ...other }) => {
     const [field, data] = useField(name);
@@ -39,11 +37,9 @@ const DateField = ({ name, ...other }) => {
         sx: { svg: { color: '#D7D7D7' } }
     };
 
-
     if (data && data.touched && data.error) {
         textConfig.error = true;
     }
-
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>

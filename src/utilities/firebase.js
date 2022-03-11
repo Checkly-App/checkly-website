@@ -1,8 +1,9 @@
 import { initializeApp } from 'firebase/app';
 import { getDatabase } from 'firebase/database'
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-    apiKey: process.env.REACT_APP_apiKey,
+    apiKey: "AIzaSyBuw-T0G2smroeMGAWU_KBcnM-ScQm5Los",
     authDomain: process.env.REACT_APP_authDomain,
     databaseURL: "https://checkly-292d2-default-rtdb.firebaseio.com",
     projectId: process.env.REACT_APP_projectId,
@@ -12,5 +13,6 @@ const firebaseConfig = {
     measurementId: process.env.REACT_APP_measurementId
 }
 
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
 export const database = getDatabase(app);
