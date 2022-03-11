@@ -148,7 +148,7 @@ const AddEmployee = () => {
                         <Grid item xs={6}>
                             <InputField
                                 name='email'
-                                icon={<MdOutlineAlternateEmail color='gray' />}
+                                icon={<MdOutlineAlternateEmail color='#D7D7D7' size={24} />}
                                 id='email'
                                 label='Email'
                             />

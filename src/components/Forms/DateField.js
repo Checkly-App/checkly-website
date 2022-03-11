@@ -23,23 +23,23 @@ const DateField = ({ name, ...other }) => {
         inputFormat: 'dd/MM/yyyy',
         mask: 'dd/mm/yyyy',
         onChange: handleChange,
-        maxDate: new Date('01/01/2005')
+        maxDate: new Date('01/01/2005'),
+        openTo: 'year',
+        views: ['year', 'month', 'day']
     };
 
     const textConfig = {
-        ...field,
-
-        ...other,
         variant: 'outlined',
         size: 'small',
         fullWidth: true,
         margin: 'dense',
-        helperText: ' '
-    }
+        helperText: ' ',
+        sx: { svg: { color: '#D7D7D7' } }
+    };
+
 
     if (data && data.touched && data.error) {
         textConfig.error = true;
-        textConfig.helperText = data.error;
     }
 
 
