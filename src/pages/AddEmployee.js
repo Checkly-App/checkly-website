@@ -3,7 +3,6 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import InputField from '../components/Forms/InputField';
 import { MdOutlineAlternateEmail } from "react-icons/md";
-import { Container, Grid } from '@mui/material';
 import SelectField from '../components/Forms/SelectField';
 import RadioButtons from '../components/Forms/RadioButtons';
 import { set, ref, onValue } from 'firebase/database';
@@ -11,6 +10,47 @@ import { database, auth } from '../utilities/firebase';
 import DateField from '../components/Forms/DateField';
 import { format } from 'date-fns';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import styled, { keyframes } from 'styled-components'
+
+
+const Section = styled.div`
+    background-color: white;
+    border-radius: 0.75em;
+    padding: 3em;
+    margin-bottom: 3em;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1.5em;
+    row-gap: 0.75em;
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+  }
+`
+
+const SectionTitle = styled.h1`
+    font-size: 1em;
+    font-weight: 600;
+    margin: 1em 0em 1em 0em;
+    grid-column: 1 / 3;
+    @media (max-width: 768px) {
+           grid-column: 1;
+  }
+`
+const SetionsWrapper = styled.div`
+    margin: 5em;
+`
+const Button = styled.button`
+    width: 15em;
+    height: 3em;
+    font-size: 1em;
+    font-weight: 500;
+    text-align :center;
+    color: rgba(255,255,255,0.9);
+    border-radius: 0.5em;
+    border: none;
+    background: linear-gradient(90deg, #56BBEB 0%, #58AAF3 100%);
+`
 
 const AddEmployee = () => {
     const [departments, setDepartments] = useState([{
@@ -48,19 +88,6 @@ const AddEmployee = () => {
         department: '',
         position: ''
     };
-
-    /*
-    phoneNumber: Yup.number().min(10).max(10).matches(/[^[0]+[0-9]*$]/),
-    Full name -> (required)
-    National Id -> 10 length and integer only (required)
-    Phone Number -> 10 length and integer only (required)
-    Date -> 18 or above - in a range (required)
-    Address -> whatever
-    Email -> email with @ and domain (required)
-    Employee Id -> 10 length and integer only (required)
-    Department -> From firebase (required)
-    Position -> String (required)
-    */
 
     const validationSchema =
         Yup.object({
@@ -110,92 +137,87 @@ const AddEmployee = () => {
                 addEmployee(values);
                 alert(JSON.stringify(values, null, 2));
             }}>
-            <Container fixed>
-                <Form>
-                    <Grid container spacing={3} >
-                        <Grid item xs={6}>
-                            <InputField
-                                name='fullName'
-                                id='fullName'
-                                label='Full Name'
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <InputField
-                                name='nationalID'
-                                id='nationalID'
-                                label='National ID'
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <InputField
-                                name='phoneNumber'
-                                id='phoneNumber'
-                                label='Phone Number'
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <DateField
-                                name='birthdate'
-                                id='birthdate'
-                                label='Birthdate'
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <InputField
-                                name='address'
-                                id='address'
-                                label='Address'
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <RadioButtons
-                                name='gender'
-                                id='gender'
-                                label='Gender'
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <InputField
-                                name='email'
-                                icon={<MdOutlineAlternateEmail color='#D7D7D7' size={24} />}
-                                id='email'
-                                label='Email'
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <InputField
-                                name='employeeID'
-                                id='employeeID'
-                                label='Employee ID'
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <SelectField
-                                name='department'
-                                id='department'
-                                label='Department'
-                                options={departments}
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <InputField
-                                name='position'
-                                id='position'
-                                label='Position'
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <button type='submit'>  Add an employee </button>
-                        </Grid>
-                    </Grid>
-                </Form>
-            </Container>
-
-        </Formik >
+            <Form>
+                <SetionsWrapper>
+                    <Section>
+                        <SectionTitle>Personal Information</SectionTitle>
+                        <InputField
+                            name='fullName'
+                            id='fullName'
+                            label='Full Name'
+                        />
+                        <InputField
+                            name='nationalID'
+                            id='nationalID'
+                            label='National ID'
+                        />
+                        <InputField
+                            name='phoneNumber'
+                            id='phoneNumber'
+                            label='Phone Number'
+                        />
+                        <DateField
+                            name='birthdate'
+                            id='birthdate'
+                            label='Birthdate'
+                        />
+                        <InputField
+                            name='address'
+                            id='address'
+                            label='Address'
+                        />
+                        <RadioButtons
+                            name='gender'
+                            id='gender'
+                            label='Gender'
+                        />
+                    </Section>
+                    <Section>
+                        <SectionTitle>Work Information</SectionTitle>
+                        <InputField
+                            name='email'
+                            icon={<MdOutlineAlternateEmail color='#D7D7D7' size={24} />}
+                            id='email'
+                            label='Email'
+                        />
+                        <InputField
+                            name='employeeID'
+                            id='employeeID'
+                            label='Employee ID'
+                        />
+                        <SelectField
+                            name='department'
+                            id='department'
+                            label='Department'
+                            options={departments}
+                        />
+                        <InputField
+                            name='position'
+                            id='position'
+                            label='Position'
+                        />
+                    </Section>
+                    <Button type='submit'>  Add an employee </Button>
+                </SetionsWrapper>
+            </Form>
+        </Formik>
     );
 };
 
 
 
 export default AddEmployee;
+
+
+/*
+phoneNumber: Yup.number().min(10).max(10).matches(/[^[0]+[0-9]*$]/),
+Full name -> (required)
+National Id -> 10 length and integer only (required)
+Phone Number -> 10 length and integer only (required)
+Date -> 18 or above - in a range (required)
+Address -> whatever
+Email -> email with @ and domain (required)
+Employee Id -> 10 length and integer only (required)
+Department -> From firebase (required)
+Position -> String (required)
+*/

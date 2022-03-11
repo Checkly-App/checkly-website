@@ -33,7 +33,7 @@ const DateField = ({ name, ...other }) => {
         variant: 'outlined',
         size: 'small',
         fullWidth: true,
-        margin: 'dense',
+        margin: 'none',
         sx: { svg: { color: '#D7D7D7' } }
     };
 

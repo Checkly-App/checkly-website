@@ -20,7 +20,7 @@ const SelectField = ({ name, options, ...other }) => {
         variant: 'outlined',
         size: 'small',
         fullWidth: true,
-        margin: 'dense',
+        margin: 'none',
         InputProps: {
             style: { textAlign: 'left' }
         },
