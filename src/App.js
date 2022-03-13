@@ -12,7 +12,8 @@ function App() {
       name: "",
       size: "",
       location: "",
-      industry: ""
+      industry: "",
+      prefrence: ""
     },
     validationSchema: Yup.object({
       email: Yup.string()
@@ -122,6 +123,26 @@ function App() {
            </select>
            {/* validation */}
            {formik.errors.industry && formik.touched.industry ? <p> {formik.errors.industry} </p> : null }
+
+            <label> Preferred Attendance Recording Strategy </label>
+            <label htmlFor= "QR code">QR code</label>
+            <input type="radio" 
+            onChange={formik.handleChange} 
+            value= "QR code"
+            id="QR code"
+            name='prefrence' />
+            <label htmlFor= "Location Based">Location Based</label>
+            <input type="radio" 
+            onChange={formik.handleChange} 
+            value="Location Based"
+            id="Location Based"
+            name='prefrence' />
+            <label htmlFor= "Both">Both</label>
+            <input type="radio" 
+            onChange={formik.handleChange} 
+            value="Both"
+            id="Both"
+            name='prefrence' />
            
             <button type="submit"> Register </button>
         </form>
