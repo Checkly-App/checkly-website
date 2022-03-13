@@ -1,0 +1,105 @@
+[debug] [2022-03-13T17:20:46.939Z] ----------------------------------------------------------------------
+[debug] [2022-03-13T17:20:46.941Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\dalal\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --only functions
+[debug] [2022-03-13T17:20:46.941Z] CLI Version:   10.2.2
+[debug] [2022-03-13T17:20:46.941Z] Platform:      win32
+[debug] [2022-03-13T17:20:46.941Z] Node Version:  v16.14.0
+[debug] [2022-03-13T17:20:46.942Z] Time:          Sun Mar 13 2022 20:20:46 GMT+0300 (Arabian Standard Time)
+[debug] [2022-03-13T17:20:46.942Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-03-13T17:20:47.022Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-03-13T17:20:47.022Z] > authorizing via signed-in user (dalalbinhumaid@gmail.com)
+[info] i  emulators: Starting emulators: functions {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: functions"}}
+[debug] [2022-03-13T17:20:47.060Z] [hub] writing locator at C:\Users\dalal\AppData\Local\Temp\hub-checkly-292d2.json
+[warn] !  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: auth, firestore, database, hosting, pubsub, storage {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mauth, firestore, database, hosting, pubsub, storage\u001b[22m"}}
+[info] +  functions: Using node@16 from host. {"metadata":{"emulator":{"name":"functions"},"message":"Using node@16 from host."}}
+[debug] [2022-03-13T17:20:47.363Z] defaultcredentials: writing to file C:\Users\dalal\AppData\Roaming\firebase\dalalbinhumaid_gmail_com_application_default_credentials.json
+[debug] [2022-03-13T17:20:47.376Z] Setting GAC to C:\Users\dalal\AppData\Roaming\firebase\dalalbinhumaid_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\dalal\\AppData\\Roaming\\firebase\\dalalbinhumaid_gmail_com_application_default_credentials.json"}}
+[debug] [2022-03-13T17:20:47.380Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/checkly-292d2/adminSdkConfig [none]
+[debug] [2022-03-13T17:20:47.935Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/checkly-292d2/adminSdkConfig 200
+[debug] [2022-03-13T17:20:47.935Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/checkly-292d2/adminSdkConfig {"projectId":"checkly-292d2","databaseURL":"https://checkly-292d2-default-rtdb.firebaseio.com","storageBucket":"checkly-292d2.appspot.com","locationId":"us-central"}
+[warn] !  ui: Emulator UI unable to start on port 4000, starting on 4002 instead. {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI unable to start on port 4000, starting on 4002 instead."}}
+[debug] [2022-03-13T17:20:48.013Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2022-03-13T17:20:48.014Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2022-03-13T17:20:48.014Z] Starting Emulator UI with command {"binary":"node","args":["C:\\Users\\dalal\\.cache\\firebase\\emulators\\ui-v1.6.5\\server.bundle.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"C:\\\\Users\\\\dalal\\\\.cache\\\\firebase\\\\emulators\\\\ui-v1.6.5\\\\server.bundle.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2022-03-13T17:20:48.170Z] Web / API server started at localhost:4002
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at localhost:4002\n"}}
+[info] i  functions: Watching "C:\Users\dalal\Desktop\checkly-website\functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"C:\\Users\\dalal\\Desktop\\checkly-website\\functions\" for Cloud Functions..."}}
+[debug] [2022-03-13T17:20:48.293Z] Validating nodejs source
+[debug] [2022-03-13T17:20:51.448Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "16"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "@sendgrid/mail": "^7.6.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "firebase-admin": "^10.0.2",
+    "firebase-functions": "^3.18.0"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^0.2.0"
+  },
+  "private": true
+}
+[debug] [2022-03-13T17:20:51.448Z] Building nodejs source
+[debug] [2022-03-13T17:20:51.448Z] Analyzing nodejs backend spec
+[info] +  functions[us-central1-sendEmail]: http function initialized (http://localhost:5001/checkly-292d2/us-central1/sendEmail). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://localhost:5001/checkly-292d2/us-central1/sendEmail)."}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://localhost:4002                │
+└─────────────────────────────────────────────────────────────┘
+
+┌───────────┬────────────────┬─────────────────────────────────┐
+│ Emulator  │ Host:Port      │ View in Emulator UI             │
+├───────────┼────────────────┼─────────────────────────────────┤
+│ Functions │ localhost:5001 │ http://localhost:4002/functions │
+└───────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub running at localhost:4400
+  Other reserved ports: 4500
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[debug] [2022-03-13T17:23:45.679Z] [work-queue] {"queueLength":1,"workRunningCount":0}
+[debug] [2022-03-13T17:23:45.680Z] [work-queue] {"queueLength":0,"workRunningCount":1}
+[debug] [2022-03-13T17:23:45.681Z] Accepted request POST /checkly-292d2/us-central1/sendEmail --> us-central1-sendEmail
+[info] i  functions: Loaded environment variables from .env. 
+[debug] [2022-03-13T17:23:45.699Z] [worker-pool] addWorker(us-central1-sendEmail) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] addWorker(us-central1-sendEmail)"}}
+[debug] [2022-03-13T17:23:45.699Z] [worker-pool] Adding worker with key us-central1-sendEmail, total=1 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Adding worker with key us-central1-sendEmail, total=1"}}
+[debug] [2022-03-13T17:23:45.700Z] [worker-pool] submitWork(triggerId=us-central1-sendEmail) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitWork(triggerId=us-central1-sendEmail)"}}
+[debug] [2022-03-13T17:23:45.701Z] [worker-us-central1-sendEmail-2f3dbb61-c0ac-4efc-9745-7419248f8410]: Assigning socketPath: \\?\pipe\C:\Users\dalal\Desktop\checkly-website\functions\5016 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-us-central1-sendEmail-2f3dbb61-c0ac-4efc-9745-7419248f8410]: Assigning socketPath: \\\\?\\pipe\\C:\\Users\\dalal\\Desktop\\checkly-website\\functions\\5016"}}
+[debug] [2022-03-13T17:23:45.702Z] [worker-us-central1-sendEmail-2f3dbb61-c0ac-4efc-9745-7419248f8410]: BUSY {"metadata":{"emulator":{"name":"functions"},"message":"[worker-us-central1-sendEmail-2f3dbb61-c0ac-4efc-9745-7419248f8410]: BUSY"}}
+[debug] [2022-03-13T17:23:46.951Z] [runtime-status] [5016] Functions runtime initialized. {"cwd":"C:\\Users\\dalal\\Desktop\\checkly-website\\functions","node_version":"16.14.0"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-sendEmail"},"extension":{},"message":"[runtime-status] [5016] Functions runtime initialized. {\"cwd\":\"C:\\\\Users\\\\dalal\\\\Desktop\\\\checkly-website\\\\functions\",\"node_version\":\"16.14.0\"}"}}
+[debug] [2022-03-13T17:23:46.952Z] [runtime-status] [5016] Disabled runtime features: undefined {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-sendEmail"},"extension":{},"message":"[runtime-status] [5016] Disabled runtime features: undefined"}}
+[debug] [2022-03-13T17:23:46.955Z] [runtime-status] [5016] Resolved module firebase-admin {"declared":true,"installed":true,"version":"10.0.2","resolution":"C:\\Users\\dalal\\Desktop\\checkly-website\\functions\\node_modules\\firebase-admin\\lib\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-sendEmail"},"extension":{},"message":"[runtime-status] [5016] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"10.0.2\",\"resolution\":\"C:\\\\Users\\\\dalal\\\\Desktop\\\\checkly-website\\\\functions\\\\node_modules\\\\firebase-admin\\\\lib\\\\index.js\"}"}}
+[debug] [2022-03-13T17:23:46.956Z] [runtime-status] [5016] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.18.1","resolution":"C:\\Users\\dalal\\Desktop\\checkly-website\\functions\\node_modules\\firebase-functions\\lib\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-sendEmail"},"extension":{},"message":"[runtime-status] [5016] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"3.18.1\",\"resolution\":\"C:\\\\Users\\\\dalal\\\\Desktop\\\\checkly-website\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\index.js\"}"}}
+[debug] [2022-03-13T17:23:46.957Z] [runtime-status] [5016] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-sendEmail"},"extension":{},"message":"[runtime-status] [5016] Outgoing network have been stubbed. [{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"net\",\"status\":\"mocked\"}]"}}
+[debug] [2022-03-13T17:23:46.957Z] [runtime-status] [5016] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.18.1","resolution":"C:\\Users\\dalal\\Desktop\\checkly-website\\functions\\node_modules\\firebase-functions\\lib\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-sendEmail"},"extension":{},"message":"[runtime-status] [5016] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"3.18.1\",\"resolution\":\"C:\\\\Users\\\\dalal\\\\Desktop\\\\checkly-website\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\index.js\"}"}}
+[debug] [2022-03-13T17:23:47.005Z] [runtime-status] [5016] Checked functions.config() {"config":{}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-sendEmail"},"extension":{},"message":"[runtime-status] [5016] Checked functions.config() {\"config\":{}}"}}
+[debug] [2022-03-13T17:23:47.005Z] [runtime-status] [5016] firebase-functions has been stubbed. {"functionsResolution":{"declared":true,"installed":true,"version":"3.18.1","resolution":"C:\\Users\\dalal\\Desktop\\checkly-website\\functions\\node_modules\\firebase-functions\\lib\\index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-sendEmail"},"extension":{},"message":"[runtime-status] [5016] firebase-functions has been stubbed. {\"functionsResolution\":{\"declared\":true,\"installed\":true,\"version\":\"3.18.1\",\"resolution\":\"C:\\\\Users\\\\dalal\\\\Desktop\\\\checkly-website\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\index.js\"}}"}}
+[debug] [2022-03-13T17:23:47.006Z] [runtime-status] [5016] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.18.1","resolution":"C:\\Users\\dalal\\Desktop\\checkly-website\\functions\\node_modules\\firebase-functions\\lib\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-sendEmail"},"extension":{},"message":"[runtime-status] [5016] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"3.18.1\",\"resolution\":\"C:\\\\Users\\\\dalal\\\\Desktop\\\\checkly-website\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\index.js\"}"}}
+[debug] [2022-03-13T17:23:47.007Z] [runtime-status] [5016] Resolved module firebase-admin {"declared":true,"installed":true,"version":"10.0.2","resolution":"C:\\Users\\dalal\\Desktop\\checkly-website\\functions\\node_modules\\firebase-admin\\lib\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-sendEmail"},"extension":{},"message":"[runtime-status] [5016] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"10.0.2\",\"resolution\":\"C:\\\\Users\\\\dalal\\\\Desktop\\\\checkly-website\\\\functions\\\\node_modules\\\\firebase-admin\\\\lib\\\\index.js\"}"}}
+[debug] [2022-03-13T17:23:47.008Z] [runtime-status] [5016] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.18.1","resolution":"C:\\Users\\dalal\\Desktop\\checkly-website\\functions\\node_modules\\firebase-functions\\lib\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-sendEmail"},"extension":{},"message":"[runtime-status] [5016] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"3.18.1\",\"resolution\":\"C:\\\\Users\\\\dalal\\\\Desktop\\\\checkly-website\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\index.js\"}"}}
+[debug] [2022-03-13T17:23:47.008Z] [runtime-status] [5016] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"10.0.2","resolution":"C:\\Users\\dalal\\Desktop\\checkly-website\\functions\\node_modules\\firebase-admin\\lib\\index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-sendEmail"},"extension":{},"message":"[runtime-status] [5016] firebase-admin has been stubbed. {\"adminResolution\":{\"declared\":true,\"installed\":true,\"version\":\"10.0.2\",\"resolution\":\"C:\\\\Users\\\\dalal\\\\Desktop\\\\checkly-website\\\\functions\\\\node_modules\\\\firebase-admin\\\\lib\\\\index.js\"}}"}}
+[debug] [2022-03-13T17:23:47.060Z] [runtime-status] [5016] Beginning invocation function sendEmail! {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-sendEmail"},"extension":{},"message":"[runtime-status] [5016] Beginning invocation function sendEmail!"}}
+[info] i  functions: Beginning execution of "sendEmail" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-sendEmail"},"extension":{},"message":"Beginning execution of \"sendEmail\""}}
+[debug] [2022-03-13T17:23:47.062Z] [runtime-status] [5016] Running sendEmail in signature http {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-sendEmail"},"extension":{},"message":"[runtime-status] [5016] Running sendEmail in signature http"}}
+[debug] [2022-03-13T17:23:47.066Z] [runtime-status] [5016] Attempting to listen to socketPath: \\?\pipe\C:\Users\dalal\Desktop\checkly-website\functions\5016 {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-sendEmail"},"extension":{},"message":"[runtime-status] [5016] Attempting to listen to socketPath: \\\\?\\pipe\\C:\\Users\\dalal\\Desktop\\checkly-website\\functions\\5016"}}
+[debug] [2022-03-13T17:23:47.070Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2022-03-13T17:23:47.071Z] [functions] Got req.url=/checkly-292d2/us-central1/sendEmail, mapping to path=/ {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/checkly-292d2/us-central1/sendEmail, mapping to path=/"}}
+[debug] [2022-03-13T17:23:47.088Z] [runtime-status] [5016] Ephemeral server handling POST request {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-sendEmail"},"extension":{},"message":"[runtime-status] [5016] Ephemeral server handling POST request"}}
+[debug] [2022-03-13T17:23:47.116Z] [runtime-status] [5016] Ephemeral server survived. {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-sendEmail"},"extension":{},"message":"[runtime-status] [5016] Ephemeral server survived."}}
+[info] i  functions: Finished "sendEmail" in ~1s {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-sendEmail"},"extension":{},"message":"Finished \"sendEmail\" in ~1s"}}
+[debug] [2022-03-13T17:23:48.490Z] [worker-us-central1-sendEmail-2f3dbb61-c0ac-4efc-9745-7419248f8410]: IDLE {"metadata":{"emulator":{"name":"functions"},"message":"[worker-us-central1-sendEmail-2f3dbb61-c0ac-4efc-9745-7419248f8410]: IDLE"}}
+[debug] [2022-03-13T17:23:48.491Z] [work-queue] {"queueLength":0,"workRunningCount":0}
