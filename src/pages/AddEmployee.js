@@ -30,23 +30,30 @@ const Section = styled.div`
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: 1.5em;
+    column-gap: 2.5em;
     row-gap: 0.75em;
     @media (max-width: 768px) {
+        padding: 1em;
         grid-template-columns: 1fr;
+        gap: 0.5em
+
   }
 `
 const SectionTitle = styled.h1`
-    font-size: 1em;
+    font-size: 1.05em;
     font-weight: 600;
-    margin: 1em 0em 1em 0em;
+    margin: 1em 0em 2em;
     grid-column: 1 / 3;
     @media (max-width: 768px) {
            grid-column: 1;
   }
 `
 const SetionsWrapper = styled.div`
-    margin: 5em;
+    margin: 4em 8em;
+    overflow:auto;
+     @media (max-width: 768px) {
+            margin: 2em 3em;
+  }
 `
 const Button = styled.button`
     width: 15em;
@@ -58,6 +65,20 @@ const Button = styled.button`
     border-radius: 0.5em;
     border: none;
     background: linear-gradient(90deg, #56BBEB 0%, #58AAF3 100%);
+`
+const MainTitle = styled.h1`
+    font-size: 2em;
+    font-weight: 500;
+    color: #2CB1EF;
+    margin: 0.25em 0;
+`
+const Subtitle = styled.p`
+    font-size: 0.75em;
+    color: #A3A1A1;
+`
+const MainWrapper = styled.div`
+    width: 100%;
+    margin: 2em 0;
 `
 
 const AddEmployee = () => {
@@ -183,6 +204,10 @@ const AddEmployee = () => {
             }}>
             <Form>
                 <SetionsWrapper>
+                    <MainWrapper>
+                        <MainTitle>Add Employee</MainTitle>
+                        <Subtitle>Start by adding an individual employee or a batch of employees</Subtitle>
+                    </MainWrapper>
                     <Section>
                         <SectionTitle>Personal Information</SectionTitle>
                         <InputField
