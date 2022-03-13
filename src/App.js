@@ -145,6 +145,30 @@ function App() {
             value="Both"
             id="Both"
             name='prefrence' />
+          {/* photo */}
+          <input
+          type="file"
+          accept="image/*"
+          id="contained-button-file"
+          />
+          {/* employees */}
+          <input
+          type="file"
+          accept="image/*"
+          id="contained-button-file"
+          />
+          {/* geofence */}
+          <input
+          type="file"
+          accept="image/*"
+          id="contained-button-file"
+          />
+          {/* departments */}
+          <input
+          type="file"
+          accept="image/*"
+          id="contained-button-file"
+          />
            
             <button type="submit"> Register </button>
         </form>
