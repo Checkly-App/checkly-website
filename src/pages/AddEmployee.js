@@ -136,14 +136,13 @@ const AddEmployee = () => {
     const addEmployee = (employee) => {
         setIsLoading(true);
 
-        const password = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 9); //might be vulnerbile tp brute-force attacks
-
-        sendEmail({
-            email: employee.email,
-            name: employee.fullName,
-            password: password,
-        }).then(() => {
-            createUserWithEmailAndPassword(auth, employee.email, password).then((result) => {
+        const password = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 9); //might be vulnerable tp brute-force attacks
+        createUserWithEmailAndPassword(auth, employee.email, password).then((result) => {
+            sendEmail({
+                email: employee.email,
+                name: employee.fullName,
+                password: password,
+            }).then(() => {
                 set(ref(database, 'test/' + result.user.uid), {
                     name: employee.fullName,
                     national_id: employee.nationalID,
@@ -167,7 +166,6 @@ const AddEmployee = () => {
                 setOpenSnackbar(true);
                 return;
             });
-
         }).catch((error) => {
             setError(true);
             setIsLoading(false);

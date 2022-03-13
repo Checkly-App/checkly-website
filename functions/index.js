@@ -1,6 +1,6 @@
 const functions = require('firebase-functions');
 const sgMail = require('@sendgrid/mail');
-const cors = require('cors')({ origin: true });
+const cors = require('cors')({ origin: 'http://localhost:3000' });
 require('dotenv').config()
 
 sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
