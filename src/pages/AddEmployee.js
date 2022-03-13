@@ -136,7 +136,7 @@ const AddEmployee = () => {
     const addEmployee = (employee) => {
         setIsLoading(true);
 
-        const password = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 9);
+        const password = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 9); //might be vulnerbile tp brute-force attacks
 
         sendEmail({
             email: employee.email,
