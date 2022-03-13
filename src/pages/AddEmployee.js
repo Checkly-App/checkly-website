@@ -6,13 +6,22 @@ import { MdOutlineAlternateEmail } from "react-icons/md";
 import SelectField from '../components/Forms/SelectField';
 import RadioButtons from '../components/Forms/RadioButtons';
 import { set, ref, onValue } from 'firebase/database';
-import { database, auth } from '../utilities/firebase';
+import { database, auth, functions } from '../utilities/firebase';
 import DateField from '../components/Forms/DateField';
 import { format } from 'date-fns';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components';
+import { httpsCallable } from 'firebase/functions';
+import { Alert, CircularProgress, Snackbar } from '@mui/material';
 
+/**
+ * Send Email Cloud Function 
+ */
+const sendEmail = httpsCallable(functions, 'sendEmail');
 
+/**
+ * Styled Components 
+ */
 const Section = styled.div`
     background-color: white;
     border-radius: 0.75em;
@@ -27,7 +36,6 @@ const Section = styled.div`
         grid-template-columns: 1fr;
   }
 `
-
 const SectionTitle = styled.h1`
     font-size: 1em;
     font-weight: 600;
@@ -53,11 +61,19 @@ const Button = styled.button`
 `
 
 const AddEmployee = () => {
+    /**
+     * Use States
+     */
+    const [error, setError] = useState(false);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [departments, setDepartments] = useState([{
         department: '',
         name: ''
     }]);
-
+    /**
+     * Use Effect to fecth all of the company's departments
+     */
     useEffect(() => {
         onValue(ref(database, 'Department'), (snapshot) => {
             const data = snapshot.val();
@@ -76,6 +92,9 @@ const AddEmployee = () => {
         });
     }, []);
 
+    /**
+     * Form's Initial Values
+     */
     const initialValues = {
         fullName: '',
         nationalID: '',
@@ -88,7 +107,9 @@ const AddEmployee = () => {
         department: '',
         position: ''
     };
-
+    /**
+     * Form's validation patterns
+     */
     const validationSchema =
         Yup.object({
             fullName: Yup.string().required('Full Name is required'),
@@ -102,28 +123,55 @@ const AddEmployee = () => {
             position: Yup.string().required('Position is required')
         });
 
-
+    /**
+     * Clos sack bar function
+     */
+    const closeSnackbar = () => {
+        setOpenSnackbar(false);
+    };
+    /**
+     * Add employee function - triggered when the form is submitted
+     * @params employee - JSON Object containing employee's information
+     */
     const addEmployee = (employee) => {
-        createUserWithEmailAndPassword(auth, employee.email, '123456').then((result) => {
-            set(ref(database, 'test/' + result.user.uid), {
-                name: employee.fullName,
-                national_id: employee.nationalID,
-                phone_number: employee.phoneNumber,
-                birthdate: format(employee.birthdate, 'dd/MM/yyyy'),
-                address: employee.address,
-                gender: employee.gender,
-                email: employee.email,
-                employee_id: employee.employeeID,
-                department: employee.department,
-                position: employee.position,
-                change_image: 0,
-                image_token: "null"
+        setIsLoading(true);
+
+        const password = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 9);
+
+        sendEmail({
+            email: employee.email,
+            name: employee.fullName,
+            password: password,
+        }).then(() => {
+            createUserWithEmailAndPassword(auth, employee.email, password).then((result) => {
+                set(ref(database, 'test/' + result.user.uid), {
+                    name: employee.fullName,
+                    national_id: employee.nationalID,
+                    phone_number: employee.phoneNumber,
+                    birthdate: format(employee.birthdate, 'dd/MM/yyyy'),
+                    address: employee.address,
+                    gender: employee.gender,
+                    email: employee.email,
+                    employee_id: employee.employeeID,
+                    department: employee.department,
+                    position: employee.position,
+                    change_image: 0,
+                    image_token: "null"
+                });
+                setError(false);
+                setIsLoading(false);
+                setOpenSnackbar(true);
+            }).catch((error) => {
+                setError(true);
+                setIsLoading(false);
+                setOpenSnackbar(true);
+                return;
             });
+
         }).catch((error) => {
-            // var errorCode = error.code;
-            var errorMessage = error.message;
-            alert(errorMessage);
-            console.log(error);
+            setError(true);
+            setIsLoading(false);
+            setOpenSnackbar(true);
             return;
         });
     }
@@ -133,9 +181,7 @@ const AddEmployee = () => {
             initialValues={{ ...initialValues }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
-                console.log(values);
                 addEmployee(values);
-                alert(JSON.stringify(values, null, 2));
             }}>
             <Form>
                 <SetionsWrapper>
@@ -197,27 +243,27 @@ const AddEmployee = () => {
                             label='Position'
                         />
                     </Section>
-                    <Button type='submit'>  Add an employee </Button>
+                    {isLoading ? <CircularProgress /> : <Button type='submit'>  Add an employee </Button>}
                 </SetionsWrapper>
+                {error ? (<Snackbar
+                    open={openSnackbar}
+                    onClose={closeSnackbar}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                    <Alert onClose={closeSnackbar} severity="error">
+                        Oops! Something went wrong, try again later.
+                    </Alert>
+                </Snackbar>)
+                    :
+                    (<Snackbar
+                        open={openSnackbar}
+                        autoHideDuration={2000}
+                        onClose={closeSnackbar}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }} >
+                        <Alert severity="success">Message sent!</Alert>
+                    </Snackbar>)}
             </Form>
         </Formik>
     );
 };
 
-
-
 export default AddEmployee;
-
-
-/*
-phoneNumber: Yup.number().min(10).max(10).matches(/[^[0]+[0-9]*$]/),
-Full name -> (required)
-National Id -> 10 length and integer only (required)
-Phone Number -> 10 length and integer only (required)
-Date -> 18 or above - in a range (required)
-Address -> whatever
-Email -> email with @ and domain (required)
-Employee Id -> 10 length and integer only (required)
-Department -> From firebase (required)
-Position -> String (required)
-*/
