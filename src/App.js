@@ -1,9 +1,10 @@
 import logo from './assets/images/logo.svg';
 import './App.css';
 import React from 'react';
-import { registerForm } from './registerForm';
 import {useFormik} from 'formik';
 import * as Yup from "yup"
+import {database} from './firebase';
+import './Form.css';
 
 function App() {
   const formik = useFormik({
@@ -29,13 +30,14 @@ function App() {
       .required("Required")
     }),
     onSubmit: values =>{
-        console.log(values)
+    let ref1 = database.ref().child('CompanyMock').push()
+    ref1.set(values)
     }
   })
   return (
-    <div className="App">
-    <h1> Register </h1>
-        <form  onSubmit={formik.handleSubmit}>
+    <div className = "form-box">>
+    
+        <form  className = "form-box" onSubmit={formik.handleSubmit}>
             {/* name input */}
             <label> Name </label>
             <input type="text" 
