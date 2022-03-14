@@ -1,10 +1,118 @@
 import logo from './assets/images/logo.svg';
 import './App.css';
-import React from 'react';
-import {useFormik} from 'formik';
+import { React, useState, useEffect } from 'react';
+import { Formik, Form, useFormik } from 'formik';
+import InputField from './components/Forms/InputField';
+import SelectField from './components/Forms/SelectField';
+import RadioButtons from './components/Forms/RadioButtons';
+import styled, { keyframes } from 'styled-components'
 import * as Yup from "yup"
 import {database} from './firebase';
-import './Form.css';
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#2CB1EF'
+    },
+    grey: {
+      main: '#A3A1A1',
+      secondary: '#A3A1A1',
+      disabled: '#A3A1A1',
+      hint: '#A3A1A1'
+    },
+    error: {
+      main: '#F65786'
+    }
+  }
+});
+
+
+const Section = styled.div`
+    background-color: white;
+    border-radius: 0.75em;
+    padding: 3em;
+    margin-bottom: 3em;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1.5em;
+    row-gap: 0.75em;
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+  }
+`
+
+const SectionTitle = styled.h1`
+    font-size: 1em;
+    font-weight: 600;
+    margin: 1em 0em 1em 0em;
+    grid-column: 1 / 3;
+    @media (max-width: 768px) {
+           grid-column: 1;
+  }
+`
+const SetionsWrapper = styled.div`
+    margin: 5em;
+`
+const Button = styled.button`
+    width: 15em;
+    height: 3em;
+    font-size: 1em;
+    font-weight: 500;
+    text-align :center;
+    color: rgba(255,255,255,0.9);
+    border-radius: 0.5em;
+    border: none;
+    background: linear-gradient(90deg, #56BBEB 0%, #58AAF3 100%);
+`
+const AppContainer = styled.div`
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+  grid-template-areas: 'bar main';
+  justify-items: stretch;
+  justify-content: center;
+`
+const SideBar = styled.div`
+  grid-area: bar;
+  display: flex;
+  align-items: center;
+  background-color: white;
+`
+const Content = styled.div`
+  grid-area: main;
+  display: subgrid;
+  align-items: center;
+  background-color: #F5F5F5;
+`
+    const initialValues = {
+      email: "",
+      name: "",
+      size: "",
+      location: "",
+      industry: "",
+      prefrence: ""
+    };
+
+      const validationSchema =
+        Yup.object({
+      email: Yup.string()
+      .required("Required")
+      .email("invalid email"),
+      name: Yup.string()
+      .required("Required"),
+      size: Yup.string()
+      .required("Required"),
+      location: Yup.string()
+      .required("Required"),
+      industry: Yup.string()
+      .required("Required")
+        });
 
 function App() {
   const formik = useFormik({
@@ -35,9 +143,15 @@ function App() {
     }
   })
   return (
-    <div className = "form-box">>
+    
+      <ThemeProvider theme={theme}>
+      <AppContainer className="App">
+        <SideBar> Sidebar Content</SideBar>
+        <Content>
+        <SetionsWrapper>
     
         <form  className = "form-box" onSubmit={formik.handleSubmit}>
+         <Section>
             {/* name input */}
             <label> Name </label>
             <input type="text" 
@@ -125,7 +239,7 @@ function App() {
            </select>
            {/* validation */}
            {formik.errors.industry && formik.touched.industry ? <p> {formik.errors.industry} </p> : null }
-
+            
             <label> Preferred Attendance Recording Strategy </label>
             <label htmlFor= "QR code">QR code</label>
             <input type="radio" 
@@ -145,6 +259,11 @@ function App() {
             value="Both"
             id="Both"
             name='prefrence' />
+
+              <Button type='submit'>  Add an employee </Button>
+          </Section>
+
+          <Section>
           {/* photo */}
           <input
           type="file"
@@ -169,10 +288,15 @@ function App() {
           accept="image/*"
           id="contained-button-file"
           />
+          </Section> 
            
-            <button type="submit"> Register </button>
+            
         </form>
-    </div>
+        
+     </SetionsWrapper>
+        </Content>
+      </AppContainer >
+    </ThemeProvider>
   );
 }
 
