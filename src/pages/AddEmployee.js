@@ -50,7 +50,6 @@ const SectionTitle = styled.h1`
 `
 const SetionsWrapper = styled.div`
     margin: 4em 8em;
-    overflow:auto;
      @media (max-width: 768px) {
             margin: 2em 3em;
   }

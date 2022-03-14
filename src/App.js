@@ -34,11 +34,13 @@ const AppContainer = styled.div`
 `
 const SideBar = styled.div`
   grid-area: bar;
+  overflow: hidden;
   display: flex;
   align-items: center;
   background-color: white;
 `
 const Content = styled.div`
+  overflow-y: scroll;
   grid-area: main;
   display: subgrid;
   align-items: center;
