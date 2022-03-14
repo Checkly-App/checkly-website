@@ -22,6 +22,7 @@ const sendEmail = httpsCallable(functions, 'sendEmail');
 /**
  * Styled Components 
  */
+
 const Section = styled.div`
     background-color: white;
     border-radius: 0.75em;

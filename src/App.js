@@ -3,6 +3,7 @@ import './App.css';
 import AddEmployee from './pages/AddEmployee';
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import styled from 'styled-components';
+import logo from './assets/images/logo.svg'
 
 const theme = createTheme({
   palette: {
@@ -21,6 +22,20 @@ const theme = createTheme({
   }
 });
 
+const Logo = styled.img`
+    width: 5em;
+`;
+
+const LogoCaption = styled.h1`
+    font-weight: 600;
+`
+const LogoWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    flex-direction: column;
+`
 const AppContainer = styled.div`
   height: 100vh;
   width: 100%;
@@ -36,7 +51,9 @@ const SideBar = styled.div`
   grid-area: bar;
   overflow: hidden;
   display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: space-around;
   background-color: white;
 `
 const Content = styled.div`
@@ -51,7 +68,13 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <AppContainer className="App">
-        <SideBar> Sidebar Content</SideBar>
+        <SideBar>
+          <LogoWrapper>
+            <Logo src={logo} />
+            <LogoCaption>Checkly</LogoCaption>
+          </LogoWrapper>
+          Sidebar Content
+        </SideBar>
         <Content>
           <AddEmployee />
         </Content>
