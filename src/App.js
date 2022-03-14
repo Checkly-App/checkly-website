@@ -3,7 +3,10 @@ import './App.css';
 import AddEmployee from './pages/AddEmployee';
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import styled from 'styled-components';
-import logo from './assets/images/logo.svg'
+import Sidebar from './components/Sidebar/Sidebar';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Departments from './pages/Departments';
+import Dashboard from './pages/Dashboard';
 
 const theme = createTheme({
   palette: {
@@ -22,20 +25,6 @@ const theme = createTheme({
   }
 });
 
-const Logo = styled.img`
-    width: 5em;
-`;
-
-const LogoCaption = styled.h1`
-    font-weight: 600;
-`
-const LogoWrapper = styled.div`
-    display: flex;
-    justify-content: center;
-    justify-items: center;
-    align-items: center;
-    flex-direction: column;
-`
 const AppContainer = styled.div`
   height: 100vh;
   width: 100%;
@@ -46,15 +35,6 @@ const AppContainer = styled.div`
   grid-template-areas: 'bar main';
   justify-items: stretch;
   justify-content: center;
-`
-const SideBar = styled.div`
-  grid-area: bar;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  background-color: white;
 `
 const Content = styled.div`
   overflow-y: scroll;
@@ -67,18 +47,17 @@ const Content = styled.div`
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <AppContainer className="App">
-        <SideBar>
-          <LogoWrapper>
-            <Logo src={logo} />
-            <LogoCaption>Checkly</LogoCaption>
-          </LogoWrapper>
-          Sidebar Content
-        </SideBar>
-        <Content>
-          <AddEmployee />
-        </Content>
-      </AppContainer >
+      <Router>
+        <AppContainer className="App">
+          <Sidebar />
+          <Content>
+            <Routes>
+              <Route path="/employees" element={<AddEmployee />} />
+              <Route path="departments/*" element={<Departments />} />
+            </Routes>
+          </Content>
+        </AppContainer >
+      </Router>
     </ThemeProvider>
 
   );

@@ -22,7 +22,6 @@ const sendEmail = httpsCallable(functions, 'sendEmail');
 /**
  * Styled Components 
  */
-
 const Section = styled.div`
     background-color: white;
     border-radius: 0.75em;
@@ -156,7 +155,6 @@ const AddEmployee = () => {
      */
     const addEmployee = (employee) => {
         setIsLoading(true);
-
         const password = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 9); //might be vulnerable tp brute-force attacks
         createUserWithEmailAndPassword(auth, employee.email, password).then((result) => {
             sendEmail({
