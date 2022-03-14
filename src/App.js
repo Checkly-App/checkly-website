@@ -1,7 +1,16 @@
 // import logo from './assets/images/logo.svg';
 import './App.css';
 import AddEmployee from './pages/AddEmployee';
+import Login from './pages/login';
+import Profle from './pages/Profle';
+import AdminProfile from './pages/AdminProfile';
+import CheckleProfile from './pages/checkleProfile';
+import ResetPassword from './pages/ResetPassword';
+import { React, useState, useEffect } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { BrowserRouter as Router, Route, Switch ,Routes} from 'react-router-dom';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
 
 const theme = createTheme({
   palette: {
@@ -21,14 +30,48 @@ const theme = createTheme({
 });
 
 function App() {
+  //const [User,SetUser] = useState[null]
+  const [userinfo, setuserinfo] = useState(null);
+
+  useEffect(()=>{
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged
+     (auth,userAuth => {
+      const user = {
+        Uid : userAuth?.Uid ,
+        email :userAuth?.email
+      }
+    
+    if (userAuth){
+      
+      setuserinfo(user)
+    } else {
+      setuserinfo(null)
+    }
+  })
+  return unsubscribe 
+},[])
+
   return (
-    <ThemeProvider theme={theme}>
-      <div className="App">
-        <header className="App-header">
-          <AddEmployee />
-        </header>
+   
+      <div >
+        
+       
+        <Router>
+       
+      <Routes>
+      
+        {userinfo? <Route exact path="/" element={ <Profle />}/> :<Route exact path="/" element={ <Login />}/> }
+         
+        <Route exact path="/AddEmployee" element={<AddEmployee/>}/>
+        <Route exact path="/Profle" element={<Profle/>}/>
+        <Route exact path="/ResetPassword" element={<ResetPassword/>}/>
+        <Route exact path="/checkleProfile" element={<CheckleProfile/>}/>
+        <Route exact path="/AdminProfile" element={<AdminProfile/>}/>
+      </Routes>
+      </Router>
       </div >
-    </ThemeProvider>
+    
 
   );
 }
