@@ -11,6 +11,9 @@ import DateField from '../components/Forms/DateField';
 import { format } from 'date-fns';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import styled, { keyframes } from 'styled-components'
+import Divider from '@mui/material/Divider';
+import Avatar from '@mui/material/Avatar';
+import Stack from '@mui/material/Stack';
 
 
 const Section = styled.div`
@@ -26,6 +29,15 @@ const Section = styled.div`
     @media (max-width: 768px) {
         grid-template-columns: 1fr;
   }
+`
+
+const Section2 = styled.div`
+    background-color: white;
+    border-radius: 0.75em;
+    padding: 3em;
+    margin-bottom: 3em;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    display: block;
 `
 
 const SectionTitle = styled.h1`
@@ -139,8 +151,18 @@ const AddEmployee = () => {
             }}>
             <Form>
                 <SetionsWrapper>
+
+                    <Section2>
+                    <Divider>
+                          <Avatar
+                            alt="Remy Sharp"
+                            src="/static/images/avatar/1.jpg"
+                             sx={{ width: 56, height: 56 }}
+                          />
+                    </Divider>
+                    </Section2>
                     <Section>
-                        <SectionTitle>Personal Information</SectionTitle>
+                        
                         <InputField
                             name='fullName'
                             id='fullName'
@@ -151,39 +173,11 @@ const AddEmployee = () => {
                             id='nationalID'
                             label='National ID'
                         />
-                        <InputField
-                            name='phoneNumber'
-                            id='phoneNumber'
-                            label='Phone Number'
-                        />
-                        <DateField
-                            name='birthdate'
-                            id='birthdate'
-                            label='Birthdate'
-                        />
-                        <InputField
-                            name='address'
-                            id='address'
-                            label='Address'
-                        />
-                        <RadioButtons
-                            name='gender'
-                            id='gender'
-                            label='Gender'
-                        />
-                    </Section>
-                    <Section>
-                        <SectionTitle>Work Information</SectionTitle>
-                        <InputField
-                            name='email'
-                            icon={<MdOutlineAlternateEmail color='#D7D7D7' size={24} />}
-                            id='email'
-                            label='Email'
-                        />
-                        <InputField
-                            name='employeeID'
-                            id='employeeID'
-                            label='Employee ID'
+                        <SelectField
+                            name='department'
+                            id='department'
+                            label='Department'
+                            options={departments}
                         />
                         <SelectField
                             name='department'
@@ -191,13 +185,21 @@ const AddEmployee = () => {
                             label='Department'
                             options={departments}
                         />
-                        <InputField
-                            name='position'
-                            id='position'
-                            label='Position'
+                        <SelectField
+                            name='department'
+                            id='department'
+                            label='Department'
+                            options={departments}
                         />
                     </Section>
-                    <Button type='submit'>  Add an employee </Button>
+                    <Section>
+                         <RadioButtons
+                            name='gender'
+                            id='gender'
+                            label='Gender'
+                        />
+                    <Button type='submit'>  Add Company </Button>
+                    </Section>
                 </SetionsWrapper>
             </Form>
         </Formik>
