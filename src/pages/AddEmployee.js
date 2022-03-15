@@ -14,6 +14,13 @@ import styled, { keyframes } from "styled-components";
 import Divider from "@mui/material/Divider";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+
 
 const Section = styled.div`
   background-color: white;
@@ -49,6 +56,7 @@ const SidebarSection = styled.div`
   border-radius: 0.75em;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   margin: 0 3em 3em 3em;
+  
 `;
 
 const SectionTitle = styled.h1`
@@ -64,17 +72,17 @@ const SetionsWrapper = styled.div`
   margin: 5em;
   display: flex;
 `;
-const Button = styled.button`
-  width: 15em;
-  height: 3em;
-  font-size: 1em;
-  font-weight: 500;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.9);
-  border-radius: 0.5em;
-  border: none;
-  background: linear-gradient(90deg, #56bbeb 0%, #58aaf3 100%);
-`;
+// const Button = styled.button`
+//   width: 15em;
+//   height: 3em;
+//   font-size: 1em;
+//   font-weight: 500;
+//   text-align: center;
+//   color: rgba(255, 255, 255, 0.9);
+//   border-radius: 0.5em;
+//   border: none;
+//   background: linear-gradient(90deg, #56bbeb 0%, #58aaf3 100%);
+// `;
 
 const AddEmployee = () => {
   const [departments, setDepartments] = useState([
@@ -213,6 +221,7 @@ const AddEmployee = () => {
                 label="Department"
                 options={departments}
               />
+              
             </Section>
             <Section>
               <RadioButtons name="gender" id="gender" label="Gender" />
@@ -220,7 +229,42 @@ const AddEmployee = () => {
             </Section>
           </MainSections>
           {/* the Sidebar Section */}
-          <SidebarSection></SidebarSection>
+          <SidebarSection>
+            <Stack direction="column" justify="center" spacing={5}>
+            <Box textAlign='center'>
+              <Button color="secondary" variant="outlined" style={{
+                maxWidth: "170px",
+                maxHeight: "150px",
+                minWidth: "170px",
+                minHeight: "150px",
+                }}>Primary</Button>
+            </Box>
+            <Box textAlign='center'>
+              <Button variant="outlined" style={{
+                maxWidth: "170px",
+                maxHeight: "80px",
+                minWidth: "170px",
+                minHeight: "80px"
+                }}>Primary</Button>
+            </Box>
+            <Box textAlign='center'>
+              <Button variant="outlined" style={{
+                maxWidth: "170px",
+                maxHeight: "80px",
+                minWidth: "170px",
+                minHeight: "80px"
+                }}>Primary</Button>
+            </Box>
+            <Box textAlign='center'>
+              <Button variant="outlined" style={{
+                maxWidth: "170px",
+                maxHeight: "80px",
+                minWidth: "170px",
+                minHeight: "80px"
+                }}>Primary</Button>
+            </Box>
+            </Stack>
+          </SidebarSection>
         </SetionsWrapper>
       </Form>
     </Formik>
@@ -229,15 +273,3 @@ const AddEmployee = () => {
 
 export default AddEmployee;
 
-/*
-phoneNumber: Yup.number().min(10).max(10).matches(/[^[0]+[0-9]*$]/),
-Full name -> (required)
-National Id -> 10 length and integer only (required)
-Phone Number -> 10 length and integer only (required)
-Date -> 18 or above - in a range (required)
-Address -> whatever
-Email -> email with @ and domain (required)
-Employee Id -> 10 length and integer only (required)
-Department -> From firebase (required)
-Position -> String (required)
-*/

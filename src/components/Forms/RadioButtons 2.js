@@ -17,12 +17,13 @@ const RadioButtons = ({ name, ...other }) => {
 
     return (
         <FormControl>
-            <FormLabel id="radio-buttons-group">Gender</FormLabel>
+            <FormLabel id="radio-buttons-group">Perferred Attendance Recording strategy</FormLabel>
             <RadioGroup
                 row
                 {...config} >
-                <FormControlLabel value="Female" control={<Radio />} label="Female" />
-                <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                <FormControlLabel value="3" control={<Radio />} label="Female" />
+                <FormControlLabel value="2" control={<Radio />} label="Male" />
+                <FormControlLabel value="1" control={<Radio />} label="Male" />
             </RadioGroup>
         </FormControl>
     );
