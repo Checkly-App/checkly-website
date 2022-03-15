@@ -139,7 +139,7 @@ const AddEmployee = () => {
             birthdate: Yup.date().nullable().required('Birthdate is required').typeError("Date format must be: dd/MM/yyyy"),
             department: Yup.string().required('Department is required'),
             email: Yup.string().email('Invalid email').required('Email is required'),
-            employeeID: Yup.string().required('Employee ID is required'),
+            employeeID: Yup.string().matches(/^(?<=\s|^)\d+(?=\s|$)/, "consists of numbers only").min(10, 'must be 10 digits').max(10, 'must be 10 digits').required('Employee ID is required'),
             position: Yup.string().required('Position is required')
         });
 
