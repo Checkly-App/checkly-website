@@ -4,7 +4,8 @@ import * as Yup from "yup";
 import InputField from "../components/Forms/InputField";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import SelectField from "../components/Forms/SelectField";
-import RadioButtons from "../components/Forms/RadioButtons";
+// import RadioButtons from "../components/Forms/RadioButtons";
+import RadioGroup from '@mui/material/RadioGroup';
 import { set, ref, onValue } from "firebase/database";
 import { database, auth } from "../utilities/firebase";
 import DateField from "../components/Forms/DateField";
@@ -20,7 +21,10 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-
+import UploadFileRoundedIcon from '@mui/icons-material/UploadFileRounded';
+import InsertPhotoOutlinedIcon from '@mui/icons-material/InsertPhotoOutlined';
+import Radio from '@mui/material/Radio';
+import InputLabel from '@mui/material/InputLabel';
 
 const Section = styled.div`
   background-color: white;
@@ -72,17 +76,17 @@ const SetionsWrapper = styled.div`
   margin: 5em;
   display: flex;
 `;
-// const Button = styled.button`
-//   width: 15em;
-//   height: 3em;
-//   font-size: 1em;
-//   font-weight: 500;
-//   text-align: center;
-//   color: rgba(255, 255, 255, 0.9);
-//   border-radius: 0.5em;
-//   border: none;
-//   background: linear-gradient(90deg, #56bbeb 0%, #58aaf3 100%);
-// `;
+const checklyButton = styled.button`
+  width: 15em;
+  height: 3em;
+  font-size: 1em;
+  font-weight: 500;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.9);
+  border-radius: 0.5em;
+  border: none;
+  background: linear-gradient(90deg, #56bbeb 0%, #58aaf3 100%);
+`;
 
 const AddCompany = () => {
   const [departments, setDepartments] = useState([
@@ -223,10 +227,66 @@ const AddCompany = () => {
               />
               
             </Section>
-            <Section>
-              <RadioButtons name="gender" id="gender" label="Gender" />
-              <Button type="submit"> Add Company </Button>
-            </Section>
+            <Section2>
+              {/* <RadioButtons name="gender" id="gender" label="Gender" /> */}
+              <InputLabel  sx={{ mb: 2 }} >Preferred Attendance Recording Strategy</InputLabel>
+              <RadioGroup>
+                  <Stack direction="row" spacing={2} >
+              <Box sx={{ p: 2, border: '1px solid grey' }}  borderRadius={1} style={{
+                maxWidth: "120px",
+                maxHeight: "50px",
+                minWidth: "120px",
+                minHeight: "50px",
+                }}>
+              <Stack alignItems='flex-start'>
+              <Radio
+                value="a"
+                name="radiobutton"
+                inputProps={{ 'aria-label': 'A' }}
+                />
+             </Stack>
+             <Stack alignItems='flex-end'>
+             <InputLabel>QR Code</InputLabel>
+            </Stack>
+             </Box>
+             <Box sx={{ p: 2, border: '1px solid grey' }}  borderRadius={1} style={{
+                maxWidth: "120px",
+                maxHeight: "50px",
+                minWidth: "120px",
+                minHeight: "50px",
+                }}>
+              <Stack alignItems='flex-start'>
+              <Radio
+                value="a"
+                name="radiobutton"
+                inputProps={{ 'aria-label': 'A' }}
+                />
+             </Stack>
+             <Stack alignItems='flex-end'>
+             <InputLabel>QR Code</InputLabel>
+            </Stack>
+             </Box>
+             <Box sx={{ p: 2, border: '1px solid grey' }}  borderRadius={1} style={{
+                maxWidth: "120px",
+                maxHeight: "50px",
+                minWidth: "120px",
+                minHeight: "50px",
+                }}>
+              <Stack alignItems='flex-start'>
+              <Radio
+                value="a"
+                name="radiobutton"
+                inputProps={{ 'aria-label': 'A' }}
+                />
+             </Stack>
+             <Stack alignItems='flex-end'>
+             <InputLabel>QR Code</InputLabel>
+            </Stack>
+             </Box>
+                </Stack>
+                </RadioGroup>
+              {/* <Button type="submit"> Add Company </Button> */}
+            </Section2>
           </MainSections>
           {/* the Sidebar Section */}
           <SidebarSection>
@@ -238,7 +298,8 @@ const AddCompany = () => {
                 minWidth: "170px",
                 minHeight: "150px",
                 border: 'dashed',
-                }}>Primary</Button>
+                fontSize: '13px'
+                }}><Stack direction="column" spacing={5} alignItems="center" > <InsertPhotoOutlinedIcon sx={{ fontSize: 60 }} /> Upload logo</Stack> </Button>
             </Box>
             <Box textAlign='center'>
               <Button variant="outlined" style={{
@@ -247,7 +308,9 @@ const AddCompany = () => {
                 minWidth: "170px",
                 minHeight: "80px",
                 border: 'dashed',
-                }}>Primary</Button>
+                fontSize: '11px'
+                }}><Stack direction="column" spacing={5} alignItems="center" > <UploadFileRoundedIcon/>Upload departments</Stack> </Button>
+                
             </Box>
             <Box textAlign='center'>
               <Button variant="outlined" style={{
@@ -256,7 +319,8 @@ const AddCompany = () => {
                 minWidth: "170px",
                 minHeight: "80px",
                 border: 'dashed',
-                }}>Primary</Button>
+                fontSize: '11px'
+                }}><Stack direction="column" spacing={5} alignItems="center" > <UploadFileRoundedIcon/>Upload geofence info</Stack> </Button>
             </Box>
             <Box textAlign='center'>
               <Button variant="outlined" style={{
@@ -264,8 +328,9 @@ const AddCompany = () => {
                 border: 'dashed',
                 maxHeight: "80px",
                 minWidth: "170px",
-                minHeight: "80px"
-                }}>Primary</Button>
+                minHeight: "80px",
+                fontSize: '11px'
+                }}> <Stack direction="column" spacing={5} alignItems="center" > <UploadFileRoundedIcon/>Upload Employees</Stack> </Button>
             </Box>
             </Stack>
           </SidebarSection>
