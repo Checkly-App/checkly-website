@@ -87,10 +87,22 @@ const AddEmployee = () => {
     const [error, setError] = useState(false);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [departments, setDepartments] = useState([{
-        department: '',
-        name: ''
-    }]);
+    const [departments, setDepartments] = useState([
+        {
+            department: '',
+            name: ''
+        }
+    ]);
+
+    const [employees, setEmployees] = useState([
+        {
+            nationalID: '',
+            phoneNumber: '',
+            employeeID: '',
+            department: '',
+        }
+    ]);
+
     /**
      * Use Effect to fecth all of the company's departments
      */
@@ -99,18 +111,54 @@ const AddEmployee = () => {
             const data = snapshot.val();
             var departments = [];
             for (let id in data) {
-                if (data[id]['company_id'] === 'com1') { // TODO: - company's id
+                if (data[id]['company_id'] === 'com3') { // TODO: - company's id
                     const department = {
-                        department: 'dep_' + data[id]['dep_id'],
+                        department: 'dep' + data[id]['dep_id'],
                         name: data[id]['name']
                     };
                     departments.push(department)
                 }
             }
-            console.log(departments)
             setDepartments(departments);
         });
     }, []);
+
+    useEffect(() => { fetchEmployees() }, [departments])
+
+    const fetchEmployees = () => {
+        const departmentsKeys = []
+        for (let i in departments)
+            departmentsKeys.push(departments[i]['department'])
+
+        onValue(ref(database, 'Employee'), (snapshot) => {
+            const data = snapshot.val();
+            var employees = [];
+            for (let id in data) {
+                if (departmentsKeys.includes(data[id]['department'])) {  //Fetch employees of a given company
+                    const employee = {
+                        nationalID: data[id]['national_id'],
+                        phoneNumber: data[id]['phone_number'],
+                        employeeID: data[id]['employee_id'],
+                        department: data[id]['department'],
+                    };
+                    employees.push(employee)
+                }
+            }
+            setEmployees(employees);
+        });
+    }
+
+    const employeeExists = (employee) => {
+        for (let i in employees) {
+            if (employee.nationalID === employees[i].nationalID)
+                return true;
+            if (employee.phoneNumber === employees[i].phoneNumber)
+                return true;
+            if (employee.nationalID === employees[i].nationalID)
+                return true
+        }
+        return false;
+    };
 
     /**
      * Form's Initial Values
@@ -155,6 +203,15 @@ const AddEmployee = () => {
      */
     const addEmployee = (employee) => {
         setIsLoading(true);
+
+        if (employeeExists(employee)) {
+            setError(true);
+            setIsLoading(false);
+            setOpenSnackbar(true);
+            console.log('Exists!')
+            return;
+        }
+
         const password = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 9); //might be vulnerable tp brute-force attacks
         createUserWithEmailAndPassword(auth, employee.email, password).then((result) => {
             sendEmail({
