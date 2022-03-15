@@ -231,8 +231,8 @@ const AddEmployee = () => {
           {/* the Sidebar Section */}
           <SidebarSection>
             <Stack direction="column" justify="center" spacing={5}>
-            <Box textAlign='center'>
-              <Button color="secondary" variant="outlined" style={{
+            <Box m={2} pt={1} textAlign='center'>
+              <Button color="grey" margin={5} variant="outlined" style={{
                 maxWidth: "170px",
                 maxHeight: "150px",
                 minWidth: "170px",
