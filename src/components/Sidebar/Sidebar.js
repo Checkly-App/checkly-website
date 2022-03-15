@@ -60,6 +60,7 @@ const LogoutWrapper = styled.div`
     align-items: center;
     justify-content: space-between;
     text-decoration: none;
+    cursor: pointer;
 `
 const Icon = styled.div`
     flex: 1;
