@@ -43,70 +43,73 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
           
         });
         const mystyle = {
-          color: "white",
+          //   color: "white",
+            
+          //  // background: linear-gradient( rgba(255,0,0,0), rgba(255,0,0,1)),
+          //  padding:'9%',
+          //   paddingLeft: "10%",
+          //   paddingRight: "10%",
+           
+            fontFamily: "Arial",
+            background:  "linear-gradient(#56BBEB, #58AAF3)",
+             height: "100vh" , 
+              margin: "auto" ,
+              paddingTop: "8%",
+              paddingLeft:"5%",
+    paddingRight:"5%"
           
-         // background: linear-gradient( rgba(255,0,0,0), rgba(255,0,0,1)),
-         padding:'9%',
-          paddingLeft: "10%",
-          paddingRight: "10%",
-         
-          paddingTop: "20%",
-      
-          fontFamily: "Arial",
-        
-        };
-        const mystyle1 = {
-          padding: "10%",
-          paddingTop: "30%",
-        //  padding : 0
-       //  hight :"100%" ,
-        // maxHeight :"100vh",
-         textAlign :"center"
-        };
-        const subTitle = {
-         color :"gray",
-         textAlign :"center" ,
-         padding : "10px" ,
-         paddingLeft : "0px" ,
-         paddingTop : "0px" ,
-         paddingRight : "0px" ,
-        };
-        const Button = {
-          background: "linear-gradient(#56BBEB, #58AAF3)",
-    color: "white",
-    width:"100%",
-    maxHeight :"100vh",
-    padding: "10px",
-    paddingLeft: "30px" ,
-    paddingRight: "30px" ,
-    borderRadius: "5px",
-   border : "none",
+          };
+          const mystyle1 = {
+            // padding: "10%",
+            //  paddingTop: "15%",
+            
+          //  padding : 0
+         //  hight :"100%" ,
+           maxHeight :"100vh",
+           textAlign :"center",
+           margin: "auto",
+    //Padding: "50em 50px",
+    paddingLeft:"5%",
+    paddingRight:"5%"
+          };
+          const subTitle = {
+           color :"gray",
+           textAlign :"center" ,
+           padding : "10px" ,
+           paddingLeft : "0px" ,
+           paddingTop : "0px" ,
+           paddingRight : "0px" ,
+          };
+          const Button = {
+            background: "linear-gradient(#56BBEB, #58AAF3)",
+      color: "white",
+      width:"100%",
+      maxHeight :"100vh",
+      padding: "10px",
+      paddingLeft: "30px" ,
+      paddingRight: "30px" ,
+      borderRadius: "5px",
+     border : "none",
+      cursor: "pointer",
+    };
+    const Button1 = {
+      background: "none",
+    color: "#2CB1EF",
+    border : "none",
     cursor: "pointer",
-  };
-  const Button1 = {
-    background: "none",
-  color: "#2CB1EF",
-  //width:"100%",
-  
-  // padding: "10px",
-  // paddingLeft: "30px" ,
-  // paddingRight: "30px" ,
-  // borderRadius: "5px",
-  border : "none",
-  cursor: "pointer",
-  };
-  const overlay = {
-     position: "absolute", 
-  
-    hight:"300px",
-    width:"35%",
-  //  //top:"50"
-  // left:"0",
-    //paddingTop:"1%" ,
-   // paddingLeft:"1%"
-  
-    
-  }
+    };
+    const overlay = {
+     //  position: "absolute", 
+       width:"80%",
+     
+    // //  //top:"50"
+    // // left:"0",
+     //  paddingTop:"5em" ,
+    //   paddingLeft:"5%" ,
+     //margin: " auto" ,
+     // Padding: "50em 55px",
+      
+    }
 return (
  
 <div class="container-fluid " id='height'>
@@ -136,10 +139,12 @@ return (
 				</div>
 			  </nav>
       
-    <div class="col-md-6 red" style={{height: "100vh"}}>
-      <div class="container" style={mystyle1}>
+   
+    <div class="col-md-6 red" style={ mystyle1}>
+      {/* <div class="container" style={mystyle1}> */}
+         
      
-          <h2>Reset Your Password</h2>
+          <h2 tyle={{ paddingTop: "12%"}}>Reset Your Password</h2>
         
           <p style={subTitle}>Enter your E-mail to receive your password replacement E-mail</p>
         
@@ -192,17 +197,17 @@ return (
 
         </Formik >
       
-  </div> </div> 
-  <div class="col-md-6 blue" style={{background:  "linear-gradient(#56BBEB, #58AAF3)", height: "100vh"}} >
+  </div> 
+  <div class="col-md-6 blue" style={mystyle}>
   {/* <img src={UILogin}  alt="logo" style={overlay}/>  */}
-  <div class="container" style={mystyle}>
+
 
 <img src={Loginpic}  alt="logo" style={overlay}/>
  
     {/* <h1 style={{fontSize:"50px"}}>Adavnce <br/>Rapidly</h1>
     <p style={{fontSize:"10px" , paddingLeft:"5%"}}>“The ideal conditions for making things are created when machines, facilities, and people work together to add value without generating any waste.”
 -Kiichiro Toyoda, founder of Toyota Motor Corporation, strongly believed in this philosoph</p>  */}
-  </div> 
+  
   </div>
 </div>
 

@@ -15,6 +15,8 @@ import UILogin from '../assets/images/UILogin.png';
 import Loginpic from '../assets/images/Loginpic.png';
 import Logo from '../assets/images/logo.svg';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+import { set, ref, onValue } from 'firebase/database';
+import { database } from '../utilities/firebase';
 <link
   rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
@@ -27,6 +29,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
   
      const navigate = useNavigate()
      const [count, setCount] = useState(null);
+    
             
     const initialValues = {
         Password: '',
@@ -35,7 +38,30 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
       
     };
   
-
+const isCompany = (email)=> {
+  console.log(email)
+  var cheak = true
+  onValue(ref(database, 'Employee'), (snapshot) => {
+    const data = snapshot.val();
+    
+    for (let id in data) {
+        if (data[id]['email'] == email) { // TODO: - 
+          cheak = false
+         
+         
+        }
+         
+        
+    }
+    
+   
+});
+ 
+console.log(cheak)
+return cheak
+// console.log(isValid)
+// console.log(count1)
+}
 
     const validationSchema =
         Yup.object({
@@ -45,25 +71,34 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
           
         });
     const mystyle = {
-        color: "white",
+      //   color: "white",
         
-       // background: linear-gradient( rgba(255,0,0,0), rgba(255,0,0,1)),
-       padding:'9%',
-        paddingLeft: "10%",
-        paddingRight: "10%",
+      //  // background: linear-gradient( rgba(255,0,0,0), rgba(255,0,0,1)),
+      //  padding:'9%',
+      //   paddingLeft: "10%",
+      //   paddingRight: "10%",
        
-        paddingTop: "20%",
-    
         fontFamily: "Arial",
+        background:  "linear-gradient(#56BBEB, #58AAF3)",
+         height: "100vh" , 
+          margin: "auto" ,
+          paddingTop: "8%",
+          paddingLeft:"5%",
+paddingRight:"5%"
       
       };
       const mystyle1 = {
-        padding: "10%",
-        paddingTop: "24%",
+        // padding: "10%",
+        //  paddingTop: "15%",
+        
       //  padding : 0
      //  hight :"100%" ,
-      // maxHeight :"100vh",
-       textAlign :"center"
+       maxHeight :"100vh",
+       textAlign :"center",
+       margin: "auto",
+//Padding: "50em 50px",
+paddingLeft:"5%",
+paddingRight:"5%"
       };
       const subTitle = {
        color :"gray",
@@ -88,24 +123,19 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 const Button1 = {
   background: "none",
 color: "#2CB1EF",
-//width:"100%",
-
-// padding: "10px",
-// paddingLeft: "30px" ,
-// paddingRight: "30px" ,
-// borderRadius: "5px",
 border : "none",
 cursor: "pointer",
 };
 const overlay = {
-   position: "absolute", 
-  width:"33%",
- // hight:"20px",
-//  //top:"50"
-// left:"0",
-  //paddingTop:"1%" ,
- // paddingLeft:"1%"
-
+ //  position: "absolute", 
+   width:"80%",
+ 
+// //  //top:"50"
+// // left:"0",
+ //  paddingTop:"5em" ,
+//   paddingLeft:"5%" ,
+ //margin: " auto" ,
+ // Padding: "50em 55px",
   
 }
 return (
@@ -124,7 +154,7 @@ return (
 				  <div class="collapse navbar-collapse" id="navbarNavDropdown" style={{marginLeft: "12em"}}>
 					<ul class="navbar-nav m-auto">
 					  <li class="nav-item">
-						<a class="nav-link active blue" aria-current="page" href="#" style={{color:"#2CB1EF" ,padding:"1em 2em" }}>Home</a>
+						<a class="nav-link active blue" aria-current="page" href="#" style={{color:"Black" ,padding:"1em 2em" }}>Home</a>
 					  </li>
 					  <li class="nav-item">
 						<a class="nav-link white" href="#" style={{color:"white" ,padding:"1em 2em"}}>About</a>
@@ -140,9 +170,9 @@ return (
 				</div>
 			  </nav>
       
-      <div class="col-md-6 red" style={{height: "100vh"}}>
-      <div class="container" style={mystyle1}>
-          <h2>Welcome To Checkly</h2>
+      <div class="col-md-6 red" style={ mystyle1}>
+      {/* <div class="container" style={mystyle1}> */}
+          <h2 style={{ paddingTop: "12%"}}>Welcome To Checkly</h2>
         
           <p style={subTitle}>login to checkly to unlock its capabilities</p>
         
@@ -154,7 +184,9 @@ return (
             validationSchema={validationSchema}
             onSubmit={(values) => {
                 // console.log(values);
-                
+             const v =   isCompany(values.email)
+               console.log(v)
+                if (isCompany(values.email)){
               signInWithEmailAndPassword(auth, values.email, values.Password)
                 .then((userCredential) => {
                   // Signed in 
@@ -167,11 +199,15 @@ return (
                 .catch((error) => {
                   const errorCode = error.code;
                   const errorMessage = error.message;
-                 // console.log(errorMessage)
+                  console.log(errorMessage)
                  // alert(JSON.stringify(errorMessage, null, 2));
                   setCount("InValid Email /Password") 
                 });
-               
+              }
+              else{
+                setCount("InValid Email /Password") 
+              }
+                
               
             }}>
            
@@ -215,18 +251,19 @@ return (
                         <button  style={Button1} onClick={()=>navigate("./ResetPassword")}>  Forgot password? </button> 
                         </Grid>
   </div> 
-  </div>
-  <div class="col-md-6 blue" style={{background:  "linear-gradient(#56BBEB, #58AAF3)", height: "100vh"}} >
+  {/* </div> */}
+  <div class="col-md-6 blue" style={mystyle}
+       >
   {/* <img src={UILogin}  alt="logo" style={overlay}/>  */}
-  <div class="container" style={mystyle}>
+  {/* <div class="container" style={mystyle}> */}
   {/* <img src=".../public/logo512.png" alt="Italian Trulli" /> */}
 
-<img src={Loginpic}  alt="logo" style={overlay}/>
+<img  src={Loginpic}  alt="logo" style={overlay}/>
  
-    {/* <h1 style={{fontSize:"50px"}}>Adavnce <br/>Rapidly</h1>
-    <p style={{fontSize:"10px" , paddingLeft:"5%"}}>“The ideal conditions for making things are created when machines, facilities, and people work together to add value without generating any waste.”
+     {/* <h1 style={{fontSize:"50px"}}>Adavnce <br/>Rapidly</h1> */}
+  {/*  <p style={{fontSize:"10px" , paddingLeft:"5%"}}>“The ideal conditions for making things are created when machines, facilities, and people work together to add value without generating any waste.”
 -Kiichiro Toyoda, founder of Toyota Motor Corporation, strongly believed in this philosoph</p>  */}
-  </div> 
+  
   </div>
 </div>
 
