@@ -84,7 +84,7 @@ const SetionsWrapper = styled.div`
 //   background: linear-gradient(90deg, #56bbeb 0%, #58aaf3 100%);
 // `;
 
-const AddEmployee = () => {
+const AddCompany = () => {
   const [departments, setDepartments] = useState([
     {
       department: "",
@@ -237,6 +237,7 @@ const AddEmployee = () => {
                 maxHeight: "150px",
                 minWidth: "170px",
                 minHeight: "150px",
+                border: 'dashed',
                 }}>Primary</Button>
             </Box>
             <Box textAlign='center'>
@@ -244,7 +245,8 @@ const AddEmployee = () => {
                 maxWidth: "170px",
                 maxHeight: "80px",
                 minWidth: "170px",
-                minHeight: "80px"
+                minHeight: "80px",
+                border: 'dashed',
                 }}>Primary</Button>
             </Box>
             <Box textAlign='center'>
@@ -252,12 +254,14 @@ const AddEmployee = () => {
                 maxWidth: "170px",
                 maxHeight: "80px",
                 minWidth: "170px",
-                minHeight: "80px"
+                minHeight: "80px",
+                border: 'dashed',
                 }}>Primary</Button>
             </Box>
             <Box textAlign='center'>
               <Button variant="outlined" style={{
                 maxWidth: "170px",
+                border: 'dashed',
                 maxHeight: "80px",
                 minWidth: "170px",
                 minHeight: "80px"
@@ -271,4 +275,4 @@ const AddEmployee = () => {
   );
 };
 
-export default AddEmployee;
+export default AddCompany;
