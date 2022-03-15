@@ -97,8 +97,8 @@ paddingRight:"5%"
        textAlign :"center",
        margin: "auto",
 //Padding: "50em 50px",
-paddingLeft:"5%",
-paddingRight:"5%"
+paddingLeft:"6%",
+paddingRight:"6%"
       };
       const subTitle = {
        color :"gray",
@@ -176,9 +176,9 @@ return (
         
           <p style={subTitle}>login to checkly to unlock its capabilities</p>
         
-          <p  style={{color :"red"}} role="alert">
- {count}
-</p>
+       {count?  <p class=" alert-danger" role="alert">
+ {count}</p> : null }
+
           <Formik
             initialValues={{ ...initialValues }}
             validationSchema={validationSchema}

@@ -2,7 +2,7 @@ import { React, useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import InputField from '../components/Forms/InputField';
-import { MdOutlineAlternateEmail,MdHttps } from "react-icons/md";
+import { MdOutlineAlternateEmail,MdHttps ,AiOutlineCheckCircle } from "react-icons/md";
 import { Container, Grid } from '@mui/material';
 import {auth}  from '../utilities/firebase';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -26,6 +26,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
   
      const navigate = useNavigate()
      const [count, setCount] = useState(null);
+     const [issend, setIssend] = useState(null);
             
     const initialValues = {
 
@@ -69,8 +70,8 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
            textAlign :"center",
            margin: "auto",
     //Padding: "50em 50px",
-    paddingLeft:"5%",
-    paddingRight:"5%"
+    paddingLeft:"8%",
+    paddingRight:"7%"
           };
           const subTitle = {
            color :"gray",
@@ -142,28 +143,31 @@ return (
    
     <div class="col-md-6 red" style={ mystyle1}>
       {/* <div class="container" style={mystyle1}> */}
-         
+     {issend? <div class="alert alert-success" role="alert">
+  {issend}
+</div> : null }
      
           <h2 tyle={{ paddingTop: "12%"}}>Reset Your Password</h2>
         
           <p style={subTitle}>Enter your E-mail to receive your password replacement E-mail</p>
         
-          <p  style={{color :"red"}} role="alert">
- {count}
-</p>
+          {count?  <p class=" alert-danger" role="alert">
+ {count}</p> : null }
           <Formik
             initialValues={{ ...initialValues }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
               sendPasswordResetEmail(auth, values.email)
               .then(() => {
-                alert(JSON.stringify("Great! Check your inbox for a reset message", null, 2));
+                
                 setCount(null) 
+                setIssend("Check your inbox for a reset message")
               })
               .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                setCount("Please enter valid email") 
+                setCount("Please enter a valid email") 
+ 
                 // ..
               });
                
