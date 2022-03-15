@@ -1,12 +1,12 @@
 import React from 'react';
 import { Construction } from './Dashboard';
 
-const Departments = () => {
+const Analytics = () => {
     return (
         <Construction>
-            Departments Under Construction
+            Analytics Under Construction
         </Construction>
     );
 };
 
-export default Departments;
+export default Analytics;

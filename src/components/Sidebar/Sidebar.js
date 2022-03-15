@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import logo from '../../assets/images/logo.svg';
-import { Link } from 'react-router-dom';
-import { AiOutlineDashboard, AiOutlineLineChart, AiOutlineAppstore, AiOutlineCluster } from 'react-icons/ai';
-import { MdPeopleOutline, MdLogout } from 'react-icons/md'
+import side from '../../assets/images/sidePiece.svg';
+import { MdLogout } from 'react-icons/md'
+import { NavLink } from 'react-router-dom';
+import { sideBarData } from './Data';
 
 const SideBarWrapper = styled.div`
   grid-area: bar;
@@ -29,20 +30,30 @@ const NavItem = styled.li`
     list-style: none;
     display: flex;
 `
-const NavLink = styled(Link)`
+const Link = styled(NavLink)`
     width: 100%;
+    height: 100%;
     color: #A3A1A1;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     text-decoration: none;
+
      ${NavItem}:hover &{
         color: #2CB1EF;
      }
+
+     &.active {
+        background-image: url(${side});
+        background-repeat: no-repeat;
+        background-position: right center;
+        background-size: contain;
+        color: #2CB1EF;
+  }
 `
 const LogoutWrapper = styled.div`
-   width: 100%;
+    width: 100%;
     color: #A3A1A1;
     display: flex;
     flex-direction: row;
@@ -60,46 +71,21 @@ const NavTitle = styled.span`
     flex: 2;
 `
 const Logo = styled.img`
-    width: 5em;
+    width: 6em;
 `;
 const LogoCaption = styled.h1`
-    font-weight: 600;
+    font-weight: 500;
+    font-size: 1.75em;
+    margin-top: 0.25em;
 `
 const Divider = styled.div`
     background-color:  #A3A1A1;
-    height: 1px;
-    width: 80%;
+    height: 0.5px;
+    width: 70%;
     margin: 0 2em;
 `
-const Sidebar = () => {
-    const sideBarData = [
-        {
-            title: 'Dashboard',
-            path: '/dashboard',
-            icon: <AiOutlineDashboard size={22} />,
-        },
-        {
-            title: 'Departments',
-            path: '/departments',
-            icon: <AiOutlineCluster size={22} />,
-        },
-        {
-            title: 'Employees',
-            path: '/employees',
-            icon: <MdPeopleOutline size={22} />,
-        },
-        {
-            title: 'Analytics',
-            path: '/analytics',
-            icon: <AiOutlineLineChart size={22} />,
-        },
-        {
-            title: 'Services',
-            path: '/services',
-            icon: <AiOutlineAppstore size={22} />,
-        }
-    ];
 
+const Sidebar = () => {
     return (
         <SideBarWrapper>
             <Wrapper>
@@ -111,10 +97,10 @@ const Sidebar = () => {
                     sideBarData.map((item, index) => {
                         return (
                             <NavItem key={index}>
-                                <NavLink to={item.path}>
+                                <Link to={item.path}>
                                     <Icon>{item.icon}</Icon>
                                     <NavTitle>{item.title}</NavTitle>
-                                </NavLink>
+                                </Link>
                             </NavItem>
                         )
                     })

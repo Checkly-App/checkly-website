@@ -7,6 +7,8 @@ import Sidebar from './components/Sidebar/Sidebar';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Departments from './pages/Departments';
 import Dashboard from './pages/Dashboard';
+import Analytics from './pages/Analytics';
+import Services from './pages/Services';
 
 const theme = createTheme({
   palette: {
@@ -52,8 +54,11 @@ function App() {
           <Sidebar />
           <Content>
             <Routes>
-              <Route path="/employees" element={<AddEmployee />} />
-              <Route path="departments/*" element={<Departments />} />
+              <Route path="/admin/dashboard" element={<Dashboard />} />
+              <Route path="/admin/departments" element={<Departments />} />
+              <Route path="/admin/employees" element={<AddEmployee />} />
+              <Route path="/admin/analytics" element={<Analytics />} />
+              <Route path="/admin/services" element={<Services />} />
             </Routes>
           </Content>
         </AppContainer >

@@ -1,12 +1,12 @@
 import React from 'react';
 import { Construction } from './Dashboard';
 
-const Departments = () => {
+const Services = () => {
     return (
         <Construction>
-            Departments Under Construction
+            Services Under Construction
         </Construction>
     );
 };
 
-export default Departments;
+export default Services;
