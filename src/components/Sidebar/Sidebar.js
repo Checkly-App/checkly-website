@@ -20,7 +20,7 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: center;
     justify-items: center;
-    align-items: center;
+    align-items: ${prps => prps.nav ? 'center' : 'center'};
     flex-direction: column;
 `
 const NavItem = styled.li`
@@ -37,7 +37,7 @@ const Link = styled(NavLink)`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     text-decoration: none;
 
      ${NavItem}:hover &{
@@ -63,8 +63,7 @@ const LogoutWrapper = styled.div`
     cursor: pointer;
 `
 const Icon = styled.div`
-    flex: 1;
-    text-align: end;
+    padding: 0 0 0 2em;
 `
 const NavTitle = styled.span`
     font-size: 1.25em;
@@ -82,7 +81,7 @@ const LogoCaption = styled.h1`
 const Divider = styled.div`
     background-color:  #A3A1A1;
     height: 0.5px;
-    width: 70%;
+    width: 75%;
     margin: 0 2em;
 `
 
@@ -93,7 +92,7 @@ const Sidebar = () => {
                 <Logo src={logo} />
                 <LogoCaption>Checkly</LogoCaption>
             </Wrapper>
-            <Wrapper>
+            <Wrapper nav>
                 {
                     sideBarData.map((item, index) => {
                         return (
