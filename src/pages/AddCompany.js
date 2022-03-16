@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import InputField from "../components/Forms/InputField";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import SelectField from "../components/Forms/SelectField";
-// import RadioButtons from "../components/Forms/RadioButtons";
+import RadioButtons from "../components/Forms/RadioButtons";
 import RadioGroup from '@mui/material/RadioGroup';
 import { set, ref, onValue } from "firebase/database";
 import { database, auth } from "../utilities/firebase";
@@ -25,6 +25,11 @@ import UploadFileRoundedIcon from '@mui/icons-material/UploadFileRounded';
 import InsertPhotoOutlinedIcon from '@mui/icons-material/InsertPhotoOutlined';
 import Radio from '@mui/material/Radio';
 import InputLabel from '@mui/material/InputLabel';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormLabel from '@mui/material/FormLabel';
+
 
 const Section = styled.div`
   background-color: white;
@@ -72,10 +77,12 @@ const SectionTitle = styled.h1`
     grid-column: 1;
   }
 `;
+
 const SetionsWrapper = styled.div`
   margin: 5em;
   display: flex;
 `;
+
 const checklyButton = styled.button`
   width: 15em;
   height: 3em;
@@ -88,6 +95,65 @@ const checklyButton = styled.button`
   background: linear-gradient(90deg, #56bbeb 0%, #58aaf3 100%);
 `;
 
+
+
+const locations = [
+    {
+    label: "Riyadh",
+    value: "Riyadh",
+    },
+    {
+    label: "Northern Borders",
+    value: "Northern Borders",
+    },
+    {
+    label: "Makkah",
+    value: "Makkah",
+    },
+    {
+    label: "Madinah",
+    value: "Madinah",
+    },
+    {
+    label: "Eastern Province",
+    value: "Eastern Province",
+    },
+    {
+    label: "Jizan",
+    value:"Jizan",
+    },
+    {
+    label: "Jawf",
+    value: "Jawf",
+    },
+    {
+    label: "Hail",
+    value: "Hail",
+    },
+    {
+    label: "Qasim",
+    value: "Qasim",
+    },
+    {
+    label: "Najran",
+    value: "Najran",
+    },
+    {
+    label: "Tabuk",
+    value: "Tabuk",
+    },
+    {
+    label: "Asir",
+    value: "Asir",
+    },
+    {
+    label: "Bahah",
+    value: "Bahah",
+    },
+  ];
+
+
+
 const AddCompany = () => {
   const [departments, setDepartments] = useState([
     {
@@ -95,6 +161,32 @@ const AddCompany = () => {
       name: "",
     },
   ]);
+
+
+
+//   radio button
+
+var name = "none";
+
+
+  const [value, setValue] = useState('Fixed');
+  const [helperText, setHelperText] = useState('Please enter working hours, e.g. 8-4');
+  const [FlexibleDisplay, SetFlexibleDisplay] = useState('none');
+  const [FixedDisplay, SetFixedDisplay] = useState('inline');
+
+  const handleRadioChange = (event) => {
+    setValue(event.target.value);
+    if (event.target.value === 'Flexible') {
+        setHelperText('Please enter minimum working hours');
+        SetFixedDisplay('none');
+        SetFlexibleDisplay('inline');
+ 
+    } else if (event.target.value === 'Fixed') {
+        setHelperText('Please enter working hours, e.g. 8-4');
+        SetFlexibleDisplay('none');
+        SetFixedDisplay('inline');
+    }
+  };
 
   useEffect(() => {
     onValue(ref(database, "Department"), (snapshot) => {
@@ -116,38 +208,26 @@ const AddCompany = () => {
   }, []);
 
   const initialValues = {
-    fullName: "",
-    nationalID: "",
-    phoneNumber: "",
-    birthdate: null,
-    address: "",
-    gender: "Female",
+    name: "",
     email: "",
-    employeeID: "",
+    locations: "",
+    size: "",
+    industry: "",
+    preference: "",
+    age: "",
+    //add radio button
     department: "",
-    position: "",
   };
 
   const validationSchema = Yup.object({
-    fullName: Yup.string().required("Full Name is required"),
-    nationalID: Yup.string()
-      .matches(/^(?<=\s|^)\d+(?=\s|$)/, "consists of numbers only")
-      .min(10, "must be 10 digits")
-      .max(10, "must be 10 digits")
-      .required("National ID is required"),
-    address: Yup.string().required("Address is required"),
-    phoneNumber: Yup.string()
-      .matches(/^[0](\/?[0-9])*\/?$/, "Invalid phone format ")
-      .min(10, "must be 10 digits")
-      .max(10, "must be 10 digits")
-      .required("Phone Number is required"),
-    birthdate: Yup.date()
-      .nullable()
-      .required("Birthdate is required")
-      .typeError("Date format must be: dd/MM/yyyy"),
+    name: Yup.string().required("Name is required"),
+    locations: Yup.string().required("Location is required"),
+    size: Yup.string().required("Size is required"),
+    industry: Yup.string().required("Industry is required"),
+    preference: Yup.string().required("Preference is required"),
     department: Yup.string().required("Department is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
-    employeeID: Yup.string().required("Employee ID is required"),
+    age: Yup.string().required("Date of establishment is required"),
     position: Yup.string().required("Position is required"),
   });
 
@@ -201,12 +281,19 @@ const AddCompany = () => {
               </Divider>
             </Section2>
             <Section>
-              <InputField name="fullName" id="fullName" label="Full Name" />
+              <InputField name="name" id="name" label="Name" />
               <InputField
-                name="nationalID"
-                id="nationalID"
-                label="National ID"
+                name="email"
+                id="email"
+                label="Email"
               />
+              <SelectField
+                name="locations"
+                id="locations"
+                label="Location"
+                options= {locations}
+              />
+              {/* industry */}
               <SelectField
                 name="department"
                 id="department"
@@ -214,77 +301,44 @@ const AddCompany = () => {
                 options={departments}
               />
               <SelectField
-                name="department"
-                id="department"
-                label="Department"
+                name="size"
+                id="size"
+                label="Size"
                 options={departments}
               />
-              <SelectField
-                name="department"
-                id="department"
-                label="Department"
+             <SelectField
+                name="age"
+                id="age"
+                label="Years since establishment"
                 options={departments}
               />
+            <SelectField
+                name="preference"
+                id="preference"
+                label="Attendance Recording Strategy"
+                options={departments}
+              />
+ 
               
             </Section>
+
             <Section2>
-              {/* <RadioButtons name="gender" id="gender" label="Gender" /> */}
-              <InputLabel  sx={{ mb: 2 }} >Preferred Attendance Recording Strategy</InputLabel>
-              <RadioGroup>
-                  <Stack direction="row" spacing={2} >
-              <Box sx={{ p: 2, border: '1px solid grey' }}  borderRadius={1} style={{
-                maxWidth: "120px",
-                maxHeight: "50px",
-                minWidth: "120px",
-                minHeight: "50px",
-                }}>
-              <Stack alignItems='flex-start'>
-              <Radio
-                value="a"
-                name="radiobutton"
-                inputProps={{ 'aria-label': 'A' }}
-                />
-             </Stack>
-             <Stack alignItems='flex-end'>
-             <InputLabel>QR Code</InputLabel>
-            </Stack>
-             </Box>
-             <Box sx={{ p: 2, border: '1px solid grey' }}  borderRadius={1} style={{
-                maxWidth: "120px",
-                maxHeight: "50px",
-                minWidth: "120px",
-                minHeight: "50px",
-                }}>
-              <Stack alignItems='flex-start'>
-              <Radio
-                value="a"
-                name="radiobutton"
-                inputProps={{ 'aria-label': 'A' }}
-                />
-             </Stack>
-             <Stack alignItems='flex-end'>
-             <InputLabel>QR Code</InputLabel>
-            </Stack>
-             </Box>
-             <Box sx={{ p: 2, border: '1px solid grey' }}  borderRadius={1} style={{
-                maxWidth: "120px",
-                maxHeight: "50px",
-                minWidth: "120px",
-                minHeight: "50px",
-                }}>
-              <Stack alignItems='flex-start'>
-              <Radio
-                value="a"
-                name="radiobutton"
-                inputProps={{ 'aria-label': 'A' }}
-                />
-             </Stack>
-             <Stack alignItems='flex-end'>
-             <InputLabel>QR Code</InputLabel>
-            </Stack>
-             </Box>
-                </Stack>
-                </RadioGroup>
+              
+            <FormControl>
+            <FormLabel id="radio-buttons-group">Company's Attendance Policy</FormLabel>
+             <RadioGroup
+                name="policy"
+                value={value}
+                onChange={handleRadioChange}
+            >
+                    <FormControlLabel value="Fixed" control={<Radio />} label="Fixed" />
+                    <FormControlLabel value="Flexible" control={<Radio />} label="Flexible" />
+             </RadioGroup>
+             <FormHelperText>{helperText}</FormHelperText>
+             <InputField sx={{ display: FlexibleDisplay }} name="Flexible" id="Flexible" label="Flexible" />
+             <InputField sx={{ display: FixedDisplay }} name="Fixed" id="Fixed"label="Fixed" />
+              </FormControl>
+ 
               {/* <Button type="submit"> Add Company </Button> */}
             </Section2>
           </MainSections>
