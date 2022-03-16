@@ -154,12 +154,29 @@ const AddEmployee = () => {
 
     const employeeExists = (employee) => {
         for (let i in employees) {
-            if (employee.nationalID === employees[i].nationalID)
+            if (employee.nationalID === employees[i].nationalID) {
+                setErrorDetails({
+                    title: 'Employee Exists',
+                    description: 'Another employee with the same national id exists'
+                })
                 return true;
-            if (employee.phoneNumber === employees[i].phoneNumber)
+            }
+
+            if (employee.phoneNumber === employees[i].phoneNumber) {
+                setErrorDetails({
+                    title: 'Employee Exists',
+                    description: 'Another employee with the same phone number exists'
+                })
                 return true;
-            if (employee.nationalID === employees[i].nationalID)
-                return true
+            }
+            if (employee.employeeID === employees[i].employeeID) {
+                setErrorDetails({
+                    title: 'Employee Exists',
+                    description: 'Another employee with the same employee id exists'
+                })
+                return true;
+            }
+
         }
         return false;
     };
@@ -196,7 +213,7 @@ const AddEmployee = () => {
         });
 
     /**
-     * Clos sack bar function
+     * Close sack bar function
      */
     const closeSnackbar = () => {
         setOpenSnackbar(false);
