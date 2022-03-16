@@ -36,7 +36,7 @@ const SelectField = ({ name, options, ...other }) => {
         <TextField {...config}>
             {options.map((option, pos) => {
                 return (
-                    <MenuItem key={pos} value={option.department}>
+                    <MenuItem key={pos} value={option.key}>
                         {option.name}
                     </MenuItem>
                 );

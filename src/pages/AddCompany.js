@@ -99,58 +99,188 @@ const checklyButton = styled.button`
 
 const locations = [
     {
-    label: "Riyadh",
-    value: "Riyadh",
+    key: "Riyadh",
+    name: "Riyadh",
     },
     {
-    label: "Northern Borders",
-    value: "Northern Borders",
+    key: "Northern Borders",
+    name: "Northern Borders",
     },
     {
-    label: "Makkah",
-    value: "Makkah",
+    key: "Makkah",
+    name: "Makkah",
     },
     {
-    label: "Madinah",
-    value: "Madinah",
+    key: "Madinah",
+    name: "Madinah",
     },
     {
-    label: "Eastern Province",
-    value: "Eastern Province",
+    key: "Eastern Province",
+    name: "Eastern Province",
     },
     {
-    label: "Jizan",
-    value:"Jizan",
+    key: "Jizan",
+    name:"Jizan",
     },
     {
-    label: "Jawf",
-    value: "Jawf",
+    key: "Jawf",
+    name: "Jawf",
     },
     {
-    label: "Hail",
-    value: "Hail",
+    key: "Hail",
+    name: "Hail",
     },
     {
-    label: "Qasim",
-    value: "Qasim",
+    key: "Qasim",
+    name: "Qasim",
     },
     {
-    label: "Najran",
-    value: "Najran",
+    key: "Najran",
+    name: "Najran",
     },
     {
-    label: "Tabuk",
-    value: "Tabuk",
+    key: "Tabuk",
+    name: "Tabuk",
     },
     {
-    label: "Asir",
-    value: "Asir",
+    key: "Asir",
+    name: "Asir",
     },
     {
-    label: "Bahah",
-    value: "Bahah",
+    key: "Bahah",
+    name: "Bahah",
     },
   ];
+
+  const industries = [
+    {
+    key: "Accountancy, banking and finance",
+    name: "Accountancy, banking and finance",
+    },
+    {
+    key: "Business, consulting and management",
+    name: "Business, consulting and management",
+    },
+    {
+    key: "Engineering and manufacturing",
+    name: "Engineering and manufacturing",
+    },
+    {
+    key: "Healthcare",
+    name: "Healthcare",
+    },
+    {
+    key: "Information Technology",
+    name: "Information Technology",
+    },
+    {
+    key: "Law",
+    name:"Law",
+    },
+    {
+    key: "Marketing, advertising and PR",
+    name: "Marketing, advertising and PR",
+    },
+    {
+    key: "Transport and logistics",
+    name: "Transport and logistics",
+    },
+    {
+    key: "Education",
+    name: "Education",
+    },
+    {
+    key: "Retail",
+    name: "Retail",
+    },
+    {
+    key: "Public services and administration",
+    name: "Public services and administration",
+    },
+    {
+    key: "Recruitment and HR",
+    name: "Recruitment and HR",
+    },
+    {
+    key: "Leisure, sport and tourism",
+    name: "Leisure, sport and tourism",
+    },
+  ];
+
+  const sizes = [
+    {
+    key: "1-10 Employees",
+    name: "1-10 Employees",
+    },
+    {
+    key: "11-50 Employees",
+    name: "11-50 Employees",
+    },
+    {
+    key: "51-200 Employees",
+    name: "51-200 Employees",
+    },
+    {
+    key: "201-500 Employees",
+    name: "201-500 Employees",
+    },
+    {
+    key: "501-1000 Employees",
+    name: "501-1000 Employees",
+    },
+    {
+    key: "1001-5000 Employees",
+    name:"1001-5000 Employees",
+    },
+    {
+    key: "5001-10,000 Employees",
+    name: "5001-10,000 Employees",
+    },
+    {
+    key: "+10,000 Employees",
+    name: "+10,000 Employees",
+    },
+  ];
+
+  const ages = [
+    {
+    key: "Less than a year",
+    name: "Less than a year",
+    },
+    {
+    key: "1-2 Years",
+    name: "1-2 Years",
+    },
+    {
+    key: "2-5 Years",
+    name: "2-5 Years",
+    },
+    {
+    key: "5-10 Years",
+    name: "5-10 Years",
+    },
+    {
+    key: "+10 Years",
+    name: "+10 Years",
+    },
+  ];
+
+  const preferences = [
+    {
+    key: "QR-Code",
+    name: "QR-Code",
+    },
+    {
+    key: "Location-Based",
+    name: "Location-Based",
+    },
+    {
+    key: "Both",
+    name: "Both",
+    },
+  ];
+
+  
 
 
 
@@ -164,10 +294,7 @@ const AddCompany = () => {
 
 
 
-//   radio button
-
-var name = "none";
-
+//   radio button config
 
   const [value, setValue] = useState('Fixed');
   const [helperText, setHelperText] = useState('Please enter working hours, e.g. 8-4');
@@ -216,7 +343,6 @@ var name = "none";
     preference: "",
     age: "",
     //add radio button
-    department: "",
   };
 
   const validationSchema = Yup.object({
@@ -271,53 +397,65 @@ var name = "none";
       <Form>
         <SetionsWrapper>
           <MainSections>
+
             <Section2>
               <Divider>
                 <Avatar
-                  alt="Remy Sharp"
+                  alt="R"
                   src="/static/images/avatar/1.jpg"
                   sx={{ width: 56, height: 56 }}
                 />
               </Divider>
             </Section2>
+
             <Section>
-              <InputField name="name" id="name" label="Name" />
-              <InputField
+
+            <InputField 
+                name="name" 
+                id="name" 
+                label="Name"
+            />
+
+            <InputField
                 name="email"
                 id="email"
                 label="Email"
-              />
-              <SelectField
+            />
+
+            <SelectField
                 name="locations"
                 id="locations"
                 label="Location"
                 options= {locations}
-              />
-              {/* industry */}
-              <SelectField
-                name="department"
-                id="department"
-                label="Department"
-                options={departments}
-              />
-              <SelectField
+             />
+
+            <SelectField
+                name="industry"
+                id="industry"
+                label="Industry"
+                options={industries}
+            />
+
+            <SelectField
                 name="size"
                 id="size"
                 label="Size"
-                options={departments}
-              />
-             <SelectField
+                options={sizes}
+            />
+
+            <SelectField
                 name="age"
                 id="age"
                 label="Years since establishment"
-                options={departments}
-              />
+                options={ages}
+            />
+
             <SelectField
                 name="preference"
                 id="preference"
                 label="Attendance Recording Strategy"
-                options={departments}
-              />
+                options={preferences}
+            />
  
               
             </Section>
@@ -335,8 +473,8 @@ var name = "none";
                     <FormControlLabel value="Flexible" control={<Radio />} label="Flexible" />
              </RadioGroup>
              <FormHelperText>{helperText}</FormHelperText>
-             <InputField sx={{ display: FlexibleDisplay }} name="Flexible" id="Flexible" label="Flexible" />
-             <InputField sx={{ display: FixedDisplay }} name="Fixed" id="Fixed"label="Fixed" />
+             <InputField sx={{ display: FlexibleDisplay }} name="Flexible" id="Flexible" label="Hours" />
+             <InputField sx={{ display: FixedDisplay }} name="Fixed" id="Fixed"label="Hours" />
               </FormControl>
  
               {/* <Button type="submit"> Add Company </Button> */}
