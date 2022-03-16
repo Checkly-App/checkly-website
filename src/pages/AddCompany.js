@@ -384,24 +384,19 @@ const Input = styled('input')({
     Fixed: Yup.string().required("CWorking hours are required"),
   });
 
-  const addEmployee = (employee) => {
-    createUserWithEmailAndPassword(auth, employee.email, "123456")
-      .then((result) => {
+  const addCompany = (company) => {
+    // createUserWithEmailAndPassword(auth, employee.email, "123456")
+    //   .then((result) => {
         set(ref(database, "test/" + result.user.uid), {
-          name: employee.fullName,
-          national_id: employee.nationalID,
-          phone_number: employee.phoneNumber,
-          birthdate: format(employee.birthdate, "dd/MM/yyyy"),
-          address: employee.address,
-          gender: employee.gender,
-          email: employee.email,
-          employee_id: employee.employeeID,
-          department: employee.department,
-          position: employee.position,
-          change_image: 0,
-          image_token: "null",
-        });
-      })
+          name: company.name,
+          address: company.address,
+          gender: company.gender,
+          email: company.email,
+          employee_id: company.employeeID,
+          department: company.department,
+          position: company.position,
+        })
+      // })
       .catch((error) => {
         // var errorCode = error.code;
         var errorMessage = error.message;
