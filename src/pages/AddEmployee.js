@@ -91,21 +91,16 @@ const AddEmployee = () => {
     });
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [departments, setDepartments] = useState([
-        {
-            department: '',
-            name: ''
-        }
-    ]);
-
-    const [employees, setEmployees] = useState([
-        {
-            nationalID: '',
-            phoneNumber: '',
-            employeeID: '',
-            department: '',
-        }
-    ]);
+    const [departments, setDepartments] = useState([{
+        department: '',
+        name: ''
+    }]);
+    const [employees, setEmployees] = useState([{
+        nationalID: '',
+        phoneNumber: '',
+        employeeID: '',
+        department: '',
+    }]);
 
     /**
      * Use Effect to fecth all of the company's departments
@@ -158,22 +153,21 @@ const AddEmployee = () => {
                 setErrorDetails({
                     title: 'Employee Exists',
                     description: 'Another employee with the same national id exists'
-                })
+                });
                 return true;
             }
-
             if (employee.phoneNumber === employees[i].phoneNumber) {
                 setErrorDetails({
                     title: 'Employee Exists',
                     description: 'Another employee with the same phone number exists'
-                })
+                });
                 return true;
             }
             if (employee.employeeID === employees[i].employeeID) {
                 setErrorDetails({
                     title: 'Employee Exists',
                     description: 'Another employee with the same employee id exists'
-                })
+                });
                 return true;
             }
 
@@ -229,18 +223,18 @@ const AddEmployee = () => {
             setError(true);
             setIsLoading(false);
             setOpenSnackbar(true);
-            console.log('Exists!')
             return;
         }
 
-        const password = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 9); //might be vulnerable tp brute-force attacks
+        const password = Math.random().toString(36).substr(0, 9); //might be vulnerable to brute-force attacks
+
         createUserWithEmailAndPassword(auth, employee.email, password).then((result) => {
             sendEmail({
                 email: employee.email,
                 name: employee.fullName,
                 password: password,
             }).then(() => {
-                set(ref(database, 'test/' + result.user.uid), {
+                set(ref(database, 'Employee/' + result.user.uid), {
                     name: employee.fullName,
                     national_id: employee.nationalID,
                     phone_number: employee.phoneNumber,
@@ -258,12 +252,20 @@ const AddEmployee = () => {
                 setIsLoading(false);
                 setOpenSnackbar(true);
             }).catch((error) => {
+                setErrorDetails({
+                    title: 'An Error Occured',
+                    description: { error }
+                });
                 setError(true);
                 setIsLoading(false);
                 setOpenSnackbar(true);
                 return;
             });
         }).catch((error) => {
+            setErrorDetails({
+                title: 'An Error Occured',
+                description: 'The email exists within Checkly'
+            });
             setError(true);
             setIsLoading(false);
             setOpenSnackbar(true);
@@ -345,10 +347,11 @@ const AddEmployee = () => {
                     {isLoading ? <CircularProgress /> : <Button type='submit'>  Add an employee </Button>}
                 </SetionsWrapper>
                 {error ? (<Snackbar
+                    autoHideDuration={6000}
                     open={openSnackbar}
                     onClose={closeSnackbar}
-                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
-                    <Alert onClose={closeSnackbar} severity="error" variant='filled'>
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                    <Alert onClose={closeSnackbar} severity='error' variant='filled'>
                         <AlertTitle>{errorDetails.title}</AlertTitle>
                         {errorDetails.description}
                     </Alert>
@@ -358,8 +361,8 @@ const AddEmployee = () => {
                         open={openSnackbar}
                         autoHideDuration={2000}
                         onClose={closeSnackbar}
-                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }} >
-                        <Alert severity="success">Message sent!</Alert>
+                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
+                        <Alert severity='success' variant='filled'>Message sent!</Alert>
                     </Snackbar>)}
             </Form>
         </Formik>
