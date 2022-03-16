@@ -95,6 +95,17 @@ const checklyButton = styled.button`
   background: linear-gradient(90deg, #56bbeb 0%, #58aaf3 100%);
 `;
 
+const SButton = styled.button`
+  width: 15em;
+  height: 3em;
+  font-size: 1em;
+  font-weight: 500;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.9);
+  border-radius: 0.5em;
+  border: none;
+  background: linear-gradient(90deg, #56bbeb 0%, #58aaf3 100%);
+`;
 
 
 const locations = [
@@ -346,6 +357,7 @@ const Input = styled('input')({
     });
   }, []);
 
+
   const initialValues = {
     name: "",
     email: "",
@@ -401,12 +413,13 @@ const Input = styled('input')({
 
   
   return (
+    
     <Formik
       initialValues={{ ...initialValues }}
       validationSchema={validationSchema}
       onSubmit={(values) => {
         console.log(values);
-        addEmployee(values);
+        // addEmployee(values);
         alert(JSON.stringify(values, null, 2));
       }}
     >
@@ -520,7 +533,7 @@ const Input = styled('input')({
                 </Button>
              </label>
             </Box>
-            <button onClick={upload}>Upload</button>
+            
             
             <Box textAlign='center'>
             <label htmlFor="contained-button-file">
@@ -578,7 +591,7 @@ const Input = styled('input')({
             </Button>
             </label>
             </Box>
-
+                <SButton type="submit"> kjk </SButton>
             </Stack>
 
 
