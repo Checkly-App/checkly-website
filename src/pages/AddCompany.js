@@ -7,7 +7,7 @@ import SelectField from "../components/Forms/SelectField";
 import RadioButtons from "../components/Forms/RadioButtons";
 import RadioGroup from '@mui/material/RadioGroup';
 import { set, ref, onValue } from "firebase/database";
-import { database, auth } from "../utilities/firebase";
+import { database, auth, storage } from "../utilities/firebase";
 import DateField from "../components/Forms/DateField";
 import { format } from "date-fns";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -291,7 +291,10 @@ const AddCompany = () => {
       name: "",
     },
   ]);
-
+ 
+const Input = styled('input')({
+    display: 'none',
+  });
 
 
 //   radio button config
@@ -315,6 +318,15 @@ const AddCompany = () => {
     }
   };
 
+  //upload 
+  const [image , setImage] = useState('');
+        const upload = ()=>{
+         if(image == null)
+         return;
+    storage.ref(`/Companies/${image.name}`).put(image)
+     .on("state_changed" , alert("success") , alert);
+}
+
   useEffect(() => {
     onValue(ref(database, "Department"), (snapshot) => {
       const data = snapshot.val();
@@ -337,24 +349,27 @@ const AddCompany = () => {
   const initialValues = {
     name: "",
     email: "",
-    locations: "",
+    location: "",
     size: "",
     industry: "",
     preference: "",
     age: "",
+    policy: "Fixed",
+    Flexible: "",
+    Fixed: "",
     //add radio button
   };
 
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
-    locations: Yup.string().required("Location is required"),
+    location: Yup.string().required("Location is required"),
     size: Yup.string().required("Size is required"),
     industry: Yup.string().required("Industry is required"),
     preference: Yup.string().required("Preference is required"),
-    department: Yup.string().required("Department is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
-    age: Yup.string().required("Date of establishment is required"),
-    position: Yup.string().required("Position is required"),
+    age: Yup.string().required("Company's age is required"),
+    Flexible: Yup.string().required("Working hours are required"),
+    Fixed: Yup.string().required("CWorking hours are required"),
   });
 
   const addEmployee = (employee) => {
@@ -384,6 +399,7 @@ const AddCompany = () => {
       });
   };
 
+  
   return (
     <Formik
       initialValues={{ ...initialValues }}
@@ -423,8 +439,8 @@ const AddCompany = () => {
             />
 
             <SelectField
-                name="locations"
-                id="locations"
+                name="location"
+                id="location"
                 label="Location"
                 options= {locations}
              />
@@ -460,71 +476,112 @@ const AddCompany = () => {
               
             </Section>
 
-            <Section2>
+            <Section>
               
-            <FormControl>
-            <FormLabel id="radio-buttons-group">Company's Attendance Policy</FormLabel>
-             <RadioGroup
-                name="policy"
-                value={value}
-                onChange={handleRadioChange}
-            >
-                    <FormControlLabel value="Fixed" control={<Radio />} label="Fixed" />
-                    <FormControlLabel value="Flexible" control={<Radio />} label="Flexible" />
-             </RadioGroup>
-             <FormHelperText>{helperText}</FormHelperText>
-             <InputField sx={{ display: FlexibleDisplay }} name="Flexible" id="Flexible" label="Hours" />
-             <InputField sx={{ display: FixedDisplay }} name="Fixed" id="Fixed"label="Hours" />
+                <FormControl>
+                    <FormLabel> Company's Attendance Policy </FormLabel>
+                    <RadioGroup
+                        row
+                        name="policy"
+                        value={value}
+                        onChange={handleRadioChange}
+                    >
+                    <FormControlLabel value="Fixed" control={<Radio />} label="Fixed Hours" />
+                    <FormControlLabel value="Flexible" control={<Radio />} label="Flexible Hours" />
+                    </RadioGroup>
+                    <FormHelperText>{helperText}</FormHelperText>
+                    <InputField sx={{ display: FlexibleDisplay }} name="Flexible" id="Flexible" label="Hours" />
+                    <InputField sx={{ display: FixedDisplay }} name="Fixed" id="Fixed"label="Hours" />
               </FormControl>
  
-              {/* <Button type="submit"> Add Company </Button> */}
-            </Section2>
+
+            </Section>
           </MainSections>
+
           {/* the Sidebar Section */}
           <SidebarSection>
             <Stack direction="column" justify="center" spacing={5}>
+
+            
             <Box m={2} pt={15} textAlign='center'>
-              <Button color="grey" margin={5} variant="outlined" style={{
+            <label htmlFor="contained-button-file">
+             <Input accept="image/*" id="contained-button-file" multiple type="file" />
+             <Button variant="contained" component="span" color="grey" margin={5} variant="outlined" style={{
                 maxWidth: "170px",
                 maxHeight: "150px",
                 minWidth: "170px",
                 minHeight: "150px",
                 border: 'dashed',
                 fontSize: '13px'
-                }}><Stack direction="column" spacing={5} alignItems="center" > <InsertPhotoOutlinedIcon sx={{ fontSize: 60 }} /> Upload logo</Stack> </Button>
+                }}>
+                <input type="file" style={{display: 'none'}} onChange={(e)=>{setImage(e.target.files[0])}} />
+                    <Stack direction="column" spacing={5} alignItems="center" > 
+                    <InsertPhotoOutlinedIcon sx={{ fontSize: 60 }} /> Upload logo </Stack> 
+                </Button>
+             </label>
             </Box>
+            <button onClick={upload}>Upload</button>
+            
             <Box textAlign='center'>
-              <Button variant="outlined" style={{
+            <label htmlFor="contained-button-file">
+            <Input accept="image/*" id="contained-button-file" multiple type="file" />
+              <Button variant="contained" component="span" variant="outlined" style={{
                 maxWidth: "170px",
                 maxHeight: "80px",
                 minWidth: "170px",
                 minHeight: "80px",
                 border: 'dashed',
                 fontSize: '11px'
-                }}><Stack direction="column" spacing={5} alignItems="center" > <UploadFileRoundedIcon/>Upload departments</Stack> </Button>
-                
+                }}>
+            
+            <Stack direction="column" spacing={5} alignItems="center" > 
+            <UploadFileRoundedIcon/> Upload departments </Stack> 
+            </Button>
+            </label>
             </Box>
+
+
+
             <Box textAlign='center'>
-              <Button variant="outlined" style={{
+            <label htmlFor="contained-button-file">
+            <Input accept="image/*" id="contained-button-file" multiple type="file" />
+              <Button variant="contained" component="span" variant="outlined" style={{
                 maxWidth: "170px",
                 maxHeight: "80px",
                 minWidth: "170px",
                 minHeight: "80px",
                 border: 'dashed',
                 fontSize: '11px'
-                }}><Stack direction="column" spacing={5} alignItems="center" > <UploadFileRoundedIcon/>Upload geofence info</Stack> </Button>
+                }}>
+            
+            <Stack direction="column" spacing={5} alignItems="center" > 
+            <UploadFileRoundedIcon/> Upload Employees </Stack> 
+            </Button>
+            </label>
             </Box>
+
+
             <Box textAlign='center'>
-              <Button variant="outlined" style={{
+            <label htmlFor="contained-button-file">
+            <Input accept="image/*" id="contained-button-file" multiple type="file" />
+              <Button variant="contained" component="span" variant="outlined" style={{
                 maxWidth: "170px",
-                border: 'dashed',
                 maxHeight: "80px",
                 minWidth: "170px",
                 minHeight: "80px",
+                border: 'dashed',
                 fontSize: '11px'
-                }}> <Stack direction="column" spacing={5} alignItems="center" > <UploadFileRoundedIcon/>Upload Employees</Stack> </Button>
+                }}>
+            
+            <Stack direction="column" spacing={5} alignItems="center" > 
+            <UploadFileRoundedIcon/> Upload Geofence Info </Stack> 
+            </Button>
+            </label>
             </Box>
+
             </Stack>
+
+
           </SidebarSection>
         </SetionsWrapper>
       </Form>
