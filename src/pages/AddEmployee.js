@@ -359,10 +359,13 @@ const AddEmployee = () => {
                     :
                     (<Snackbar
                         open={openSnackbar}
-                        autoHideDuration={2000}
+                        autoHideDuration={6000}
                         onClose={closeSnackbar}
                         anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
-                        <Alert severity='success' variant='filled'>Message sent!</Alert>
+                        <Alert severity='success' variant='filled'>
+                            <AlertTitle>Success!</AlertTitle>
+                            An Email message was sent to the employee with their credentials!
+                        </Alert>
                     </Snackbar>)}
             </Form>
         </Formik>
