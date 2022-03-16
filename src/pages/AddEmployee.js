@@ -12,7 +12,7 @@ import { format } from 'date-fns';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import styled from 'styled-components';
 import { httpsCallable } from 'firebase/functions';
-import { Alert, CircularProgress, Snackbar } from '@mui/material';
+import { Alert, AlertTitle, CircularProgress, Snackbar } from '@mui/material';
 
 /**
  * Send Email Cloud Function 
@@ -85,6 +85,10 @@ const AddEmployee = () => {
      * Use States
      */
     const [error, setError] = useState(false);
+    const [errorDetails, setErrorDetails] = useState({
+        title: 'error',
+        description: 'Oops! Something went wrong, try again later.',
+    });
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [departments, setDepartments] = useState([
@@ -327,8 +331,9 @@ const AddEmployee = () => {
                     open={openSnackbar}
                     onClose={closeSnackbar}
                     anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
-                    <Alert onClose={closeSnackbar} severity="error">
-                        Oops! Something went wrong, try again later.
+                    <Alert onClose={closeSnackbar} severity="error" variant='filled'>
+                        <AlertTitle>{errorDetails.title}</AlertTitle>
+                        {errorDetails.description}
                     </Alert>
                 </Snackbar>)
                     :
