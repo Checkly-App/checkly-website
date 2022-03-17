@@ -30,13 +30,15 @@ import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormLabel from '@mui/material/FormLabel';
 import logo from '../assets/images/logo.svg';
+import { deepOrange, white } from '@mui/material/colors';
+import Badge from '@mui/material/Badge';
 
 
 const Section = styled.div`
   background-color: white;
   border-radius: 0.75em;
   padding: 3em;
-  margin-bottom: 3em;
+  margin-bottom: 1em;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -50,8 +52,8 @@ const Section = styled.div`
 const Section2 = styled.div`
   background-color: white;
   border-radius: 0.75em;
-  padding: 3em;
-  margin-bottom: 3em;
+  padding: 0.5em;
+  margin-bottom: 1em;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   display: block;
 `;
@@ -69,31 +71,16 @@ const SidebarSection = styled.div`
   
 `;
 
-const SectionTitle = styled.h1`
-  font-size: 1em;
-  font-weight: 600;
-  margin: 1em 0em 1em 0em;
-  grid-column: 1 / 3;
-  @media (max-width: 768px) {
-    grid-column: 1;
-  }
+const FormTitle = styled.h1`
+  font-size: 1.5em;
+  font-weight: 500;
+  margin: 0em 0em 1em 0em;
+  text-align: center;
 `;
 
 const SetionsWrapper = styled.div`
   margin: 5em;
   display: flex;
-`;
-
-const checklyButton = styled.button`
-  width: 15em;
-  height: 3em;
-  font-size: 1em;
-  font-weight: 500;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.9);
-  border-radius: 0.5em;
-  border: none;
-  background: linear-gradient(90deg, #56bbeb 0%, #58aaf3 100%);
 `;
 
 const SButton = styled.button`
@@ -106,7 +93,9 @@ const SButton = styled.button`
   border-radius: 0.5em;
   border: none;
   background: linear-gradient(90deg, #56bbeb 0%, #58aaf3 100%);
+  margin: 10em 0em 0em 10em;
 `;
+
 
 
 const locations = [
@@ -407,13 +396,17 @@ const Input = styled('input')({
           <MainSections>
 
             <Section2>
-              <Divider>
+             
                 <Avatar
+                  style={{zIndex:1, marginTop:-90, marginLeft:340}}
+                  background-color= "white"
                   alt="R"
                   src= {logo}
-                  sx={{ width: 56, height: 56 }}
+                  sx={{ width: 65, height: 150 }}
                 />
-              </Divider>
+
+                <FormTitle>Register Company To Checkly</FormTitle>
+              
             </Section2>
 
             <Section>
@@ -486,6 +479,7 @@ const Input = styled('input')({
                     <InputField sx={{ display: FixedDisplay }} name="Fixed" id="Fixed"label="Hours" />
               </FormControl>
             
+            <SButton>Register Company</SButton>
 
             </Section>
           </MainSections>
