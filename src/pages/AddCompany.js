@@ -29,6 +29,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormLabel from '@mui/material/FormLabel';
+import logo from '../assets/images/logo.svg';
 
 
 const Section = styled.div`
@@ -338,25 +339,6 @@ const Input = styled('input')({
      .on("state_changed" , alert("success") , alert);
 }
 
-  useEffect(() => {
-    onValue(ref(database, "Department"), (snapshot) => {
-      const data = snapshot.val();
-      var departments = [];
-      for (let id in data) {
-        if (data[id]["company_id"] === "com1") {
-          // TODO: - company's id
-          const department = {
-            department: "dep_" + data[id]["dep_id"],
-            name: data[id]["name"],
-          };
-          departments.push(department);
-        }
-      }
-      console.log(departments);
-      setDepartments(departments);
-    });
-  }, []);
-
 
   const initialValues = {
     name: "",
@@ -385,18 +367,20 @@ const Input = styled('input')({
   });
 
   const addCompany = (company) => {
-    // createUserWithEmailAndPassword(auth, employee.email, "123456")
-    //   .then((result) => {
-        set(ref(database, "test/" + result.user.uid), {
+
+        set(ref(database, "test/" + "11"), {
           name: company.name,
-          address: company.address,
-          gender: company.gender,
           email: company.email,
-          employee_id: company.employeeID,
-          department: company.department,
-          position: company.position,
+          location: company.location,
+          industry: company.industry,
+          email: company.email,
+          age: company.age,
+          policy: company.policy,
+          preference: company.preference,
+          Flexible: company.Flexible,
+          Flexible: company.Fixed,
         })
-      // })
+
       .catch((error) => {
         // var errorCode = error.code;
         var errorMessage = error.message;
@@ -426,7 +410,7 @@ const Input = styled('input')({
               <Divider>
                 <Avatar
                   alt="R"
-                  src="/static/images/avatar/1.jpg"
+                  src= {logo}
                   sx={{ width: 56, height: 56 }}
                 />
               </Divider>
@@ -501,7 +485,7 @@ const Input = styled('input')({
                     <InputField sx={{ display: FlexibleDisplay }} name="Flexible" id="Flexible" label="Hours" />
                     <InputField sx={{ display: FixedDisplay }} name="Fixed" id="Fixed"label="Hours" />
               </FormControl>
- 
+            
 
             </Section>
           </MainSections>
@@ -586,7 +570,7 @@ const Input = styled('input')({
             </Button>
             </label>
             </Box>
-                <SButton type="submit"> kjk </SButton>
+               
             </Stack>
 
 
