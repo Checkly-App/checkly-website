@@ -199,7 +199,7 @@ const AddEmployee = () => {
             nationalID: Yup.string().matches(/^(?<=\s|^)\d+(?=\s|$)/, "consists of numbers only").min(10, 'must be 10 digits').max(10, 'must be 10 digits').required('National ID is required'),
             address: Yup.string().required('Address is required'),
             phoneNumber: Yup.string().matches(/^[0](\/?[0-9])*\/?$/, "Invalid phone format ").min(10, 'must be 10 digits').max(10, 'must be 10 digits').required('Phone Number is required'),
-            birthdate: Yup.date().nullable().required('Birthdate is required').typeError("Date format must be: dd/MM/yyyy"),
+            birthdate: Yup.date().nullable().max(new Date('01/01/2005'), "Maximum date is 01/01/2005").min(new Date('01/01/1920'), "Minimum date is 01/01/1920").required('Birthdate is required').typeError("Date format must be: dd/MM/yyyy"),
             department: Yup.string().required('Department is required'),
             email: Yup.string().email('Invalid email').required('Email is required'),
             employeeID: Yup.string().matches(/^(?<=\s|^)\d+(?=\s|$)/, "consists of numbers only").min(10, 'must be 10 digits').max(10, 'must be 10 digits').required('Employee ID is required'),
@@ -344,7 +344,8 @@ const AddEmployee = () => {
                             label='Position'
                         />
                     </Section>
-                    {isLoading ? <CircularProgress /> : <Button type='submit'>  Add an employee </Button>}
+                    {isLoading ?
+                        <CircularProgress /> : <Button type='submit'>  Add an employee </Button>}
                 </SetionsWrapper>
                 {error ? (<Snackbar
                     autoHideDuration={6000}

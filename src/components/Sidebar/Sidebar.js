@@ -90,7 +90,7 @@ const Sidebar = () => {
         <SideBarWrapper>
             <Wrapper>
                 <Logo src={logo} />
-                <LogoCaption>Checkly</LogoCaption>
+                <LogoCaption></LogoCaption>
             </Wrapper>
             <Wrapper nav>
                 {

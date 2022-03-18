@@ -10,8 +10,6 @@ const DateField = ({ name, ...other }) => {
     const { setFieldValue } = useFormikContext();
 
     const handleChange = (e) => {
-        console.log(field)
-        console.log(e);
         setFieldValue(name, e);
     };
 
@@ -24,8 +22,7 @@ const DateField = ({ name, ...other }) => {
         onChange: handleChange,
         minDate: new Date('01/01/1920'),
         maxDate: new Date('01/01/2005'),
-        openTo: 'year',
-        views: ['year', 'month', 'day']
+        openTo: 'day',
     };
 
     const textConfig = {
