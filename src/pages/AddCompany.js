@@ -33,6 +33,20 @@ import logo from '../assets/images/logo.svg';
 import { deepOrange, white } from '@mui/material/colors';
 import Badge from '@mui/material/Badge';
 
+const ButtonCircle2 = styled.button`
+background-color: white;
+  height: 85px;
+  width: 85px;
+  color: white;
+  padding: 1rem;
+  border: none;
+  cursor: pointer;
+  font-size: 27px;
+  border: 5px solid white;
+  border-radius: 50%;
+  padding: 10px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 1px 15px;
+  `;
 
 const Section = styled.div`
   background-color: white;
@@ -396,15 +410,18 @@ const Input = styled('input')({
           <MainSections>
 
             <Section2>
-             
+              <ButtonCircle2 
+              style={{zIndex:1, marginTop:-90, marginLeft:340}}
+              >
+              </ButtonCircle2>
                 <Avatar
-                  style={{zIndex:1, marginTop:-90, marginLeft:340}}
+                  style={{zIndex:1, marginTop:-108, marginLeft:355}}
                   background-color= "white"
                   alt="R"
                   src= {logo}
-                  sx={{ width: 65, height: 150 }}
+                  sx={{ width: 50, height: 135 }}
                 />
-
+             
                 <FormTitle>Register Company To Checkly</FormTitle>
               
             </Section2>
@@ -461,7 +478,7 @@ const Input = styled('input')({
               
             </Section>
 
-            <Section>
+            <Section2>
               
                 <FormControl>
                     <FormLabel> Company's Attendance Policy </FormLabel>
@@ -481,7 +498,7 @@ const Input = styled('input')({
             
             <SButton>Register Company</SButton>
 
-            </Section>
+            </Section2>
           </MainSections>
 
           {/* the Sidebar Section */}
