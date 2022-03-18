@@ -1,39 +1,39 @@
 import { React, useState, useEffect } from 'react';
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { getAuth, signOut } from "firebase/auth";
 import EmplyeeAdd from './AddEmployee';
 import AdminProfile from './AdminProfile';
-import CheckleProfile from './checkleProfile'
+import ChecklyProfile from './ChecklyProfile'
 
 
 const Profile = () => {
   const [userRole, setuserRole] = useState(false);
- 
+
   const navigate = useNavigate();
   const auth = getAuth();
   const user = auth.currentUser;
-  
-  const emailValid = ()=>{
+
+  const emailValid = () => {
     const email = user.email;
-   
+
     const index = email.indexOf("@")
     const subst = email.substring(index)
-   
-   if (subst == "@checkly.org"){
-    setuserRole(true)
-    
-   }
-   else {
-    setuserRole(false)
-   
-    
-   }
+
+    if (subst == "@checkly.org") {
+      setuserRole(true)
+
+    }
+    else {
+      setuserRole(false)
+
+
+    }
   }
-  
-  useEffect(()=>{
-   emailValid()
-},[])
-  const logout = () =>{
+
+  useEffect(() => {
+    emailValid()
+  }, [])
+  const logout = () => {
 
     const auth = getAuth();
     signOut(auth).then(() => {
@@ -43,11 +43,11 @@ const Profile = () => {
     });
   }
   return (
-   
-  <>
-   {userRole ? <CheckleProfile/> :<AdminProfile/> }
-  </>
+
+    <>
+      {userRole ? <ChecklyProfile /> : <AdminProfile />}
+    </>
   )
 };
-  
+
 export default Profile;
