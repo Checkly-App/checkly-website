@@ -51,7 +51,7 @@ function App() {
       <AppContainer className="App">
         <SideBar> Sidebar Content</SideBar>
         <Content>
-          <AddCompany />
+          <AddCompany/>
         </Content>
       </AppContainer >
     </ThemeProvider>

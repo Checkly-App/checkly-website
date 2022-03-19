@@ -2,36 +2,25 @@ import { React, useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import InputField from "../components/Forms/InputField";
-import { MdOutlineAlternateEmail } from "react-icons/md";
 import SelectField from "../components/Forms/SelectField";
-import RadioButtons from "../components/Forms/RadioButtons";
 import RadioGroup from '@mui/material/RadioGroup';
 import { set, ref, onValue } from "firebase/database";
 import { database, auth, storage } from "../utilities/firebase";
-import DateField from "../components/Forms/DateField";
-import { format } from "date-fns";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import styled, { keyframes } from "styled-components";
-import Divider from "@mui/material/Divider";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import UploadFileRoundedIcon from '@mui/icons-material/UploadFileRounded';
 import InsertPhotoOutlinedIcon from '@mui/icons-material/InsertPhotoOutlined';
 import Radio from '@mui/material/Radio';
-import InputLabel from '@mui/material/InputLabel';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormLabel from '@mui/material/FormLabel';
 import logo from '../assets/images/logo.svg';
-import { deepOrange, white } from '@mui/material/colors';
-import Badge from '@mui/material/Badge';
+import {  uploadBytesResumable } from "firebase/storage"; //ref
 
 const ButtonCircle2 = styled.button`
 background-color: white;
@@ -81,7 +70,6 @@ const Section3 = styled.div`
   display: block;
 `; 
 
-
 const MainSections = styled.div`
   width: 85%;
 `;
@@ -123,7 +111,11 @@ const SButton = styled.button`
   margin-right: 0em
 `;
 
+const Input = styled('input')({
+  display: 'none',
+});
 
+//Arrays
 
 const locations = [
     {
@@ -308,52 +300,40 @@ const locations = [
     },
   ];
 
-  
-
 
 
 const AddCompany = () => {
-  const [departments, setDepartments] = useState([
-    {
-      department: "",
-      name: "",
-    },
-  ]);
- 
-const Input = styled('input')({
-    display: 'none',
-  });
 
 
-//   radio button config
+//   radio button helper text config
 
   const [value, setValue] = useState('Fixed');
   const [helperText, setHelperText] = useState('Please enter working hours, e.g. 8-4');
-  const [FlexibleDisplay, SetFlexibleDisplay] = useState('none');
-  const [FixedDisplay, SetFixedDisplay] = useState('inline');
 
   const handleRadioChange = (event) => {
     setValue(event.target.value);
     if (event.target.value === 'Flexible') {
         setHelperText('Please enter minimum working hours');
-        SetFixedDisplay('none');
-        SetFlexibleDisplay('inline');
  
     } else if (event.target.value === 'Fixed') {
         setHelperText('Please enter working hours, e.g. 8-4');
-        SetFlexibleDisplay('none');
-        SetFixedDisplay('inline');
     }
   };
 
   //upload 
-  const [image , setImage] = useState('');
-        const upload = ()=>{
-         if(image == null)
-         return;
-    storage.ref(`/Companies/${image.name}`).put(image)
-     .on("state_changed" , alert("success") , alert);
-}
+  const uploadFile = (file) =>  {
+      if (!file) return;
+
+      const storageRef = ref(storage, `Companies/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+  };
+
+  // const formHandler = (e) => {
+  //   e.preventDefault();
+  //   const file = e.target[0].files[0];
+  //   console.log(file.name);
+  //   //uploadFile(file);
+  // };
 
 
   const initialValues = {
@@ -365,25 +345,26 @@ const Input = styled('input')({
     preference: "",
     age: "",
     policy: "Fixed",
-    Flexible: "",
-    Fixed: "",
+    hours: "",
+    file: "",
   };
+
 
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
-    location: Yup.string().required("Location is required"),
-    size: Yup.string().required("Size is required"),
-    industry: Yup.string().required("Industry is required"),
-    preference: Yup.string().required("Preference is required"),
-    email: Yup.string().email("Invalid email").required("Email is required"),
-    age: Yup.string().required("Company's age is required"),
-    Flexible: Yup.string().required("Working hours are required"),
-    Fixed: Yup.string().required("Working hours are required"),
+    // location: Yup.string().required("Location is required"),
+    // size: Yup.string().required("Size is required"),
+    // industry: Yup.string().required("Industry is required"),
+    // preference: Yup.string().required("Preference is required"),
+    // email: Yup.string().email("Invalid email").required("Email is required"),
+    // age: Yup.string().required("Company's age is required"),
+    // Flexible: Yup.string().required("Working hours are required"),
+    // Fixed: Yup.string().required("Working hours are required"),
   });
 
   const addCompany = (company) => {
     createUserWithEmailAndPassword(auth, company.email, '123456').then((result) => {
-        set(ref(database, 'Company'), {
+        set(ref(database, 'Company/'), {
             name: company.name,
             // email: company.email,
             // location: company.location,
@@ -404,7 +385,6 @@ const Input = styled('input')({
     });
 }
 
-console.log(Formik.values);
   
   return (
     
@@ -413,13 +393,17 @@ console.log(Formik.values);
       validationSchema={validationSchema}
       onSubmit={(values) => {
         console.log(values);
+        // uploadFile(file)
         addCompany(values);
         alert(JSON.stringify(values, null, 2));
       }}
     >
-      <Form onSubmit={Formik.handleSubmit}>
+      <Form>
+      
         <SetionsWrapper>
           <MainSections>
+
+          {/* header */}
 
             <Section2>
               <ButtonCircle2 
@@ -437,6 +421,7 @@ console.log(Formik.values);
                 <FormTitle>Register Company To Checkly</FormTitle>
               
             </Section2>
+
 
             <Section>
 
@@ -504,23 +489,26 @@ console.log(Formik.values);
                     <FormControlLabel value="Flexible" control={<Radio />} label="Flexible Hours" />
                     </RadioGroup>
                     <FormHelperText>{helperText}</FormHelperText>
-                    <InputField sx={{ display: FlexibleDisplay }} name="Flexible" id="Flexible" label="Hours" />
-                    <InputField sx={{ display: FixedDisplay }} name="Fixed" id="Fixed"label="Hours" />
+                    <InputField name="hours" id="hours" label="Hours" />
+
               </FormControl>
             
-            <SButton type='submit' >Register Company</SButton>
+            <Button type="submit" >Register Company</Button>
 
             </Section3>
           </MainSections>
 
           {/* the Sidebar Section */}
           <SidebarSection>
+
             <Stack direction="column" justify="center" spacing={5}>
 
-            
+           
             <Box m={2} pt={15} textAlign='center'>
             <label htmlFor="contained-button-file">
-             <Input accept="image/*" id="contained-button-file" multiple type="file" />
+             <Input id="file" name="file" type="file" accept="image/*" multiple onChange={(event) => {
+                    Formik.setFieldValue("file", event.currentTarget.files[0]);
+                  }} />
              <Button variant="contained" component="span" color="grey" margin={5} variant="outlined" style={{
                 maxWidth: "170px",
                 maxHeight: "150px",
@@ -529,14 +517,16 @@ console.log(Formik.values);
                 border: 'dashed',
                 fontSize: '13px'
                 }}>
-                <input type="file" style={{display: 'none'}} onChange={(e)=>{setImage(e.target.files[0])}} />
+                <input type="file" style={{display: 'none'}} />
                     <Stack direction="column" spacing={5} alignItems="center" > 
                     <InsertPhotoOutlinedIcon sx={{ fontSize: 60 }} /> Upload logo </Stack> 
                 </Button>
              </label>
             </Box>
+          
             
             
+        
             <Box textAlign='center'>
             <label htmlFor="contained-button-file">
             <Input accept="image/*" id="contained-button-file" multiple type="file" />

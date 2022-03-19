@@ -9,7 +9,7 @@ const firebaseConfig = {
     authDomain: process.env.REACT_APP_authDomain,
     databaseURL: "https://checkly-292d2-default-rtdb.firebaseio.com",
     projectId: process.env.REACT_APP_projectId,
-    storageBucket: process.env.REACT_APP_storageBucket,
+    storageBucket: "gs://checkly-292d2.appspot.com",
     messagingSenderId: process.env.REACT_APP_messagingSenderId,
     appId: process.env.REACT_APP_appId,
     measurementId: process.env.REACT_APP_measurementId
