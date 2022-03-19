@@ -196,13 +196,13 @@ const AddEmployee = () => {
     const validationSchema =
         Yup.object({
             fullName: Yup.string().required('Full Name is required'),
-            nationalID: Yup.string().matches(/^(?<=\s|^)\d+(?=\s|$)/, "consists of numbers only").min(10, 'must be 10 digits').max(10, 'must be 10 digits').required('National ID is required'),
+            nationalID: Yup.string().matches(/^(?<=\s|^)\d+(?=\s|$)/, "National ID should consist of numbers only").min(10, 'Must be 10 digits').max(10, 'Must be 10 digits').required('National ID is required'),
             address: Yup.string().required('Address is required'),
-            phoneNumber: Yup.string().matches(/^[05](\/?[0-9])*\/?$/, "Invalid phone format ").min(10, 'must be 10 digits').max(10, 'must be 10 digits').required('Phone Number is required'),
+            phoneNumber: Yup.string().matches(/^[0]{1}[5]{1}([0-9])*$/, "Invalid phone format ").min(10, 'Must be 10 digits').max(10, 'Must be 10 digits').required('Phone Number is required'),
             birthdate: Yup.date().nullable().max(new Date('01/01/2005'), "Maximum date is 01/01/2005").min(new Date('01/01/1920'), "Minimum date is 01/01/1920").required('Birthdate is required').typeError("Date format must be: dd/MM/yyyy"),
             department: Yup.string().required('Department is required'),
             email: Yup.string().email('Invalid email').required('Email is required'),
-            employeeID: Yup.string().matches(/^(?<=\s|^)\d+(?=\s|$)/, "consists of numbers only").min(10, 'must be 10 digits').max(10, 'must be 10 digits').required('Employee ID is required'),
+            employeeID: Yup.string().matches(/^(?<=\s|^)\d+(?=\s|$)/, "Employee ID should consist of numbers only").min(10, 'Must be 10 digits').max(10, 'Must be 10 digits').required('Employee ID is required'),
             position: Yup.string().required('Position is required')
         });
 
