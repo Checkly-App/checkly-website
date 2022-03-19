@@ -122,9 +122,7 @@ const AddEmployee = () => {
         });
     }, []);
 
-    useEffect(() => { fetchEmployees() }, [departments])
-
-    const fetchEmployees = () => {
+    useEffect(() => {
         const departmentsKeys = []
         for (let i in departments)
             departmentsKeys.push(departments[i]['department'])
@@ -145,7 +143,9 @@ const AddEmployee = () => {
             }
             setEmployees(employees);
         });
-    }
+    }, [departments])
+
+
 
     const employeeExists = (employee) => {
         for (let i in employees) {
@@ -198,7 +198,7 @@ const AddEmployee = () => {
             fullName: Yup.string().required('Full Name is required'),
             nationalID: Yup.string().matches(/^(?<=\s|^)\d+(?=\s|$)/, "consists of numbers only").min(10, 'must be 10 digits').max(10, 'must be 10 digits').required('National ID is required'),
             address: Yup.string().required('Address is required'),
-            phoneNumber: Yup.string().matches(/^[0](\/?[0-9])*\/?$/, "Invalid phone format ").min(10, 'must be 10 digits').max(10, 'must be 10 digits').required('Phone Number is required'),
+            phoneNumber: Yup.string().matches(/^[05](\/?[0-9])*\/?$/, "Invalid phone format ").min(10, 'must be 10 digits').max(10, 'must be 10 digits').required('Phone Number is required'),
             birthdate: Yup.date().nullable().max(new Date('01/01/2005'), "Maximum date is 01/01/2005").min(new Date('01/01/1920'), "Minimum date is 01/01/1920").required('Birthdate is required').typeError("Date format must be: dd/MM/yyyy"),
             department: Yup.string().required('Department is required'),
             email: Yup.string().email('Invalid email').required('Email is required'),
