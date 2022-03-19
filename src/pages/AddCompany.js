@@ -367,7 +367,6 @@ const Input = styled('input')({
     policy: "Fixed",
     Flexible: "",
     Fixed: "",
-    //add radio button
   };
 
   const validationSchema = Yup.object({
@@ -379,48 +378,22 @@ const Input = styled('input')({
     email: Yup.string().email("Invalid email").required("Email is required"),
     age: Yup.string().required("Company's age is required"),
     Flexible: Yup.string().required("Working hours are required"),
-    Fixed: Yup.string().required("CWorking hours are required"),
+    Fixed: Yup.string().required("Working hours are required"),
   });
-
-  // const addCompany = (company) => {
-
-  //       set(ref(database, "test/" + "11"), {
-  //         name: company.name,
-  //         email: company.email,
-  //         location: company.location,
-  //         industry: company.industry,
-  //         email: company.email,
-  //         age: company.age,
-  //         policy: company.policy,
-  //         preference: company.preference,
-  //         Flexible: company.Flexible,
-  //         Flexible: company.Fixed,
-  //       })
-
-  //     .catch((error) => {
-  //       // var errorCode = error.code;
-  //       var errorMessage = error.message;
-  //       alert(errorMessage);
-  //       console.log(error);
-  //       return;
-  //     });
-  // };
 
   const addCompany = (company) => {
     createUserWithEmailAndPassword(auth, company.email, '123456').then((result) => {
-        set(ref(database, 'test2/'), {
-            name: company.name
-            // national_id: employee.nationalID,
-            // phone_number: employee.phoneNumber,
-            // birthdate: format(employee.birthdate, 'dd/MM/yyyy'),
-            // address: employee.address,
-            // gender: employee.gender,
-            // email: employee.email,
-            // employee_id: employee.employeeID,
-            // department: employee.department,
-            // position: employee.position,
-            // change_image: 0,
-            // image_token: "null"
+        set(ref(database, 'Company'), {
+            name: company.name,
+            // email: company.email,
+            // location: company.location,
+            // size: company.size,
+            // industry: company.industry,
+            // age: company.age,
+            // policy: company.policy,
+            // Flexible: company.Flexible,
+            // Fixed: company.Fixed,
+            // preference: company.preference
         });
     }).catch((error) => {
         // var errorCode = error.code;
@@ -431,6 +404,7 @@ const Input = styled('input')({
     });
 }
 
+console.log(Formik.values);
   
   return (
     
@@ -439,11 +413,11 @@ const Input = styled('input')({
       validationSchema={validationSchema}
       onSubmit={(values) => {
         console.log(values);
-        // addCompany(values);
+        addCompany(values);
         alert(JSON.stringify(values, null, 2));
       }}
     >
-      <Form>
+      <Form onSubmit={Formik.handleSubmit}>
         <SetionsWrapper>
           <MainSections>
 
@@ -534,7 +508,7 @@ const Input = styled('input')({
                     <InputField sx={{ display: FixedDisplay }} name="Fixed" id="Fixed"label="Hours" />
               </FormControl>
             
-            <SButton type="submit" >Register Company</SButton>
+            <SButton type='submit' >Register Company</SButton>
 
             </Section3>
           </MainSections>
