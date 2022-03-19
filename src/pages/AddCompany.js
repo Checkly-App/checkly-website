@@ -71,6 +71,17 @@ const Section2 = styled.div`
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   display: block;
 `;
+
+const Section3 = styled.div`
+  background-color: white;
+  border-radius: 0.75em;
+  padding: 2em;
+  margin-bottom: 1em;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  display: block;
+`; 
+
+
 const MainSections = styled.div`
   width: 85%;
 `;
@@ -107,7 +118,9 @@ const SButton = styled.button`
   border-radius: 0.5em;
   border: none;
   background: linear-gradient(90deg, #56bbeb 0%, #58aaf3 100%);
-  margin: 10em 0em 0em 10em;
+  margin: 0em 0em 0em 12em;
+  margin-left: 10em
+  margin-right: 0em
 `;
 
 
@@ -415,7 +428,7 @@ const Input = styled('input')({
               >
               </ButtonCircle2>
                 <Avatar
-                  style={{zIndex:1, marginTop:-108, marginLeft:355}}
+                  style={{zIndex:1, marginTop:-108, marginLeft:357}}
                   background-color= "white"
                   alt="R"
                   src= {logo}
@@ -478,7 +491,7 @@ const Input = styled('input')({
               
             </Section>
 
-            <Section2>
+            <Section3>
               
                 <FormControl>
                     <FormLabel> Company's Attendance Policy </FormLabel>
@@ -498,7 +511,7 @@ const Input = styled('input')({
             
             <SButton>Register Company</SButton>
 
-            </Section2>
+            </Section3>
           </MainSections>
 
           {/* the Sidebar Section */}
