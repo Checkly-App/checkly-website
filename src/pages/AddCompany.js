@@ -382,29 +382,54 @@ const Input = styled('input')({
     Fixed: Yup.string().required("CWorking hours are required"),
   });
 
+  // const addCompany = (company) => {
+
+  //       set(ref(database, "test/" + "11"), {
+  //         name: company.name,
+  //         email: company.email,
+  //         location: company.location,
+  //         industry: company.industry,
+  //         email: company.email,
+  //         age: company.age,
+  //         policy: company.policy,
+  //         preference: company.preference,
+  //         Flexible: company.Flexible,
+  //         Flexible: company.Fixed,
+  //       })
+
+  //     .catch((error) => {
+  //       // var errorCode = error.code;
+  //       var errorMessage = error.message;
+  //       alert(errorMessage);
+  //       console.log(error);
+  //       return;
+  //     });
+  // };
+
   const addCompany = (company) => {
-
-        set(ref(database, "test/" + "11"), {
-          name: company.name,
-          email: company.email,
-          location: company.location,
-          industry: company.industry,
-          email: company.email,
-          age: company.age,
-          policy: company.policy,
-          preference: company.preference,
-          Flexible: company.Flexible,
-          Flexible: company.Fixed,
-        })
-
-      .catch((error) => {
+    createUserWithEmailAndPassword(auth, company.email, '123456').then((result) => {
+        set(ref(database, 'test2/'), {
+            name: company.name
+            // national_id: employee.nationalID,
+            // phone_number: employee.phoneNumber,
+            // birthdate: format(employee.birthdate, 'dd/MM/yyyy'),
+            // address: employee.address,
+            // gender: employee.gender,
+            // email: employee.email,
+            // employee_id: employee.employeeID,
+            // department: employee.department,
+            // position: employee.position,
+            // change_image: 0,
+            // image_token: "null"
+        });
+    }).catch((error) => {
         // var errorCode = error.code;
         var errorMessage = error.message;
         alert(errorMessage);
         console.log(error);
         return;
-      });
-  };
+    });
+}
 
   
   return (
@@ -414,7 +439,7 @@ const Input = styled('input')({
       validationSchema={validationSchema}
       onSubmit={(values) => {
         console.log(values);
-        // addEmployee(values);
+        // addCompany(values);
         alert(JSON.stringify(values, null, 2));
       }}
     >
@@ -509,7 +534,7 @@ const Input = styled('input')({
                     <InputField sx={{ display: FixedDisplay }} name="Fixed" id="Fixed"label="Hours" />
               </FormControl>
             
-            <SButton>Register Company</SButton>
+            <SButton type="submit" >Register Company</SButton>
 
             </Section3>
           </MainSections>
