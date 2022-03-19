@@ -13,6 +13,8 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import styled from 'styled-components';
 import { httpsCallable } from 'firebase/functions';
 import { Alert, AlertTitle, CircularProgress, Snackbar } from '@mui/material';
+import { v4 as uuidv4 } from 'uuid';
+
 
 /**
  * Send Email Cloud Function 
@@ -145,8 +147,6 @@ const AddEmployee = () => {
         });
     }, [departments])
 
-
-
     const employeeExists = (employee) => {
         for (let i in employees) {
             if (employee.nationalID === employees[i].nationalID) {
@@ -226,7 +226,7 @@ const AddEmployee = () => {
             return;
         }
 
-        const password = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 9); //might be vulnerable to brute-force attacks
+        const password = uuidv4().slice(0, 8);
 
         createUserWithEmailAndPassword(auth, employee.email, password).then((result) => {
             sendEmail({
