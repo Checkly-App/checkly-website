@@ -1,17 +1,18 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import InputField from '../components/Forms/InputField';
-import { MdOutlineAlternateEmail,MdHttps ,AiOutlineCheckCircle } from "react-icons/md";
-import { Container, Grid } from '@mui/material';
+import { MdOutlineAlternateEmail } from "react-icons/md";
+import {  Grid } from '@mui/material';
 import {auth}  from '../utilities/firebase';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { padding, textAlign } from '@mui/system';
-import Reset from './AddEmployee'
-import { getAuth, sendPasswordResetEmail  } from "firebase/auth";
+import {  sendPasswordResetEmail  } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
-import UILogin from '../assets/images/UILogin.png';
+//import UILogin from '../assets/images/UILogin.png';
 import Loginpic from '../assets/images/Loginpic.png';
+import {  ref, onValue } from 'firebase/database';
+import { database } from '../utilities/firebase';
+
 import Logo from '../assets/images/logo.svg';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 <link
@@ -24,7 +25,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
   
    const ResetPaaword = () => {
   
-     const navigate = useNavigate()
+    // const navigate = useNavigate()
      const [count, setCount] = useState(null);
      const [issend, setIssend] = useState(null);
             
@@ -34,7 +35,30 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
       
     };
   
-
+    const isCompany = (email) => {
+      console.log(email)
+      var cheak = true
+      onValue(ref(database, 'Employee'), (snapshot) => {
+        const data = snapshot.val();
+  
+        for (let id in data) {
+          if (data[id]['email'] === email) { // TODO: - 
+            cheak = false
+  
+  
+          }
+  
+  
+        }
+  
+  
+      });
+  
+      console.log(cheak)
+      return cheak
+      // console.log(isValid)
+      // console.log(count1)
+    }
 
     const validationSchema =
         Yup.object({
@@ -93,12 +117,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
      border : "none",
       cursor: "pointer",
     };
-    const Button1 = {
-      background: "none",
-    color: "#2CB1EF",
-    border : "none",
-    cursor: "pointer",
-    };
+    
     const overlay = {
      //  position: "absolute", 
        width:"80%",
@@ -157,6 +176,9 @@ return (
             initialValues={{ ...initialValues }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
+              const v = isCompany(values.email)
+              console.log(v)
+              if (isCompany(values.email)) {
               sendPasswordResetEmail(auth, values.email)
               .then(() => {
                 
@@ -164,13 +186,14 @@ return (
                 setIssend("Check your inbox for a reset message")
               })
               .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
+               
                 setCount("Please enter a valid email") 
  
                 // ..
               });
-               
+            }else{
+              setCount("Please enter a valid email") 
+            }
               
             }}>
            

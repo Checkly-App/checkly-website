@@ -1,6 +1,5 @@
 // import logo from './assets/images/logo.svg';
 import './App.css';
-import AddEmployee from './pages/AddEmployee';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
 import AdminProfile from './pages/AdminProfile';
@@ -10,7 +9,8 @@ import { React, useState, useEffect } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { BrowserRouter as Router, Route, Switch, Routes } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-
+import { Navigate, Outlet } from 'react-router-dom';
+import PrivateRoute from './context/PrivateRoute';
 
 const theme = createTheme({
   palette: {
@@ -44,7 +44,7 @@ function App() {
 
         if (userAuth) {
 
-          setuserinfo(user)
+          setuserinfo(userAuth)
         } else {
           setuserinfo(null)
         }
@@ -61,13 +61,14 @@ function App() {
 
         <Routes>
 
-          {userinfo ? <Route exact path="/" element={<Profile />} /> : <Route exact path="/" element={<Login />} />}
-
-          <Route exact path="/AddEmployee" element={<AddEmployee />} />
-          <Route exact path="/Profile" element={<Profile />} />
+       
+          {/* <Route exact path='/Admin' element={<PrivateRoute/>}>
+            <Route exact path='/Admin' element={<Profile/>}/>
+          </Route> */}
+         {userinfo? <Route component={() => (<div>404 Not found </div>)} /> : <Route exact path="/login" element={<Login />} />}
           <Route exact path="/ResetPassword" element={<ResetPassword />} />
-          <Route exact path="/checklyProfile" element={<ChecklyProfile />} />
-          <Route exact path="/AdminProfile" element={<AdminProfile />} />
+          <Route exact path="/admin/AdminCheckly" element={<ChecklyProfile />} />
+          <Route exact path="/admin/AdminEmployee" element={<AdminProfile />} />
         </Routes>
       </Router>
     </div >

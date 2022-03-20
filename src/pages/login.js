@@ -1,22 +1,21 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect , useContext } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import InputField from '../components/Forms/InputField';
 import { MdOutlineAlternateEmail, MdHttps } from "react-icons/md";
-import { Container, Grid } from '@mui/material';
+import {  Grid } from '@mui/material';
 import { auth } from '../utilities/firebase';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { padding, style, textAlign, width } from '@mui/system';
-import EmplyeeAdd from './AddEmployee'
-import ResetPassword from './ResetPassword'
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import UILogin from '../assets/images/UILogin.png';
 import Loginpic from '../assets/images/Loginpic.png';
 import Logo from '../assets/images/logo.svg';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import { set, ref, onValue } from 'firebase/database';
+import {  ref, onValue } from 'firebase/database';
 import { database } from '../utilities/firebase';
+import {  getAuth,onAuthStateChanged } from "firebase/auth";
+
 <link
   rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
@@ -29,6 +28,33 @@ const Login = () => {
 
   const navigate = useNavigate()
   const [count, setCount] = useState(null);
+ 
+ 
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged
+      (auth, userAuth => {
+
+        if (userAuth) {
+          const index =  userAuth?.email.indexOf("@")
+          const subst =  userAuth?.email.substring(index)
+      
+          if (subst == "@checkly.org") {
+            navigate("/admin/AdminCheckly")
+        }
+          else{
+            navigate("/admin/AdminEmployee")
+          }
+         
+        } else {
+          navigate("/login")
+
+        }
+      })
+    return unsubscribe
+  }, [])
+  
 
 
   const initialValues = {
@@ -37,7 +63,27 @@ const Login = () => {
     email: '',
 
   };
+  const [userRole, setuserRole] = useState(false);
 
+  
+
+  const emailValid = (email) => {
+  
+
+    const index = email.indexOf("@")
+    const subst = email.substring(index)
+
+    if (subst == "@checkly.org") {
+      setuserRole(true)
+return true
+    }
+    else {
+      setuserRole(false)
+      return false
+
+
+    }
+  }
   const isCompany = (email) => {
     console.log(email)
     var cheak = true
@@ -59,8 +105,7 @@ const Login = () => {
 
     console.log(cheak)
     return cheak
-    // console.log(isValid)
-    // console.log(count1)
+ 
   }
 
   const validationSchema =
@@ -192,8 +237,21 @@ const Login = () => {
                     // Signed in 
                     const user = userCredential.user;
                     console.log(user)
+                    
                     // alert(JSON.stringify(user, null, 2));
                     setCount(null)
+                    // window.history.replaceState(null, null, "/admin");
+                  // navigate("/admin")
+                  if (emailValid(values.email)){
+                     window.history.replaceState(null, null, "/admin/AdminCheckly")
+                  navigate("/admin/AdminCheckly")
+                 //  window.location.reload(false)
+                }
+                   else{
+                    window.history.replaceState(null, null,"/admin/AdminEmployee")
+                    navigate("/admin/AdminEmployee")
+                   // window.location.reload(false)
+                   }
                     // ...
                   })
                   .catch((error) => {
@@ -248,7 +306,7 @@ const Login = () => {
 
           </Formik >
           <Grid item xs={12}>
-            <button style={Button1} onClick={() => navigate("./ResetPassword")}>  Forgot password? </button>
+            <button style={Button1} onClick={() => navigate("/ResetPassword")}>  Forgot password? </button>
           </Grid>
         </div>
         {/* </div> */}

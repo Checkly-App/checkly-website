@@ -45,7 +45,7 @@ const Profile = () => {
   return (
 
     <>
-      {userRole ? <ChecklyProfile /> : <AdminProfile />}
+      {userRole ? navigate("/admin/AdminCheckly") : navigate("/admin/AdminEmployee")}
     </>
   )
 };
