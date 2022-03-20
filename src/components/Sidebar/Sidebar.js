@@ -54,7 +54,7 @@ const Link = styled(NavLink)`
         background-position: right center;
         background-size: contain;
         color: #2CB1EF;
-        }
+    }
 `
 const LogoutWrapper = styled.div`
     width: 100%;
