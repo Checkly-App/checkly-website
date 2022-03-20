@@ -307,10 +307,11 @@ const AddCompany = () => {
 
 //   radio button helper text config
 
-  const [value, setValue] = useState('Fixed');
-  const [helperText, setHelperText] = useState('Please enter working hours, e.g. 8-4');
+  const [value, setValue] = useState('');
+  const [helperText, setHelperText] = useState('');
 
   const handleRadioChange = (event) => {
+    event.preventDefault();
     setValue(event.target.value);
     if (event.target.value === 'Flexible') {
         setHelperText('Please enter minimum working hours');
@@ -338,13 +339,14 @@ const AddCompany = () => {
 
   const initialValues = {
     name: "",
+    abbreviation: "",
     email: "",
     location: "",
     size: "",
     industry: "",
     preference: "",
     age: "",
-    policy: "Fixed",
+    policy: "",
     hours: "",
     file: "",
   };
@@ -352,6 +354,7 @@ const AddCompany = () => {
 
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
+    abbreviation: Yup.string().required("Name is required"), 
     // location: Yup.string().required("Location is required"),
     // size: Yup.string().required("Size is required"),
     // industry: Yup.string().required("Industry is required"),
@@ -365,8 +368,8 @@ const AddCompany = () => {
   const addCompany = (company) => {
     createUserWithEmailAndPassword(auth, company.email, '123456').then((result) => {
         set(ref(database, 'Company/' + result.user.uid), {
-            //abbrevation
             name: company.name,
+            abbreviation: company.abbreviation,
             email: company.email,
             location: company.location,
             size: company.size,
@@ -431,6 +434,12 @@ const AddCompany = () => {
                 label="Name"
             />
 
+            <InputField 
+                name="abbreviation" 
+                id="abbreviation" 
+                label="Name Abbreviation"
+            />
+
             <InputField
                 name="email"
                 id="email"
@@ -461,7 +470,7 @@ const AddCompany = () => {
             <SelectField
                 name="age"
                 id="age"
-                label="Years since establishment"
+                label="Years Since Establishment"
                 options={ages}
             />
 
