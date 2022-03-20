@@ -1,10 +1,13 @@
-import React from 'react';
+import { React, useEffect } from 'react';
 import styled from 'styled-components';
 import logo from '../../assets/images/logo.svg';
 import side from '../../assets/images/sidePiece.svg';
 import { MdLogout } from 'react-icons/md'
 import { NavLink } from 'react-router-dom';
 import { sideBarData } from './Data';
+import { useNavigate } from "react-router-dom"
+import { signOut } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const SideBarWrapper = styled.div`
   grid-area: bar;
@@ -87,6 +90,36 @@ const Divider = styled.div`
 `
 
 const Sidebar = () => {
+    const navigate = useNavigate()
+    useEffect(() => {
+        const auth = getAuth();
+        const unsubscribe = onAuthStateChanged(auth, userAuth => {
+            if (userAuth) {
+                const index = userAuth?.email.indexOf("@");
+                const subst = userAuth?.email.substring(index);
+                if (subst == "@checkly.org") {
+                    navigate("/admin/AdminCheckly");
+                }
+                else {
+                    navigate("/admin/dashboard");
+                }
+
+            } else {
+                navigate("/login");
+            }
+        })
+        return unsubscribe;
+    }, [])
+
+    const logout = () => {
+        const auth = getAuth();
+        signOut(auth).then(() => {
+            window.history.replaceState(null, null, "/login");
+            navigate("/login")
+            window.location.reload(false);
+        });
+    }
+
     return (
         <SideBarWrapper>
             <Wrapper>
@@ -109,7 +142,7 @@ const Sidebar = () => {
             </Wrapper>
             <Wrapper>
                 <Divider />
-                <NavItem>
+                <NavItem onClick={logout}>
                     <LogoutWrapper>
                         <Icon>
                             <MdLogout size={22} />

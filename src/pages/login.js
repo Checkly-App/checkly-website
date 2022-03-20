@@ -25,31 +25,24 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 
 const Login = () => {
-
   const navigate = useNavigate()
   const [count, setCount] = useState(null);
-
-
 
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged
       (auth, userAuth => {
-
         if (userAuth) {
           const index = userAuth?.email.indexOf("@")
           const subst = userAuth?.email.substring(index)
-
           if (subst == "@checkly.org") {
             navigate("/admin/AdminCheckly")
           }
           else {
             navigate("/admin/dashboard")
           }
-
         } else {
           navigate("/login")
-
         }
       })
     return unsubscribe
@@ -59,16 +52,12 @@ const Login = () => {
 
   const initialValues = {
     Password: '',
-
     email: '',
-
   };
+
   const [userRole, setuserRole] = useState(false);
 
-
-
   const emailValid = (email) => {
-
 
     const index = email.indexOf("@")
     const subst = email.substring(index)
@@ -80,12 +69,9 @@ const Login = () => {
     else {
       setuserRole(false)
       return false
-
-
     }
   }
   const isCompany = (email) => {
-    console.log(email)
     var cheak = true
     onValue(ref(database, 'Employee'), (snapshot) => {
       const data = snapshot.val();
@@ -93,14 +79,8 @@ const Login = () => {
       for (let id in data) {
         if (data[id]['email'] == email) { // TODO: - 
           cheak = false
-
-
         }
-
-
       }
-
-
     });
 
     console.log(cheak)
@@ -111,18 +91,10 @@ const Login = () => {
   const validationSchema =
     Yup.object({
       Password: Yup.string().required('Password  is required'),
-
       email: Yup.string().email('Invalid email').required('Email is required'),
-
     });
+
   const mystyle = {
-    //   color: "white",
-
-    //  // background: linear-gradient( rgba(255,0,0,0), rgba(255,0,0,1)),
-    //  padding:'9%',
-    //   paddingLeft: "10%",
-    //   paddingRight: "10%",
-
     fontFamily: "Arial",
     background: "linear-gradient(#56BBEB, #58AAF3)",
     height: "100vh",
@@ -130,18 +102,11 @@ const Login = () => {
     paddingTop: "8%",
     paddingLeft: "5%",
     paddingRight: "5%"
-
   };
   const mystyle1 = {
-    // padding: "10%",
-    //  paddingTop: "15%",
-
-    //  padding : 0
-    //  hight :"100%" ,
     maxHeight: "100vh",
     textAlign: "center",
     margin: "auto",
-    //Padding: "50em 50px",
     paddingLeft: "6%",
     paddingRight: "6%"
   };
@@ -184,11 +149,7 @@ const Login = () => {
 
   }
   return (
-
     <div class="container-fluid ">
-
-
-
       <div class="row"  >
         <nav class="navbar navbar-expand-lg navbar-light" style={{ position: "absolute" }}>
           <div class="container-fluid justify-content-center">
@@ -216,9 +177,7 @@ const Login = () => {
         </nav>
 
         <div class="col-md-6 red" style={mystyle1}>
-          {/* <div class="container" style={mystyle1}> */}
           <h2 style={{ paddingTop: "12%" }}>Welcome To Checkly</h2>
-
           <p style={subTitle}>login to checkly to unlock its capabilities</p>
 
           {count ? <p class=" alert-danger" role="alert">
@@ -228,31 +187,21 @@ const Login = () => {
             initialValues={{ ...initialValues }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
-              // console.log(values);
               const v = isCompany(values.email)
               console.log(v)
               if (isCompany(values.email)) {
                 signInWithEmailAndPassword(auth, values.email, values.Password)
                   .then((userCredential) => {
-                    // Signed in 
                     const user = userCredential.user;
-                    console.log(user)
-
-                    // alert(JSON.stringify(user, null, 2));
                     setCount(null)
-                    // window.history.replaceState(null, null, "/admin");
-                    // navigate("/admin")
                     if (emailValid(values.email)) {
                       window.history.replaceState(null, null, "/admin/AdminCheckly")
                       navigate("/admin/AdminCheckly")
-                      //  window.location.reload(false)
                     }
                     else {
                       window.history.replaceState(null, null, "/admin/dashboard")
                       navigate("/admin/dashboard")
-                      // window.location.reload(false)
                     }
-                    // ...
                   })
                   .catch((error) => {
                     const errorCode = error.code;
@@ -265,8 +214,6 @@ const Login = () => {
               else {
                 setCount("InValid Email /Password")
               }
-
-
             }}>
 
             <Form>
