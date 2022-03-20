@@ -364,17 +364,17 @@ const AddCompany = () => {
 
   const addCompany = (company) => {
     createUserWithEmailAndPassword(auth, company.email, '123456').then((result) => {
-        set(ref(database, 'Company/'), {
+        set(ref(database, 'Company/' + result.user.uid), {
+            //abbrevation
             name: company.name,
-            // email: company.email,
-            // location: company.location,
-            // size: company.size,
-            // industry: company.industry,
-            // age: company.age,
-            // policy: company.policy,
-            // Flexible: company.Flexible,
-            // Fixed: company.Fixed,
-            // preference: company.preference
+            email: company.email,
+            location: company.location,
+            size: company.size,
+            industry: company.industry,
+            age: company.age,
+            policy: company.policy,
+            working_hours: company.hours,
+            attendance_strategy: company.preference
         });
     }).catch((error) => {
         // var errorCode = error.code;
@@ -493,7 +493,7 @@ const AddCompany = () => {
 
               </FormControl>
             
-            <Button type="submit" >Register Company</Button>
+            <SButton type="submit" >Register Company</SButton>
 
             </Section3>
           </MainSections>
