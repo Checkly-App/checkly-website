@@ -5,13 +5,12 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import styled from 'styled-components';
 import Sidebar from './components/Sidebar/Sidebar';
-import Departments from './pages/Departments';
-import Dashboard from './pages/Dashboard';
-import Analytics from './pages/Analytics';
-import Services from './pages/Services';
-import AddEmployee from './pages/AddEmployee';
+import Departments from './pages/Company Admin/Departments';
+import Dashboard from './pages/Company Admin/Dashboard';
+import Analytics from './pages/Company Admin/Analytics';
+import Services from './pages/Company Admin/Services';
+import AddEmployee from './pages/Company Admin/AddEmployee';
 import Login from './pages/Login';
-import AdminProfile from './pages/AdminProfile';
 import ChecklyProfile from './pages/ChecklyProfile';
 import ResetPassword from './pages/ResetPassword';
 
@@ -59,19 +58,13 @@ function App() {
 
   useEffect(() => {
     const auth = getAuth();
-    const unsubscribe = onAuthStateChanged
-      (auth, userAuth => {
-        const user = {
-          Uid: userAuth?.Uid,
-          email: userAuth?.email
-        }
-
-        if (userAuth) {
-          setuserinfo(userAuth)
-        } else {
-          setuserinfo(null)
-        }
-      });
+    const unsubscribe = onAuthStateChanged(auth, userAuth => {
+      if (userAuth) {
+        setuserinfo(userAuth)
+      } else {
+        setuserinfo(null)
+      }
+    });
     return unsubscribe;
   });
 
@@ -82,17 +75,17 @@ function App() {
           <Routes>
             {userinfo ? <Route component={() => (<div>404 Not found </div>)} /> : <Route exact path="/login" element={<Login />} />}
             <Route exact path="/ResetPassword" element={<ResetPassword />} />
-            <Route exact path="/admin/AdminCheckly" element={<ChecklyProfile />} />
+            <Route exact path="/checkly" element={<ChecklyProfile />} />
           </Routes>
           <AdminContainer>
             <Sidebar />
             <Content>
               <Routes>
-                <Route path="/admin/dashboard" element={<Dashboard />} />
-                <Route path="/admin/departments" element={<Departments />} />
-                <Route path="/admin/employees" element={<AddEmployee />} />
-                <Route path="/admin/analytics" element={<Analytics />} />
-                <Route path="/admin/services" element={<Services />} />
+                <Route exact path="/admin/dashboard" element={<Dashboard />} />
+                <Route exact path="/admin/departments" element={<Departments />} />
+                <Route exact path="/admin/employees" element={<AddEmployee />} />
+                <Route exact path="/admin/analytics" element={<Analytics />} />
+                <Route exact path="/admin/services" element={<Services />} />
               </Routes>
             </Content>
           </AdminContainer>

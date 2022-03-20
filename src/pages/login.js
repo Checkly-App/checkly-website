@@ -8,7 +8,6 @@ import { auth } from '../utilities/firebase';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
-import UILogin from '../assets/images/UILogin.png';
 import Loginpic from '../assets/images/Loginpic.png';
 import Logo from '../assets/images/logo.svg';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
@@ -30,21 +29,20 @@ const Login = () => {
 
   useEffect(() => {
     const auth = getAuth();
-    const unsubscribe = onAuthStateChanged
-      (auth, userAuth => {
-        if (userAuth) {
-          const index = userAuth?.email.indexOf("@")
-          const subst = userAuth?.email.substring(index)
-          if (subst == "@checkly.org") {
-            navigate("/admin/AdminCheckly")
-          }
-          else {
-            navigate("/admin/dashboard")
-          }
-        } else {
-          navigate("/login")
+    const unsubscribe = onAuthStateChanged(auth, userAuth => {
+      if (userAuth) {
+        const index = userAuth?.email.indexOf("@")
+        const subst = userAuth?.email.substring(index)
+        if (subst == "@checkly.org") {
+          navigate("/checkly")
         }
-      })
+        else {
+          navigate("/admin/dashboard")
+        }
+      } else {
+        navigate("/login")
+      }
+    })
     return unsubscribe
   }, [])
 
@@ -196,7 +194,7 @@ const Login = () => {
                     setCount(null)
                     if (emailValid(values.email)) {
                       window.history.replaceState(null, null, "/admin/AdminCheckly")
-                      navigate("/admin/AdminCheckly")
+                      navigate("/checkly")
                     }
                     else {
                       window.history.replaceState(null, null, "/admin/dashboard")

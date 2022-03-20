@@ -91,31 +91,31 @@ const Divider = styled.div`
 
 const Sidebar = () => {
     const navigate = useNavigate()
-    useEffect(() => {
-        const auth = getAuth();
-        const unsubscribe = onAuthStateChanged(auth, userAuth => {
-            if (userAuth) {
-                const index = userAuth?.email.indexOf("@");
-                const subst = userAuth?.email.substring(index);
-                if (subst == "@checkly.org") {
-                    navigate("/admin/AdminCheckly");
-                }
-                else {
-                    navigate("/admin/dashboard");
-                }
+    // useEffect(() => {
+    //     const auth = getAuth();
+    //     const unsubscribe = onAuthStateChanged(auth, userAuth => {
+    //         if (userAuth) {
+    //             const index = userAuth?.email.indexOf("@");
+    //             const subst = userAuth?.email.substring(index);
+    //             if (subst == "@checkly.org") {
+    //                 navigate("/checkly");
+    //             }
+    //             else {
+    //                 navigate("/admin/dashboard");
+    //             }
 
-            } else {
-                navigate("/login");
-            }
-        })
-        return unsubscribe;
-    }, [])
+    //         } else {
+    //             navigate("/login");
+    //         }
+    //     })
+    //     return unsubscribe;
+    // });
 
     const logout = () => {
         const auth = getAuth();
         signOut(auth).then(() => {
             window.history.replaceState(null, null, "/login");
-            navigate("/login")
+            navigate("/login");
             window.location.reload(false);
         });
     }
@@ -136,7 +136,7 @@ const Sidebar = () => {
                                     <NavTitle>{item.title}</NavTitle>
                                 </Link>
                             </NavItem>
-                        )
+                        );
                     })
                 }
             </Wrapper>

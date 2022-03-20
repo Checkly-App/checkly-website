@@ -1,13 +1,13 @@
 import { React, useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import InputField from '../components/Forms/InputField';
+import InputField from '../../components/Forms/InputField';
 import { MdOutlineAlternateEmail } from "react-icons/md";
-import SelectField from '../components/Forms/SelectField';
-import RadioButtons from '../components/Forms/RadioButtons';
+import SelectField from '../../components/Forms/SelectField';
+import RadioButtons from '../../components/Forms/RadioButtons';
 import { set, ref, onValue } from 'firebase/database';
-import { database, auth, functions } from '../utilities/firebase';
-import DateField from '../components/Forms/DateField';
+import { database, auth, functions } from '../../utilities/firebase';
+import DateField from '../../components/Forms/DateField';
 import { format } from 'date-fns';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import styled from 'styled-components';
