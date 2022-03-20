@@ -2,6 +2,7 @@ import { React, useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import InputField from "../components/Forms/InputField";
+import Upload from "../components/Forms/Upload";
 import PolicyRadioButtons from "../components/Forms/PrefrenceRadioButtons";
 import SelectField from "../components/Forms/SelectField";
 import RadioGroup from '@mui/material/RadioGroup';
@@ -305,22 +306,6 @@ const locations = [
 
 const AddCompany = () => {
 
-  //upload 
-  const uploadFile = (file) =>  {
-      if (!file) return;
-
-      const storageRef = ref(storage, `Companies/${file.name}`);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-  };
-
-  // const formHandler = (e) => {
-  //   e.preventDefault();
-  //   const file = e.target[0].files[0];
-  //   console.log(file.name);
-  //   //uploadFile(file);
-  // };
-
-
   const initialValues = {
     name: "",
     abbreviation: "",
@@ -380,7 +365,6 @@ const AddCompany = () => {
       validationSchema={validationSchema}
       onSubmit={(values) => {
         console.log(values);
-        // uploadFile(file)
         // addCompany(values);
         alert(JSON.stringify(values, null, 2));
       }}
@@ -487,10 +471,12 @@ const AddCompany = () => {
 
             <Stack direction="column" justify="center" spacing={5}>
 
+            {/* Upload logo  */}
            
             <Box m={2} pt={15} textAlign='center'>
             <label htmlFor="contained-button-file">
              <Input id="file" name="file" type="file" accept="image/*" multiple onChange={(event) => {
+                    console.log(event.target);
                     Formik.setFieldValue("file", event.currentTarget.files[0]);
                   }} />
              <Button variant="contained" component="span" color="grey" margin={5} variant="outlined" style={{
@@ -501,14 +487,13 @@ const AddCompany = () => {
                 border: 'dashed',
                 fontSize: '13px'
                 }}>
-                <input type="file" style={{display: 'none'}} />
                     <Stack direction="column" spacing={5} alignItems="center" > 
                     <InsertPhotoOutlinedIcon sx={{ fontSize: 60 }} /> Upload logo </Stack> 
                 </Button>
              </label>
             </Box>
           
-            
+            {/* End of upload logo */}
             
         
             <Box textAlign='center'>
@@ -522,14 +507,11 @@ const AddCompany = () => {
                 border: 'dashed',
                 fontSize: '11px'
                 }}>
-            
             <Stack direction="column" spacing={5} alignItems="center" > 
             <UploadFileRoundedIcon/> Upload departments </Stack> 
             </Button>
             </label>
             </Box>
-
-
 
             <Box textAlign='center'>
             <label htmlFor="contained-button-file">
@@ -548,8 +530,6 @@ const AddCompany = () => {
             </Button>
             </label>
             </Box>
-
-
             <Box textAlign='center'>
             <label htmlFor="contained-button-file">
             <Input accept="image/*" id="contained-button-file" multiple type="file" />
