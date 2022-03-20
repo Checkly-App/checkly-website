@@ -5,11 +5,3 @@
   font-family: 'Roboto', sans-serif;
 }
 
-h1 {
-  font-weight: 100;
-}
-
-input[type="time"]::-webkit-calendar-picker-indicator {
-display: none;
--webkit-appearance: none;
-}

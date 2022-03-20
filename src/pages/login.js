@@ -1,9 +1,9 @@
-import { React, useState, useEffect , useContext } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import InputField from '../components/Forms/InputField';
 import { MdOutlineAlternateEmail, MdHttps } from "react-icons/md";
-import {  Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { auth } from '../utilities/firebase';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -12,9 +12,9 @@ import UILogin from '../assets/images/UILogin.png';
 import Loginpic from '../assets/images/Loginpic.png';
 import Logo from '../assets/images/logo.svg';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import {  ref, onValue } from 'firebase/database';
+import { ref, onValue } from 'firebase/database';
 import { database } from '../utilities/firebase';
-import {  getAuth,onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 <link
   rel="stylesheet"
@@ -28,8 +28,8 @@ const Login = () => {
 
   const navigate = useNavigate()
   const [count, setCount] = useState(null);
- 
- 
+
+
 
   useEffect(() => {
     const auth = getAuth();
@@ -37,16 +37,16 @@ const Login = () => {
       (auth, userAuth => {
 
         if (userAuth) {
-          const index =  userAuth?.email.indexOf("@")
-          const subst =  userAuth?.email.substring(index)
-      
+          const index = userAuth?.email.indexOf("@")
+          const subst = userAuth?.email.substring(index)
+
           if (subst == "@checkly.org") {
             navigate("/admin/AdminCheckly")
-        }
-          else{
-            navigate("/admin/AdminEmployee")
           }
-         
+          else {
+            navigate("/admin/dashboard")
+          }
+
         } else {
           navigate("/login")
 
@@ -54,7 +54,7 @@ const Login = () => {
       })
     return unsubscribe
   }, [])
-  
+
 
 
   const initialValues = {
@@ -65,17 +65,17 @@ const Login = () => {
   };
   const [userRole, setuserRole] = useState(false);
 
-  
+
 
   const emailValid = (email) => {
-  
+
 
     const index = email.indexOf("@")
     const subst = email.substring(index)
 
     if (subst == "@checkly.org") {
       setuserRole(true)
-return true
+      return true
     }
     else {
       setuserRole(false)
@@ -105,7 +105,7 @@ return true
 
     console.log(cheak)
     return cheak
- 
+
   }
 
   const validationSchema =
@@ -237,21 +237,21 @@ return true
                     // Signed in 
                     const user = userCredential.user;
                     console.log(user)
-                    
+
                     // alert(JSON.stringify(user, null, 2));
                     setCount(null)
                     // window.history.replaceState(null, null, "/admin");
-                  // navigate("/admin")
-                  if (emailValid(values.email)){
-                     window.history.replaceState(null, null, "/admin/AdminCheckly")
-                  navigate("/admin/AdminCheckly")
-                 //  window.location.reload(false)
-                }
-                   else{
-                    window.history.replaceState(null, null,"/admin/AdminEmployee")
-                    navigate("/admin/AdminEmployee")
-                   // window.location.reload(false)
-                   }
+                    // navigate("/admin")
+                    if (emailValid(values.email)) {
+                      window.history.replaceState(null, null, "/admin/AdminCheckly")
+                      navigate("/admin/AdminCheckly")
+                      //  window.location.reload(false)
+                    }
+                    else {
+                      window.history.replaceState(null, null, "/admin/dashboard")
+                      navigate("/admin/dashboard")
+                      // window.location.reload(false)
+                    }
                     // ...
                   })
                   .catch((error) => {

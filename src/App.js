@@ -1,21 +1,19 @@
-// import logo from './assets/images/logo.svg';
 import './App.css';
-import Login from './pages/Login';
-import AdminProfile from './pages/AdminProfile';
-import ChecklyProfile from './pages/ChecklyProfile';
-import ResetPassword from './pages/ResetPassword';
 import { React, useState, useEffect } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import { BrowserRouter as Router, Route, Switch, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { Navigate, Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import Sidebar from './components/Sidebar/Sidebar';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Departments from './pages/Departments';
 import Dashboard from './pages/Dashboard';
 import Analytics from './pages/Analytics';
 import Services from './pages/Services';
+import AddEmployee from './pages/AddEmployee';
+import Login from './pages/Login';
+import AdminProfile from './pages/AdminProfile';
+import ChecklyProfile from './pages/ChecklyProfile';
+import ResetPassword from './pages/ResetPassword';
 
 const theme = createTheme({
   palette: {
@@ -37,7 +35,7 @@ const theme = createTheme({
   }
 });
 
-const AppContainer = styled.div`
+const AdminContainer = styled.div`
   height: 100vh;
   width: 100%;
   margin: 0;
@@ -57,7 +55,6 @@ const Content = styled.div`
 `
 
 function App() {
-  //const [User,SetUser] = useState[null]
   const [userinfo, setuserinfo] = useState(null);
 
   useEffect(() => {
@@ -70,42 +67,38 @@ function App() {
         }
 
         if (userAuth) {
-
           setuserinfo(userAuth)
         } else {
           setuserinfo(null)
         }
-      })
-    return unsubscribe
-  }, [])
+      });
+    return unsubscribe;
+  });
 
   return (
-
     <ThemeProvider theme={theme}>
-      <Router>
-        <AppContainer className="App">
+      <div className="App">
+        <Router>
           <Routes>
-
-
             {userinfo ? <Route component={() => (<div>404 Not found </div>)} /> : <Route exact path="/login" element={<Login />} />}
             <Route exact path="/ResetPassword" element={<ResetPassword />} />
             <Route exact path="/admin/AdminCheckly" element={<ChecklyProfile />} />
-            <Route exact path="/admin/AdminEmployee" element={<AdminProfile />} />
           </Routes>
-          <Sidebar />
-          <Content>
-            <Routes>
-              <Route path="/admin/dashboard" element={<Dashboard />} />
-              <Route path="/admin/departments" element={<Departments />} />
-              <Route path="/admin/employees" element={<AddEmployee />} />
-              <Route path="/admin/analytics" element={<Analytics />} />
-              <Route path="/admin/services" element={<Services />} />
-            </Routes>
-          </Content>
-        </AppContainer >
-      </Router>
+          <AdminContainer>
+            <Sidebar />
+            <Content>
+              <Routes>
+                <Route path="/admin/dashboard" element={<Dashboard />} />
+                <Route path="/admin/departments" element={<Departments />} />
+                <Route path="/admin/employees" element={<AddEmployee />} />
+                <Route path="/admin/analytics" element={<Analytics />} />
+                <Route path="/admin/services" element={<Services />} />
+              </Routes>
+            </Content>
+          </AdminContainer>
+        </Router>
+      </div >
     </ThemeProvider>
-
   );
 }
 
