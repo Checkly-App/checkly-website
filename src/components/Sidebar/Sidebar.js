@@ -1,4 +1,4 @@
-import { React, useEffect } from 'react';
+import { React } from 'react';
 import styled from 'styled-components';
 import logo from '../../assets/images/logo.svg';
 import side from '../../assets/images/sidePiece.svg';
@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 import { sideBarData } from './Data';
 import { useNavigate } from "react-router-dom"
 import { signOut } from "firebase/auth";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 
 const SideBarWrapper = styled.div`
   grid-area: bar;
@@ -28,8 +28,8 @@ const Wrapper = styled.div`
 `
 const NavItem = styled.li`
     width: 100%;
-    height: 2em;
-    padding: 1em;
+    height: 2.5em;
+    margin: 0.65em 0;
     list-style: none;
     display: flex;
 `
@@ -41,7 +41,7 @@ const Link = styled(NavLink)`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     text-decoration: none;
 
      ${NavItem}:hover &{
@@ -67,7 +67,7 @@ const LogoutWrapper = styled.div`
     cursor: pointer;
 `
 const Icon = styled.div`
-    padding: 0 0 0 1em;
+    padding: 0 0 0 1.5em;
 `
 const NavTitle = styled.span`
     font-size: 1.25em;
@@ -91,25 +91,6 @@ const Divider = styled.div`
 
 const Sidebar = () => {
     const navigate = useNavigate()
-    // useEffect(() => {
-    //     const auth = getAuth();
-    //     const unsubscribe = onAuthStateChanged(auth, userAuth => {
-    //         if (userAuth) {
-    //             const index = userAuth?.email.indexOf("@");
-    //             const subst = userAuth?.email.substring(index);
-    //             if (subst == "@checkly.org") {
-    //                 navigate("/checkly");
-    //             }
-    //             else {
-    //                 navigate("/admin/dashboard");
-    //             }
-
-    //         } else {
-    //             navigate("/login");
-    //         }
-    //     })
-    //     return unsubscribe;
-    // });
 
     const logout = () => {
         const auth = getAuth();

@@ -1,19 +1,20 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import InputField from '../components/Forms/InputField';
-import { MdOutlineAlternateEmail } from "react-icons/md";
+import InputField from '../../components/Forms/InputField';
+import { MdOutlineAlternateEmail, MdHttps } from "react-icons/md";
 import { Grid } from '@mui/material';
-import { auth } from '../utilities/firebase';
+import { auth } from '../../utilities/firebase';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { sendPasswordResetEmail } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
-import Loginpic from '../assets/images/Loginpic.png';
-import { ref, onValue } from 'firebase/database';
-import { database } from '../utilities/firebase';
-
-import Logo from '../assets/images/logo.svg';
+import Loginpic from '../../assets/images/Loginpic.png';
+import Logo from '../../assets/images/logo.svg';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+import { ref, onValue } from 'firebase/database';
+import { database } from '../../utilities/firebase';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
 <link
   rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
@@ -22,58 +23,74 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 />
 
 
-const ResetPaaword = () => {
-
-  // const navigate = useNavigate()
+const Login = () => {
+  const navigate = useNavigate()
   const [count, setCount] = useState(null);
-  const [issend, setIssend] = useState(null);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, userAuth => {
+      if (userAuth) {
+        const index = userAuth?.email.indexOf("@")
+        const subst = userAuth?.email.substring(index)
+        if (subst == "@checkly.org") {
+          navigate("/checkly")
+        }
+        else {
+          navigate("/admin/dashboard")
+        }
+      } else {
+        navigate("/login")
+      }
+    })
+    return unsubscribe
+  }, [])
 
   const initialValues = {
-
+    Password: '',
     email: '',
-
   };
 
+  const [userRole, setuserRole] = useState(false);
+
+  const emailValid = (email) => {
+
+    const index = email.indexOf("@")
+    const subst = email.substring(index)
+
+    if (subst == "@checkly.org") {
+      setuserRole(true)
+      return true
+    }
+    else {
+      setuserRole(false)
+      return false
+    }
+  }
   const isCompany = (email) => {
-    console.log(email)
     var cheak = true
     onValue(ref(database, 'Employee'), (snapshot) => {
       const data = snapshot.val();
 
       for (let id in data) {
-        if (data[id]['email'] === email) { // TODO: - 
+        if (data[id]['email'] == email) { // TODO: - 
           cheak = false
-
-
         }
-
-
       }
-
-
     });
 
     console.log(cheak)
     return cheak
-    // console.log(isValid)
-    // console.log(count1)
+
   }
 
   const validationSchema =
     Yup.object({
-
-
+      Password: Yup.string().required('Password  is required'),
       email: Yup.string().email('Invalid email').required('Email is required'),
-
     });
+
   const mystyle = {
-    //   color: "white",
-
-    //  // background: linear-gradient( rgba(255,0,0,0), rgba(255,0,0,1)),
-    //  padding:'9%',
-    //   paddingLeft: "10%",
-    //   paddingRight: "10%",
-
     fontFamily: "Arial",
     background: "linear-gradient(#56BBEB, #58AAF3)",
     height: "100vh",
@@ -81,20 +98,13 @@ const ResetPaaword = () => {
     paddingTop: "8%",
     paddingLeft: "5%",
     paddingRight: "5%"
-
   };
   const mystyle1 = {
-    // padding: "10%",
-    //  paddingTop: "15%",
-
-    //  padding : 0
-    //  hight :"100%" ,
     maxHeight: "100vh",
     textAlign: "center",
     margin: "auto",
-    //Padding: "50em 50px",
-    paddingLeft: "8%",
-    paddingRight: "7%"
+    paddingLeft: "6%",
+    paddingRight: "6%"
   };
   const subTitle = {
     color: "gray",
@@ -116,7 +126,12 @@ const ResetPaaword = () => {
     border: "none",
     cursor: "pointer",
   };
-
+  const Button1 = {
+    background: "none",
+    color: "#2CB1EF",
+    border: "none",
+    cursor: "pointer",
+  };
   const overlay = {
     //  position: "absolute", 
     width: "80%",
@@ -130,9 +145,8 @@ const ResetPaaword = () => {
 
   }
   return (
-
-    <div class="container-fluid " id='height'>
-      <div class="row" id='height' >
+    <div class="container-fluid ">
+      <div class="row"  >
         <nav class="navbar navbar-expand-lg navbar-light" style={{ position: "absolute" }}>
           <div class="container-fluid justify-content-center">
             <img src={Logo} alt="logo" style={{ width: "30px", height: "30px" }} /> <a style={{ fontWeight: "500", paddingLeft: "4px" }}>  Checkly</a>
@@ -142,7 +156,7 @@ const ResetPaaword = () => {
             <div class="collapse navbar-collapse" id="navbarNavDropdown" style={{ marginLeft: "12em" }}>
               <ul class="navbar-nav m-auto">
                 <li class="nav-item">
-                  <a class="nav-link active blue" aria-current="page" href="#" style={{ color: "#2CB1EF", padding: "1em 2em" }}>Home</a>
+                  <a class="nav-link active blue" aria-current="page" href="#" style={{ color: "Black", padding: "1em 2em" }}>Home</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>About</a>
@@ -158,19 +172,13 @@ const ResetPaaword = () => {
           </div>
         </nav>
 
-
         <div class="col-md-6 red" style={mystyle1}>
-          {/* <div class="container" style={mystyle1}> */}
-          {issend ? <div class="alert alert-success" role="alert">
-            {issend}
-          </div> : null}
-
-          <h2 tyle={{ paddingTop: "12%" }}>Reset Your Password</h2>
-
-          <p style={subTitle}>Enter your E-mail to receive your password replacement E-mail</p>
+          <h2 style={{ paddingTop: "12%" }}>Welcome To Checkly</h2>
+          <p style={subTitle}>login to checkly to unlock its capabilities</p>
 
           {count ? <p class=" alert-danger" role="alert">
             {count}</p> : null}
+
           <Formik
             initialValues={{ ...initialValues }}
             validationSchema={validationSchema}
@@ -178,22 +186,29 @@ const ResetPaaword = () => {
               const v = isCompany(values.email)
               console.log(v)
               if (isCompany(values.email)) {
-                sendPasswordResetEmail(auth, values.email)
-                  .then(() => {
-
+                signInWithEmailAndPassword(auth, values.email, values.Password)
+                  .then((userCredential) => {
+                    const user = userCredential.user;
                     setCount(null)
-                    setIssend("Check your inbox for a reset message")
+                    if (emailValid(values.email)) {
+                      window.history.replaceState(null, null, "/checkly")
+                      navigate("/checkly")
+                    }
+                    else {
+                      window.history.replaceState(null, null, "/admin/dashboard")
+                      navigate("/admin/dashboard")
+                    }
                   })
                   .catch((error) => {
-
-                    setCount("Please enter a valid email")
-
-                    // ..
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.log(errorMessage)
+                    setCount("InValid Email /Password")
                   });
-              } else {
-                setCount("Please enter a valid email")
               }
-
+              else {
+                setCount("InValid Email /Password")
+              }
             }}>
 
             <Form>
@@ -208,10 +223,20 @@ const ResetPaaword = () => {
 
                 />
               </Grid>
+              <Grid item xs={12}>
 
+                <InputField
+                  name='Password'
+                  icon={<MdHttps color='gray' />}
+                  id='Password'
+                  label='Password'
+                  type="password"
+                />
+
+              </Grid>
 
               <Grid item xs={12}>
-                <button style={Button} type='submit'> Reset Your Password </button>
+                <button style={Button} type='submit'>  Login to your account </button>
               </Grid>
 
 
@@ -222,16 +247,21 @@ const ResetPaaword = () => {
 
 
           </Formik >
-
+          <Grid item xs={12}>
+            <button style={Button1} onClick={() => navigate("/reset")}>  Forgot password? </button>
+          </Grid>
         </div>
-        <div class="col-md-6 blue" style={mystyle}>
+        {/* </div> */}
+        <div class="col-md-6 blue" style={mystyle}
+        >
           {/* <img src={UILogin}  alt="logo" style={overlay}/>  */}
-
+          {/* <div class="container" style={mystyle}> */}
+          {/* <img src=".../public/logo512.png" alt="Italian Trulli" /> */}
 
           <img src={Loginpic} alt="logo" style={overlay} />
 
-          {/* <h1 style={{fontSize:"50px"}}>Adavnce <br/>Rapidly</h1>
-    <p style={{fontSize:"10px" , paddingLeft:"5%"}}>“The ideal conditions for making things are created when machines, facilities, and people work together to add value without generating any waste.”
+          {/* <h1 style={{fontSize:"50px"}}>Adavnce <br/>Rapidly</h1> */}
+          {/*  <p style={{fontSize:"10px" , paddingLeft:"5%"}}>“The ideal conditions for making things are created when machines, facilities, and people work together to add value without generating any waste.”
 -Kiichiro Toyoda, founder of Toyota Motor Corporation, strongly believed in this philosoph</p>  */}
 
         </div>
@@ -244,6 +274,6 @@ const ResetPaaword = () => {
   )
 
 };
-export default ResetPaaword;
+export default Login;
 
 

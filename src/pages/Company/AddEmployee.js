@@ -122,6 +122,12 @@ const AddEmployee = () => {
             }
             setDepartments(departments);
         });
+
+        return () => {
+            setErrorDetails({});
+            setDepartments([]);
+            setEmployees([]);
+        };
     }, []);
 
     useEffect(() => {

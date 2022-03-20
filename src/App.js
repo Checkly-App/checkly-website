@@ -5,14 +5,14 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import styled from 'styled-components';
 import Sidebar from './components/Sidebar/Sidebar';
-import Departments from './pages/Company Admin/Departments';
-import Dashboard from './pages/Company Admin/Dashboard';
-import Analytics from './pages/Company Admin/Analytics';
-import Services from './pages/Company Admin/Services';
-import AddEmployee from './pages/Company Admin/AddEmployee';
-import Login from './pages/Login';
+import Departments from './pages/Company/Departments';
+import Dashboard from './pages/Company/Dashboard';
+import Analytics from './pages/Company/Analytics';
+import Services from './pages/Company/Services';
+import AddEmployee from './pages/Company/AddEmployee';
+import Login from './pages/Authentication/Login';
 import ChecklyProfile from './pages/Checkly Admin/ChecklyProfile';
-import ResetPassword from './pages/ResetPassword';
+import ResetPassword from './pages/Authentication/ResetPassword';
 
 const theme = createTheme({
   palette: {
@@ -40,10 +40,12 @@ const AdminContainer = styled.div`
   margin: 0;
   padding: 0;
   display: grid;
+
   ${props => !props.isCompany} {
     grid-template-columns: 1fr 5fr;
     grid-template-areas: 'bar main';
     }
+
   justify-items: stretch;
   justify-content: center;
 `
