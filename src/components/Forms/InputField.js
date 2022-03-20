@@ -3,7 +3,6 @@ import { TextField } from '@mui/material';
 import { useField } from 'formik';
 import { InputAdornment } from '@mui/material';
 
-
 const InputField = ({ name, icon, ...other }) => {
     const [field, data] = useField(name);
     const config = {
@@ -13,9 +12,8 @@ const InputField = ({ name, icon, ...other }) => {
         variant: 'outlined',
         size: 'small',
         fullWidth: true,
-        margin: 'dense',
+        margin: 'none',
         InputProps: {
-            // style: { color: (data.touched && data.error) ? '#F65786' : ((focus) ? '#A3A3A1' : '#2CB1EF') },
             endAdornment: < InputAdornment position="end" > {icon} </InputAdornment>
         }
     };
@@ -26,12 +24,8 @@ const InputField = ({ name, icon, ...other }) => {
     }
 
     return (
-        <TextField {...config}
-        // onBlur={() => { !(data && data.touched && data.error)? setFocus(true) }}
-        // onFocus={() => { setFocus(false) }} 
-        />
+        <TextField {...config} />
     );
 };
-
 
 export default InputField;

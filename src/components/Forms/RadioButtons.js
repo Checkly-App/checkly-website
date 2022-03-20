@@ -1,10 +1,8 @@
 import React from 'react';
-import { useField, useFormikContext } from 'formik';
+import { useFormikContext } from 'formik';
 import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material'
 
-
 const RadioButtons = ({ name, ...other }) => {
-    const field = useField(name);
     const { setFieldValue } = useFormikContext();
 
     const handleChange = (e) => {
