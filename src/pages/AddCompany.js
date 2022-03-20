@@ -6,7 +6,7 @@ import Upload from "../components/Forms/Upload";
 import PolicyRadioButtons from "../components/Forms/PrefrenceRadioButtons";
 import SelectField from "../components/Forms/SelectField";
 import RadioGroup from '@mui/material/RadioGroup';
-import { set, ref, onValue } from "firebase/database";
+import { set, onValue } from "firebase/database"; //ref
 import { database, auth, storage } from "../utilities/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import styled, { keyframes } from "styled-components";
@@ -22,7 +22,7 @@ import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormLabel from '@mui/material/FormLabel';
 import logo from '../assets/images/logo.svg';
-import {  uploadBytesResumable } from "firebase/storage"; //ref
+import {  ref, uploadBytesResumable } from "firebase/storage"; //ref
 
 const ButtonCircle2 = styled.button`
 background-color: white;
@@ -83,7 +83,7 @@ const SidebarSection = styled.div`
   border-radius: 0.75em;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   margin: 0 3em 3em 3em;
-  
+  padding: 1em;
 `;
 
 const FormTitle = styled.h1`
@@ -357,9 +357,51 @@ const AddCompany = () => {
     });
 }
 
+const formHandler = (e) => {
+  e.preventDefault();
+  const file = e.target[0].files[0];
+  uploadFiles(file);
+};
+
+const uploadFiles = (file) => {
+  //
+  if (!file) return;
+  const sotrageRef = ref(storage, `files/${file.name}`);
+  const uploadTask = uploadBytesResumable(sotrageRef, file);
+};
+
   
   return (
-    
+    <div>
+
+<SidebarSection>
+
+          <form onSubmit={formHandler}>
+          <Stack direction="column" spacing={5} alignItems="center" >
+          <label htmlFor="contained-button-file">
+            <Box textAlign='center'>
+            <Input accept="image/*" id="contained-button-file" type="file" />
+              <Button type="submit" color="grey" variant="contained" component="span" variant="outlined" style={{
+                maxWidth: "170px",
+                maxHeight: "150px",
+                minWidth: "170px",
+                minHeight: "150px",
+                border: 'dashed',
+                fontSize: '13px'
+                }}>
+            <Stack direction="column" spacing={5} alignItems="center" > 
+            <InsertPhotoOutlinedIcon/> Upload Logo </Stack> 
+            </Button>
+            </Box>
+            </label>
+            <Button type="submit" variant="contained">Upload</Button>
+            </Stack>
+          </form>
+
+
+          
+  </SidebarSection>
+
     <Formik
       initialValues={{ ...initialValues }}
       validationSchema={validationSchema}
@@ -370,8 +412,7 @@ const AddCompany = () => {
       }}
     >
       <Form>
-      
-        <SetionsWrapper>
+ 
           <MainSections>
 
           {/* header */}
@@ -465,35 +506,13 @@ const AddCompany = () => {
 
             </Section3>
           </MainSections>
+          </Form>
+    </Formik>
 
           {/* the Sidebar Section */}
           <SidebarSection>
 
             <Stack direction="column" justify="center" spacing={5}>
-
-            {/* Upload logo  */}
-           
-            <Box m={2} pt={15} textAlign='center'>
-            <label htmlFor="contained-button-file">
-             <Input id="file" name="file" type="file" accept="image/*" multiple onChange={(event) => {
-                    console.log(event.target);
-                    Formik.setFieldValue("file", event.currentTarget.files[0]);
-                  }} />
-             <Button variant="contained" component="span" color="grey" margin={5} variant="outlined" style={{
-                maxWidth: "170px",
-                maxHeight: "150px",
-                minWidth: "170px",
-                minHeight: "150px",
-                border: 'dashed',
-                fontSize: '13px'
-                }}>
-                    <Stack direction="column" spacing={5} alignItems="center" > 
-                    <InsertPhotoOutlinedIcon sx={{ fontSize: 60 }} /> Upload logo </Stack> 
-                </Button>
-             </label>
-            </Box>
-          
-            {/* End of upload logo */}
             
         
             <Box textAlign='center'>
@@ -552,9 +571,8 @@ const AddCompany = () => {
 
 
           </SidebarSection>
-        </SetionsWrapper>
-      </Form>
-    </Formik>
+</div>
+   
   );
 };
 
