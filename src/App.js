@@ -11,7 +11,7 @@ import Analytics from './pages/Company Admin/Analytics';
 import Services from './pages/Company Admin/Services';
 import AddEmployee from './pages/Company Admin/AddEmployee';
 import Login from './pages/Login';
-import ChecklyProfile from './pages/ChecklyProfile';
+import ChecklyProfile from './pages/Checkly Admin/ChecklyProfile';
 import ResetPassword from './pages/ResetPassword';
 
 const theme = createTheme({
@@ -40,11 +40,14 @@ const AdminContainer = styled.div`
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: 1fr 5fr;
-  grid-template-areas: 'bar main';
+  ${props => !props.isCompany} {
+    grid-template-columns: 1fr 5fr;
+    grid-template-areas: 'bar main';
+    }
   justify-items: stretch;
   justify-content: center;
 `
+
 const Content = styled.div`
   overflow-y: scroll;
   grid-area: main;
@@ -55,6 +58,14 @@ const Content = styled.div`
 
 function App() {
   const [userinfo, setuserinfo] = useState(null);
+
+  const isCompany = (email) => {
+    if (email == null) return false;
+    const index = email.indexOf("@");
+    const subst = email.substring(index);
+    if (subst === "@checkly.org") return false;
+    return true;
+  }
 
   useEffect(() => {
     const auth = getAuth();
@@ -72,15 +83,13 @@ function App() {
     <ThemeProvider theme={theme}>
       <div className="App">
         <Router>
-          <Routes>
-            {userinfo ? <Route component={() => (<div>404 Not found </div>)} /> : <Route exact path="/login" element={<Login />} />}
-            <Route exact path="/ResetPassword" element={<ResetPassword />} />
-            <Route exact path="/checkly" element={<ChecklyProfile />} />
-          </Routes>
-          <AdminContainer>
+          <AdminContainer isCompany={isCompany(userinfo?.email)}>
             <Sidebar />
             <Content>
               <Routes>
+                {userinfo ? <Route component={() => (<div>404 Not found </div>)} /> : <Route exact path="/login" element={<Login />} />}
+                <Route exact path="/reset" element={<ResetPassword />} />
+                <Route exact path="/checkly" element={<ChecklyProfile />} />
                 <Route exact path="/admin/dashboard" element={<Dashboard />} />
                 <Route exact path="/admin/departments" element={<Departments />} />
                 <Route exact path="/admin/employees" element={<AddEmployee />} />

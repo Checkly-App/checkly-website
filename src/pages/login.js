@@ -46,8 +46,6 @@ const Login = () => {
     return unsubscribe
   }, [])
 
-
-
   const initialValues = {
     Password: '',
     email: '',
@@ -205,7 +203,6 @@ const Login = () => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
                     console.log(errorMessage)
-                    // alert(JSON.stringify(errorMessage, null, 2));
                     setCount("InValid Email /Password")
                   });
               }
