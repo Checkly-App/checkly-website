@@ -305,23 +305,6 @@ const locations = [
 
 const AddCompany = () => {
 
-
-//   radio button helper text config
-
-  const [value, setValue] = useState('');
-  const [helperText, setHelperText] = useState('');
-
-  const handleRadioChange = (event) => {
-    event.preventDefault();
-    setValue(event.target.value);
-    if (event.target.value === 'Flexible') {
-        setHelperText('Please enter minimum working hours');
- 
-    } else if (event.target.value === 'Fixed') {
-        setHelperText('Please enter working hours, e.g. 8-4');
-    }
-  };
-
   //upload 
   const uploadFile = (file) =>  {
       if (!file) return;
@@ -486,28 +469,13 @@ const AddCompany = () => {
             </Section>
 
             <Section3>
-              
-                {/* <FormControl>
-                    <FormLabel> Company's Attendance Policy </FormLabel>
-                    <RadioGroup
-                        row
-                        name="policy"
-                        value={value}
-                        onChange={handleRadioChange}
-                    >
-                    <FormControlLabel value="Fixed" control={<Radio />} label="Fixed Hours" />
-                    <FormControlLabel value="Flexible" control={<Radio />} label="Flexible Hours" />
-                    </RadioGroup>
-                    <FormHelperText>{helperText}</FormHelperText>
-                    <InputField name="hours" id="hours" label="Hours" />
-
-              </FormControl> */}
 
             <PolicyRadioButtons 
                 name="Policy" 
                 id="Policy" 
                 label="Policy"
             />
+            <InputField name="hours" id="hours" label="Hours" />
             
             <SButton type="submit" >Register Company</SButton>
 
