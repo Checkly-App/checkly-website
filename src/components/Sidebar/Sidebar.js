@@ -20,7 +20,7 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: center;
     justify-items: center;
-    align-items: ${prps => prps.nav ? 'center' : 'center'};
+    align-items: ${props => props.nav ? 'center' : 'center'};
     flex-direction: column;
 `
 const NavItem = styled.li`
@@ -34,10 +34,11 @@ const Link = styled(NavLink)`
     width: 100%;
     height: 100%;
     color: #A3A1A1;
+    font-size: 1em;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     text-decoration: none;
 
      ${NavItem}:hover &{
@@ -50,7 +51,7 @@ const Link = styled(NavLink)`
         background-position: right center;
         background-size: contain;
         color: #2CB1EF;
-  }
+        }
 `
 const LogoutWrapper = styled.div`
     width: 100%;
@@ -63,7 +64,7 @@ const LogoutWrapper = styled.div`
     cursor: pointer;
 `
 const Icon = styled.div`
-    padding: 0 0 0 2em;
+    padding: 0 0 0 1em;
 `
 const NavTitle = styled.span`
     font-size: 1.25em;
@@ -81,7 +82,7 @@ const LogoCaption = styled.h1`
 const Divider = styled.div`
     background-color:  #A3A1A1;
     height: 0.5px;
-    width: 75%;
+    width: 80%;
     margin: 0 2em;
 `
 
