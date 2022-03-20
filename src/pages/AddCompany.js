@@ -2,6 +2,7 @@ import { React, useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import InputField from "../components/Forms/InputField";
+import PolicyRadioButtons from "../components/Forms/PrefrenceRadioButtons";
 import SelectField from "../components/Forms/SelectField";
 import RadioGroup from '@mui/material/RadioGroup';
 import { set, ref, onValue } from "firebase/database";
@@ -346,15 +347,15 @@ const AddCompany = () => {
     industry: "",
     preference: "",
     age: "",
-    policy: "",
+    Policy: "",
     hours: "",
     file: "",
   };
 
 
   const validationSchema = Yup.object({
-    name: Yup.string().required("Name is required"),
-    abbreviation: Yup.string().required("Name is required"), 
+    // name: Yup.string().required("Name is required"),
+    // abbreviation: Yup.string().required("Name is required"), 
     // location: Yup.string().required("Location is required"),
     // size: Yup.string().required("Size is required"),
     // industry: Yup.string().required("Industry is required"),
@@ -375,7 +376,7 @@ const AddCompany = () => {
             size: company.size,
             industry: company.industry,
             age: company.age,
-            policy: company.policy,
+            Policy: company.Policy,
             working_hours: company.hours,
             attendance_strategy: company.preference
         });
@@ -397,7 +398,7 @@ const AddCompany = () => {
       onSubmit={(values) => {
         console.log(values);
         // uploadFile(file)
-        addCompany(values);
+        // addCompany(values);
         alert(JSON.stringify(values, null, 2));
       }}
     >
@@ -486,7 +487,7 @@ const AddCompany = () => {
 
             <Section3>
               
-                <FormControl>
+                {/* <FormControl>
                     <FormLabel> Company's Attendance Policy </FormLabel>
                     <RadioGroup
                         row
@@ -500,7 +501,13 @@ const AddCompany = () => {
                     <FormHelperText>{helperText}</FormHelperText>
                     <InputField name="hours" id="hours" label="Hours" />
 
-              </FormControl>
+              </FormControl> */}
+
+            <PolicyRadioButtons 
+                name="Policy" 
+                id="Policy" 
+                label="Policy"
+            />
             
             <SButton type="submit" >Register Company</SButton>
 
