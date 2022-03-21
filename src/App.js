@@ -3,8 +3,6 @@ import { React, useState, useEffect } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import styled from 'styled-components';
-import Sidebar from './components/Sidebar/Sidebar';
 import Departments from './pages/Company/Departments';
 import Dashboard from './pages/Company/Dashboard';
 import Analytics from './pages/Company/Analytics';
@@ -13,6 +11,7 @@ import AddEmployee from './pages/Company/AddEmployee';
 import Login from './pages/Authentication/Login';
 import ChecklyProfile from './pages/Checkly Admin/ChecklyProfile';
 import ResetPassword from './pages/Authentication/ResetPassword';
+import Layout from './pages/Company/Layout';
 
 const theme = createTheme({
   palette: {
@@ -34,40 +33,8 @@ const theme = createTheme({
   }
 });
 
-const AdminContainer = styled.div`
-  height: 100vh;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  display: grid;
-
-  ${props => !props.isCompany} {
-    grid-template-columns: 1fr 5fr;
-    grid-template-areas: 'bar main';
-    }
-
-  justify-items: stretch;
-  justify-content: center;
-`
-
-const Content = styled.div`
-  overflow-y: scroll;
-  grid-area: main;
-  display: subgrid;
-  align-items: center;
-  background-color: #F5F5F5;
-`
-
 function App() {
   const [userinfo, setuserinfo] = useState(null);
-
-  const isCompany = (email) => {
-    if (email == null) return false;
-    const index = email.indexOf("@");
-    const subst = email.substring(index);
-    if (subst === "@checkly.org") return false;
-    return true;
-  }
 
   useEffect(() => {
     const auth = getAuth();
@@ -85,21 +52,16 @@ function App() {
     <ThemeProvider theme={theme}>
       <div className="App">
         <Router>
-          <AdminContainer isCompany={isCompany(userinfo?.email)}>
-            <Sidebar />
-            <Content>
-              <Routes>
-                {userinfo ? <Route component={() => (<div>404 Not found </div>)} /> : <Route exact path="/login" element={<Login />} />}
-                <Route exact path="/reset" element={<ResetPassword />} />
-                <Route exact path="/checkly" element={<ChecklyProfile />} />
-                <Route exact path="/admin/dashboard" element={<Dashboard />} />
-                <Route exact path="/admin/departments" element={<Departments />} />
-                <Route exact path="/admin/employees" element={<AddEmployee />} />
-                <Route exact path="/admin/analytics" element={<Analytics />} />
-                <Route exact path="/admin/services" element={<Services />} />
-              </Routes>
-            </Content>
-          </AdminContainer>
+          <Routes>
+            {userinfo ? <Route component={() => (<div>404 Not found </div>)} /> : <Route exact path="/login" element={<Login />} />}
+            <Route exact path="/reset" element={<ResetPassword />} />
+            <Route exact path="/checkly" element={<ChecklyProfile />} />
+            <Route exact path="/admin/dashboard" element={<Layout children={<Dashboard />} />} />
+            <Route exact path="/admin/departments" element={<Layout children={<Departments />} />} />
+            <Route exact path="/admin/employees" element={<Layout children={<AddEmployee />} />} />
+            <Route exact path="/admin/analytics" element={<Layout children={<Analytics />} />} />
+            <Route exact path="/admin/services" element={<Layout children={<Services />} />} />
+          </Routes>
         </Router>
       </div >
     </ThemeProvider>
