@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import Loginpic from '../../assets/images/Loginpic.png';
 import { ref, onValue } from 'firebase/database';
 import { database } from '../../utilities/firebase';
+import { Alert, AlertTitle, CircularProgress, Snackbar } from '@mui/material';
 
 import Logo from '../../assets/images/logo.svg';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
@@ -27,7 +28,13 @@ const ResetPaaword = () => {
   // const navigate = useNavigate()
   const [count, setCount] = useState(null);
   const [issend, setIssend] = useState(null);
+  const [iserror, setiserror] = useState(null);
 
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const closeSnackbar = () => {
+    setOpenSnackbar(false);
+};
   const initialValues = {
 
     email: '',
@@ -131,27 +138,27 @@ const ResetPaaword = () => {
   }
   return (
 
-    <div class="container-fluid " id='height'>
-      <div class="row" id='height' >
-        <nav class="navbar navbar-expand-lg navbar-light" style={{ position: "absolute" }}>
-          <div class="container-fluid justify-content-center">
+    <div className="container-fluid " id='height'>
+      <div className="row" id='height' >
+        <nav className="navbar navbar-expand-lg navbar-light" style={{ position: "absolute" }}>
+          <div className="container-fluid justify-content-center">
             <img src={Logo} alt="logo" style={{ width: "30px", height: "30px" }} /> <a style={{ fontWeight: "500", paddingLeft: "4px" }}>  Checkly</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
+            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+              <span className="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown" style={{ marginLeft: "12em" }}>
-              <ul class="navbar-nav m-auto">
-                <li class="nav-item">
-                  <a class="nav-link active blue" aria-current="page" href="#" style={{ color: "#2CB1EF", padding: "1em 2em" }}>Home</a>
+            <div className="collapse navbar-collapse" id="navbarNavDropdown" style={{ marginLeft: "12em" }}>
+              <ul className="navbar-nav m-auto">
+                <li className="nav-item">
+                  <a className="nav-link active blue" aria-current="page" href="#" style={{ color: "#2CB1EF", padding: "1em 2em" }}>Home</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>About</a>
+                <li className="nav-item">
+                  <a className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>About</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>Services</a>
+                <li className="nav-item">
+                  <a className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>Services</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>Contact</a>
+                <li className="nav-item">
+                  <a className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>Contact</a>
                 </li>
               </ul>
             </div>
@@ -159,18 +166,18 @@ const ResetPaaword = () => {
         </nav>
 
 
-        <div class="col-md-6 red" style={mystyle1}>
+        <div className="col-md-6 red" style={mystyle1}>
           {/* <div class="container" style={mystyle1}> */}
-          {issend ? <div class="alert alert-success" role="alert">
+          {/* {issend ? <div class="alert alert-success" role="alert">
             {issend}
-          </div> : null}
+          </div> : null} */}
 
           <h2 tyle={{ paddingTop: "12%" }}>Reset Your Password</h2>
 
           <p style={subTitle}>Enter your E-mail to receive your password replacement E-mail</p>
 
-          {count ? <p class=" alert-danger" role="alert">
-            {count}</p> : null}
+          {/* {count ? <p class=" alert-danger" role="alert">
+            {count}</p> : null} */}
           <Formik
             initialValues={{ ...initialValues }}
             validationSchema={validationSchema}
@@ -183,21 +190,52 @@ const ResetPaaword = () => {
 
                     setCount(null)
                     setIssend("Check your inbox for a reset message")
+                    setiserror(false)
+                    setOpenSnackbar(true);
+
                   })
                   .catch((error) => {
 
                     setCount("Please enter a valid email")
+                    setiserror(true)
+
+                    setOpenSnackbar(true);
+
 
                     // ..
                   });
               } else {
                 setCount("Please enter a valid email")
+                setiserror(true)
+
+                setOpenSnackbar(true);
+
               }
 
             }}>
 
             <Form>
-
+            {iserror ?
+                    (<Snackbar
+                        autoHideDuration={6000}
+                        open={openSnackbar}
+                        onClose={closeSnackbar}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                        <Alert onClose={closeSnackbar} severity='error' variant='filled'>
+                            <AlertTitle>Error</AlertTitle>
+                            {count}
+                        </Alert>
+                    </Snackbar>) :
+                    (<Snackbar
+                        open={openSnackbar}
+                        autoHideDuration={6000}
+                        onClose={closeSnackbar}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }} >
+                        <Alert severity='success' variant='filled'>
+                            <AlertTitle>Success!</AlertTitle>
+                           {issend}
+                        </Alert>
+                    </Snackbar>)}
               <Grid item xs={12}>
                 <InputField
 
@@ -224,7 +262,7 @@ const ResetPaaword = () => {
           </Formik >
 
         </div>
-        <div class="col-md-6 blue" style={mystyle}>
+        <div className="col-md-6 blue" style={mystyle}>
           {/* <img src={UILogin}  alt="logo" style={overlay}/>  */}
 
 

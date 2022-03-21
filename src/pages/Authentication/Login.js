@@ -13,6 +13,8 @@ import Logo from '../../assets/images/logo.svg';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { ref, onValue } from 'firebase/database';
 import { database } from '../../utilities/firebase';
+import { Alert, AlertTitle, CircularProgress, Snackbar } from '@mui/material';
+
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 <link
@@ -26,8 +28,13 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 const Login = () => {
   const navigate = useNavigate()
   const [count, setCount] = useState(null);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
+  const closeSnackbar = () => {
+    setOpenSnackbar(false);
+};
   useEffect(() => {
+    const ac = new AbortController();
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, userAuth => {
       if (userAuth) {
@@ -42,8 +49,9 @@ const Login = () => {
       } else {
         navigate("/login")
       }
+      ac.abort()
     })
-    return unsubscribe
+    return unsubscribe   
   }, [])
 
   const initialValues = {
@@ -145,39 +153,39 @@ const Login = () => {
 
   }
   return (
-    <div class="container-fluid ">
-      <div class="row"  >
-        <nav class="navbar navbar-expand-lg navbar-light" style={{ position: "absolute" }}>
-          <div class="container-fluid justify-content-center">
+    <div className="container-fluid ">
+      <div className="row"  >
+        <nav className="navbar navbar-expand-lg navbar-light" style={{ position: "absolute" }}>
+          <div className="container-fluid justify-content-center">
             <img src={Logo} alt="logo" style={{ width: "30px", height: "30px" }} /> <a style={{ fontWeight: "500", paddingLeft: "4px" }}>  Checkly</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
+            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+              <span className="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown" style={{ marginLeft: "12em" }}>
-              <ul class="navbar-nav m-auto">
-                <li class="nav-item">
-                  <a class="nav-link active blue" aria-current="page" href="#" style={{ color: "Black", padding: "1em 2em" }}>Home</a>
+            <div className="collapse navbar-collapse" id="navbarNavDropdown" style={{ marginLeft: "12em" }}>
+              <ul className="navbar-nav m-auto">
+                <li className="nav-item">
+                  <a className="nav-link active blue" aria-current="page" href="#" style={{ color: "Black", padding: "1em 2em" }}>Home</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>About</a>
+                <li className="nav-item">
+                  <a className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>About</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>Services</a>
+                <li className="nav-item">
+                  <a className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>Services</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>Contact</a>
+                <li className="nav-item">
+                  <a className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>Contact</a>
                 </li>
               </ul>
             </div>
           </div>
         </nav>
 
-        <div class="col-md-6 red" style={mystyle1}>
+        <div className="col-md-6 red" style={mystyle1}>
           <h2 style={{ paddingTop: "12%" }}>Welcome To Checkly</h2>
           <p style={subTitle}>login to checkly to unlock its capabilities</p>
-
+{/* 
           {count ? <p class=" alert-danger" role="alert">
-            {count}</p> : null}
+            {count}</p> : null} */}
 
           <Formik
             initialValues={{ ...initialValues }}
@@ -204,15 +212,28 @@ const Login = () => {
                     const errorMessage = error.message;
                     console.log(errorMessage)
                     setCount("InValid Email /Password")
+                    setOpenSnackbar(true);
+
                   });
               }
               else {
                 setCount("InValid Email /Password")
+                setOpenSnackbar(true);
+
               }
             }}>
 
             <Form>
-
+            <Snackbar
+                        autoHideDuration={6000}
+                        open={openSnackbar}
+                        onClose={closeSnackbar}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                        <Alert onClose={closeSnackbar} severity='error' variant='filled'>
+                            <AlertTitle>Error</AlertTitle>
+                            {count}
+                        </Alert>
+                    </Snackbar>
               <Grid item xs={12}>
                 <InputField
 
@@ -250,9 +271,10 @@ const Login = () => {
           <Grid item xs={12}>
             <button style={Button1} onClick={() => navigate("/reset")}>  Forgot password? </button>
           </Grid>
+        
         </div>
         {/* </div> */}
-        <div class="col-md-6 blue" style={mystyle}
+        <div className="col-md-6 blue" style={mystyle}
         >
           {/* <img src={UILogin}  alt="logo" style={overlay}/>  */}
           {/* <div class="container" style={mystyle}> */}
