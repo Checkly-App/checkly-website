@@ -372,9 +372,9 @@ const uploadFiles = (file) => {
 
   
   return (
+
+
     <div>
-
-
     <SetionsWrapper>
 
 {/* <SidebarSection>
@@ -415,14 +415,14 @@ const uploadFiles = (file) => {
       }}
     >
       <Form>
- 
           <MainSections>
 
           {/* header */}
 
             <Section2>
+
               <ButtonCircle2 
-              style={{zIndex:1, marginTop:-90, marginLeft:340}}
+              style={{zIndex:1, marginTop:-90, marginLeft:340}} //Relative instead of absloute
               >
               </ButtonCircle2>
                 <Avatar
@@ -432,10 +432,11 @@ const uploadFiles = (file) => {
                   src= {logo}
                   sx={{ width: 50, height: 135 }}
                 />
-             
                 <FormTitle>Register Company To Checkly</FormTitle>
               
             </Section2>
+
+          {/* end of header */}  
 
 
             <Section>
@@ -508,40 +509,43 @@ const uploadFiles = (file) => {
             <SButton type="submit" >Register Company</SButton>
 
             </Section3>
+
           </MainSections>
-          </Form>
+        </Form>
     </Formik>
 
+     {/* Upload Logo  */}
 
     <SidebarSection>
 
-<form onSubmit={formHandler}>
-<Stack direction="column" spacing={5} alignItems="center" >
-<label htmlFor="contained-button-file">
-  <Box textAlign='center'>
-  <Input accept="image/*" id="contained-button-file" type="file" />
-    <Button type="submit" color="grey" variant="contained" component="span" variant="outlined" style={{
-      maxWidth: "170px",
-      maxHeight: "150px",
-      minWidth: "170px",
-      minHeight: "150px",
-      border: 'dashed',
-      fontSize: '13px'
-      }}>
-  <Stack direction="column" spacing={5} alignItems="center" > 
-  <InsertPhotoOutlinedIcon/> Upload Logo </Stack> 
-  </Button>
-  </Box>
-  </label>
-  <Button type="submit" variant="contained">Upload</Button>
-  </Stack>
+    <form onSubmit={formHandler}>
+      <Stack direction="column" spacing={5} alignItems="center" >
+          <label htmlFor="contained-button-file">
+             <Box textAlign='center'>
+                <Input accept="image/*" id="contained-button-file" type="file" />
+                <Button type="submit" color="grey" variant="contained" component="span" variant="outlined" style={{
+                 maxWidth: "170px",
+                 maxHeight: "150px",
+                 minWidth: "170px",
+                 minHeight: "150px",
+                 border: 'dashed',
+                fontSize: '13px'
+               }}>
+                <Stack direction="column" spacing={5} alignItems="center" > 
+                <InsertPhotoOutlinedIcon/> Upload Logo </Stack> 
+               </Button>
+             </Box>
+         </label>
+           <Button type="submit" variant="contained">Upload</Button>
+      </Stack>
 </form>
-
-
 
 </SidebarSection>
 
-          {/* the Sidebar Section */}
+    {/* end of Upload Logo  */}
+
+               {/* the Sidebar Section (uploads) */}
+               
           <SidebarSection>
 
             <Stack direction="column" justify="center" spacing={5}>
