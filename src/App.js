@@ -12,6 +12,7 @@ import Login from './pages/Authentication/Login';
 import ChecklyProfile from './pages/Checkly Admin/ChecklyProfile';
 import ResetPassword from './pages/Authentication/ResetPassword';
 import Layout from './pages/Company/Layout';
+import Home from './pages/Home';
 
 const theme = createTheme({
   palette: {
@@ -54,6 +55,7 @@ function App() {
         <Router>
           <Routes>
             {userinfo ? <Route component={() => (<div>404 Not found </div>)} /> : <Route exact path="/login" element={<Login />} />}
+            <Route path="/" element={<Home />} />
             <Route exact path="/reset" element={<ResetPassword />} />
             <Route exact path="/checkly" element={<ChecklyProfile />} />
             <Route exact path="/admin/dashboard" element={<Layout children={<Dashboard />} />} />
