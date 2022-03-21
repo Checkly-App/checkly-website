@@ -34,12 +34,12 @@ const Section = styled.div`
     grid-template-columns: 1fr 1fr;
     column-gap: 2.5em;
     row-gap: 0.75em;
+
     @media (max-width: 768px) {
         padding: 1em;
         grid-template-columns: 1fr;
         gap: 0.5em
-
-  }
+    }
 `
 const SectionTitle = styled.h1`
     font-size: 1.05em;
@@ -51,7 +51,10 @@ const SectionTitle = styled.h1`
   }
 `
 const SetionsWrapper = styled.div`
-    margin: 4em 8em;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin: 2em 8em;
      @media (max-width: 768px) {
             margin: 2em 3em;
   }
@@ -66,6 +69,8 @@ const Button = styled.button`
     border-radius: 0.5em;
     border: none;
     background: linear-gradient(90deg, #56BBEB 0%, #58AAF3 100%);
+      margin-left: auto;
+
 `
 const MainTitle = styled.h1`
     font-size: 2em;
@@ -112,7 +117,7 @@ const AddEmployee = () => {
             const data = snapshot.val();
             var departments = [];
             for (let id in data) {
-                if (data[id]['company_id'] === 'com3') { // TODO: - company's id
+                if (data[id]['company_id'] === auth.currentUser.uid) {
                     const department = {
                         department: 'dep' + data[id]['dep_id'],
                         name: data[id]['name']
@@ -122,7 +127,6 @@ const AddEmployee = () => {
             }
             setDepartments(departments);
         });
-
         return () => {
             setErrorDetails({});
             setDepartments([]);
@@ -131,7 +135,8 @@ const AddEmployee = () => {
     }, []);
 
     useEffect(() => {
-        const departmentsKeys = []
+        const departmentsKeys = [];
+
         for (let i in departments)
             departmentsKeys.push(departments[i]['department'])
 
@@ -267,7 +272,7 @@ const AddEmployee = () => {
                 setOpenSnackbar(true);
                 return;
             });
-        }).catch((error) => {
+        }).catch(() => {
             setErrorDetails({
                 title: 'An Error Occured',
                 description: 'The email exists within Checkly'
@@ -297,33 +302,27 @@ const AddEmployee = () => {
                         <InputField
                             name='fullName'
                             id='fullName'
-                            label='Full Name'
-                        />
+                            label='Full Name' />
                         <InputField
                             name='nationalID'
                             id='nationalID'
-                            label='National ID'
-                        />
+                            label='National ID' />
                         <InputField
                             name='phoneNumber'
                             id='phoneNumber'
-                            label='Phone Number'
-                        />
+                            label='Phone Number' />
                         <DateField
                             name='birthdate'
                             id='birthdate'
-                            label='Birthdate'
-                        />
+                            label='Birthdate' />
                         <InputField
                             name='address'
                             id='address'
-                            label='Address'
-                        />
+                            label='Address' />
                         <RadioButtons
                             name='gender'
                             id='gender'
-                            label='Gender'
-                        />
+                            label='Gender' />
                     </Section>
                     <Section>
                         <SectionTitle>Work Information</SectionTitle>
@@ -331,39 +330,34 @@ const AddEmployee = () => {
                             name='email'
                             icon={<MdOutlineAlternateEmail color='#D7D7D7' size={24} />}
                             id='email'
-                            label='Email'
-                        />
+                            label='Email' />
                         <InputField
                             name='employeeID'
                             id='employeeID'
-                            label='Employee ID'
-                        />
+                            label='Employee ID' />
                         <SelectField
                             name='department'
                             id='department'
                             label='Department'
-                            options={departments}
-                        />
+                            options={departments} />
                         <InputField
                             name='position'
                             id='position'
-                            label='Position'
-                        />
+                            label='Position' />
                     </Section>
-                    {isLoading ?
-                        <CircularProgress /> : <Button type='submit'>  Add an employee </Button>}
+                    {isLoading ? <CircularProgress /> : <Button type='submit'>  Add an employee </Button>}
                 </SetionsWrapper>
-                {error ? (<Snackbar
-                    autoHideDuration={6000}
-                    open={openSnackbar}
-                    onClose={closeSnackbar}
-                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                    <Alert onClose={closeSnackbar} severity='error' variant='filled'>
-                        <AlertTitle>{errorDetails.title}</AlertTitle>
-                        {errorDetails.description}
-                    </Alert>
-                </Snackbar>)
-                    :
+                {error ?
+                    (<Snackbar
+                        autoHideDuration={6000}
+                        open={openSnackbar}
+                        onClose={closeSnackbar}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                        <Alert onClose={closeSnackbar} severity='error' variant='filled'>
+                            <AlertTitle>{errorDetails.title}</AlertTitle>
+                            {errorDetails.description}
+                        </Alert>
+                    </Snackbar>) :
                     (<Snackbar
                         open={openSnackbar}
                         autoHideDuration={6000}
