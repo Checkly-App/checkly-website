@@ -228,7 +228,7 @@ const Login = () => {
                         autoHideDuration={6000}
                         open={openSnackbar}
                         onClose={closeSnackbar}
-                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}>
                         <Alert onClose={closeSnackbar} severity='error' variant='filled'>
                             <AlertTitle>Error</AlertTitle>
                             {count}

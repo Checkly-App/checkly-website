@@ -220,7 +220,7 @@ const ResetPaaword = () => {
                         autoHideDuration={6000}
                         open={openSnackbar}
                         onClose={closeSnackbar}
-                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}>
                         <Alert onClose={closeSnackbar} severity='error' variant='filled'>
                             <AlertTitle>Error</AlertTitle>
                             {count}
@@ -230,7 +230,7 @@ const ResetPaaword = () => {
                         open={openSnackbar}
                         autoHideDuration={6000}
                         onClose={closeSnackbar}
-                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }} >
+                        anchorOrigin={{ vertical: 'top', horizontal: 'left' }} >
                         <Alert severity='success' variant='filled'>
                             <AlertTitle>Success!</AlertTitle>
                            {issend}
