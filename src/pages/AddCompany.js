@@ -5,39 +5,35 @@ import InputField from "../components/Forms/InputField";
 import Upload from "../components/Forms/Upload";
 import PolicyRadioButtons from "../components/Forms/PrefrenceRadioButtons";
 import SelectField from "../components/Forms/SelectField";
-import RadioGroup from '@mui/material/RadioGroup';
+import RadioGroup from "@mui/material/RadioGroup";
 import { set, onValue } from "firebase/database"; //ref
 import { database, auth, storage } from "../utilities/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import styled, { keyframes } from "styled-components";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import UploadFileRoundedIcon from '@mui/icons-material/UploadFileRounded';
-import InsertPhotoOutlinedIcon from '@mui/icons-material/InsertPhotoOutlined';
-import Radio from '@mui/material/Radio';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormHelperText from '@mui/material/FormHelperText';
-import FormLabel from '@mui/material/FormLabel';
-import logo from '../assets/images/logo.svg';
-import {  ref, uploadBytesResumable } from "firebase/storage"; //ref
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
+import InsertPhotoOutlinedIcon from "@mui/icons-material/InsertPhotoOutlined";
+import Radio from "@mui/material/Radio";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
+import FormLabel from "@mui/material/FormLabel";
+import logo from "../assets/images/logo.svg";
+import { ref, uploadBytesResumable } from "firebase/storage"; //ref
 
-const ButtonCircle2 = styled.button`
-background-color: white;
-  height: 85px;
-  width: 85px;
-  color: white;
-  padding: 1rem;
-  border: none;
-  cursor: pointer;
-  font-size: 27px;
-  border: 5px solid white;
-  border-radius: 50%;
-  padding: 10px;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 1px 15px;
-  `;
+// Main COntainer
+const SectionsWrapper = styled.div`
+  margin: 5em 0 5rem 3rem;
+  display: flex;
+  justify-content: center;
+  // width: 100%;
+`;
+
+//Main Sections container
+const MainSections = styled.div``;
 
 const Section = styled.div`
   background-color: white;
@@ -49,9 +45,24 @@ const Section = styled.div`
   grid-template-columns: 1fr 1fr;
   column-gap: 1.5em;
   row-gap: 0.75em;
+  width: 50em;
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
+`;
+const ButtonCircle2 = styled.button`
+  background-color: white;
+  height: 85px;
+  width: 85px;
+  color: white;
+  padding: 1rem;
+  border: none;
+  cursor: pointer;
+  font-size: 27px;
+  border: 5px solid white;
+  border-radius: 50%;
+  padding: 10px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 1px 15px;
 `;
 
 const Section2 = styled.div`
@@ -69,21 +80,50 @@ const Section3 = styled.div`
   padding: 2em;
   margin-bottom: 1em;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  display: block;
-`; 
+  display: flex;
+  flex-direction: column;
+`;
+const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+`;
+const ButtonWrapper = styled.div`
+  display: flex;
 
-const MainSections = styled.div`
-  width: 85%;
+  justify-content: flex-end;
 `;
 
-// The Sidebar Section
-const SidebarSection = styled.div`
+// Sidebar Sections Wrapper
+const SidebarSectionsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+// The Sidebar Sections
+const SidebarSection1 = styled.div`
   width: 15em;
   background-color: white;
   border-radius: 0.75em;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   margin: 0 3em 3em 3em;
   padding: 1em;
+  display: flex;
+  flex-diretcion: column;
+  justify-content: center;
+  align-items: center;
+`;
+const SidebarSection2 = styled.div`
+  width: 15em;
+  background-color: white;
+  border-radius: 0.75em;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  margin: 0 3em 1em 3em;
+  padding: 1em;
+  height: 70%;
+  display: flex;
+  flex-diretcion: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const FormTitle = styled.h1`
@@ -91,11 +131,6 @@ const FormTitle = styled.h1`
   font-weight: 500;
   margin: 0em 0em 1em 0em;
   text-align: center;
-`;
-
-const SetionsWrapper = styled.div`
-  margin: 5em;
-  display: flex;
 `;
 
 const SButton = styled.button`
@@ -113,199 +148,196 @@ const SButton = styled.button`
   margin-right: 0em
 `;
 
-const Input = styled('input')({
-  display: 'none',
+const Input = styled("input")({
+  display: "none",
 });
 
 //Arrays
 
 const locations = [
-    {
+  {
     key: "Riyadh",
     name: "Riyadh",
-    },
-    {
+  },
+  {
     key: "Northern Borders",
     name: "Northern Borders",
-    },
-    {
+  },
+  {
     key: "Makkah",
     name: "Makkah",
-    },
-    {
+  },
+  {
     key: "Madinah",
     name: "Madinah",
-    },
-    {
+  },
+  {
     key: "Eastern Province",
     name: "Eastern Province",
-    },
-    {
+  },
+  {
     key: "Jizan",
-    name:"Jizan",
-    },
-    {
+    name: "Jizan",
+  },
+  {
     key: "Jawf",
     name: "Jawf",
-    },
-    {
+  },
+  {
     key: "Hail",
     name: "Hail",
-    },
-    {
+  },
+  {
     key: "Qasim",
     name: "Qasim",
-    },
-    {
+  },
+  {
     key: "Najran",
     name: "Najran",
-    },
-    {
+  },
+  {
     key: "Tabuk",
     name: "Tabuk",
-    },
-    {
+  },
+  {
     key: "Asir",
     name: "Asir",
-    },
-    {
+  },
+  {
     key: "Bahah",
     name: "Bahah",
-    },
-  ];
+  },
+];
 
-  const industries = [
-    {
+const industries = [
+  {
     key: "Accountancy, banking and finance",
     name: "Accountancy, banking and finance",
-    },
-    {
+  },
+  {
     key: "Business, consulting and management",
     name: "Business, consulting and management",
-    },
-    {
+  },
+  {
     key: "Engineering and manufacturing",
     name: "Engineering and manufacturing",
-    },
-    {
+  },
+  {
     key: "Healthcare",
     name: "Healthcare",
-    },
-    {
+  },
+  {
     key: "Information Technology",
     name: "Information Technology",
-    },
-    {
+  },
+  {
     key: "Law",
-    name:"Law",
-    },
-    {
+    name: "Law",
+  },
+  {
     key: "Marketing, advertising and PR",
     name: "Marketing, advertising and PR",
-    },
-    {
+  },
+  {
     key: "Transport and logistics",
     name: "Transport and logistics",
-    },
-    {
+  },
+  {
     key: "Education",
     name: "Education",
-    },
-    {
+  },
+  {
     key: "Retail",
     name: "Retail",
-    },
-    {
+  },
+  {
     key: "Public services and administration",
     name: "Public services and administration",
-    },
-    {
+  },
+  {
     key: "Recruitment and HR",
     name: "Recruitment and HR",
-    },
-    {
+  },
+  {
     key: "Leisure, sport and tourism",
     name: "Leisure, sport and tourism",
-    },
-  ];
+  },
+];
 
-  const sizes = [
-    {
+const sizes = [
+  {
     key: "1-10 Employees",
     name: "1-10 Employees",
-    },
-    {
+  },
+  {
     key: "11-50 Employees",
     name: "11-50 Employees",
-    },
-    {
+  },
+  {
     key: "51-200 Employees",
     name: "51-200 Employees",
-    },
-    {
+  },
+  {
     key: "201-500 Employees",
     name: "201-500 Employees",
-    },
-    {
+  },
+  {
     key: "501-1000 Employees",
     name: "501-1000 Employees",
-    },
-    {
+  },
+  {
     key: "1001-5000 Employees",
-    name:"1001-5000 Employees",
-    },
-    {
+    name: "1001-5000 Employees",
+  },
+  {
     key: "5001-10,000 Employees",
     name: "5001-10,000 Employees",
-    },
-    {
+  },
+  {
     key: "+10,000 Employees",
     name: "+10,000 Employees",
-    },
-  ];
+  },
+];
 
-  const ages = [
-    {
+const ages = [
+  {
     key: "Less than a year",
     name: "Less than a year",
-    },
-    {
+  },
+  {
     key: "1-2 Years",
     name: "1-2 Years",
-    },
-    {
+  },
+  {
     key: "2-5 Years",
     name: "2-5 Years",
-    },
-    {
+  },
+  {
     key: "5-10 Years",
     name: "5-10 Years",
-    },
-    {
+  },
+  {
     key: "+10 Years",
     name: "+10 Years",
-    },
-  ];
+  },
+];
 
-  const preferences = [
-    {
+const preferences = [
+  {
     key: "QR-Code",
     name: "QR-Code",
-    },
-    {
+  },
+  {
     key: "Location-Based",
     name: "Location-Based",
-    },
-    {
+  },
+  {
     key: "Both",
     name: "Both",
-    },
-  ];
-
-
+  },
+];
 
 const AddCompany = () => {
-
   const initialValues = {
     name: "",
     abbreviation: "",
@@ -320,10 +352,9 @@ const AddCompany = () => {
     file: "",
   };
 
-
   const validationSchema = Yup.object({
     // name: Yup.string().required("Name is required"),
-    // abbreviation: Yup.string().required("Name is required"), 
+    // abbreviation: Yup.string().required("Name is required"),
     // location: Yup.string().required("Location is required"),
     // size: Yup.string().required("Size is required"),
     // industry: Yup.string().required("Industry is required"),
@@ -335,49 +366,47 @@ const AddCompany = () => {
   });
 
   const addCompany = (company) => {
-    createUserWithEmailAndPassword(auth, company.email, '123456').then((result) => {
-        set(ref(database, 'Company/' + result.user.uid), {
-            name: company.name,
-            abbreviation: company.abbreviation,
-            email: company.email,
-            location: company.location,
-            size: company.size,
-            industry: company.industry,
-            age: company.age,
-            Policy: company.Policy,
-            working_hours: company.hours,
-            attendance_strategy: company.preference
+    createUserWithEmailAndPassword(auth, company.email, "123456")
+      .then((result) => {
+        set(ref(database, "Company/" + result.user.uid), {
+          name: company.name,
+          abbreviation: company.abbreviation,
+          email: company.email,
+          location: company.location,
+          size: company.size,
+          industry: company.industry,
+          age: company.age,
+          Policy: company.Policy,
+          working_hours: company.hours,
+          attendance_strategy: company.preference,
         });
-    }).catch((error) => {
+      })
+      .catch((error) => {
         // var errorCode = error.code;
         var errorMessage = error.message;
         alert(errorMessage);
         console.log(error);
         return;
-    });
-}
+      });
+  };
 
-const formHandler = (e) => {
-  e.preventDefault();
-  const file = e.target[0].files[0];
-  uploadFiles(file);
-};
+  const formHandler = (e) => {
+    e.preventDefault();
+    const file = e.target[0].files[0];
+    uploadFiles(file);
+  };
 
-const uploadFiles = (file) => {
-  //
-  if (!file) return;
-  const sotrageRef = ref(storage, `files/${file.name}`);
-  const uploadTask = uploadBytesResumable(sotrageRef, file);
-};
+  const uploadFiles = (file) => {
+    //
+    if (!file) return;
+    const sotrageRef = ref(storage, `files/${file.name}`);
+    const uploadTask = uploadBytesResumable(sotrageRef, file);
+  };
 
-  
   return (
-
-
     <div>
-    <SetionsWrapper>
-
-{/* <SidebarSection>
+      <SectionsWrapper>
+        {/* <SidebarSection>
 
           <form onSubmit={formHandler}>
           <Stack direction="column" spacing={5} alignItems="center" >
@@ -405,211 +434,232 @@ const uploadFiles = (file) => {
           
   </SidebarSection> */}
 
-    <Formik
-      initialValues={{ ...initialValues }}
-      validationSchema={validationSchema}
-      onSubmit={(values) => {
-        console.log(values);
-        // addCompany(values);
-        alert(JSON.stringify(values, null, 2));
-      }}
-    >
-      <Form>
-          <MainSections>
+        <Formik
+          initialValues={{ ...initialValues }}
+          validationSchema={validationSchema}
+          onSubmit={(values) => {
+            console.log(values);
+            // addCompany(values);
+            alert(JSON.stringify(values, null, 2));
+          }}
+        >
+          <Form>
+            <MainSections>
+              {/* header */}
 
-          {/* header */}
-
-            <Section2>
-
-              <ButtonCircle2 
-              style={{zIndex:1, marginTop:-90, marginLeft:340}} //Relative instead of absloute
-              >
-              </ButtonCircle2>
+              <Section2>
+                <ButtonCircle2
+                  style={{ zIndex: 1, marginTop: -90, marginLeft: 355 }} //Relative instead of absloute
+                ></ButtonCircle2>
                 <Avatar
-                  style={{zIndex:1, marginTop:-108, marginLeft:357}}
-                  background-color= "white"
+                  style={{ zIndex: 1, marginTop: -108, marginLeft: 372 }}
+                  background-color="white"
                   alt="R"
-                  src= {logo}
+                  src={logo}
                   sx={{ width: 50, height: 135 }}
                 />
                 <FormTitle>Register Company To Checkly</FormTitle>
-              
-            </Section2>
+              </Section2>
 
-          {/* end of header */}  
+              {/* end of header */}
 
+              <Section>
+                <InputField name="name" id="name" label="Name" />
 
-            <Section>
+                <InputField
+                  name="abbreviation"
+                  id="abbreviation"
+                  label="Name Abbreviation"
+                />
 
-            <InputField 
-                name="name" 
-                id="name" 
-                label="Name"
-            />
+                <InputField name="email" id="email" label="Email" />
 
-            <InputField 
-                name="abbreviation" 
-                id="abbreviation" 
-                label="Name Abbreviation"
-            />
+                <SelectField
+                  name="location"
+                  id="location"
+                  label="Location"
+                  options={locations}
+                />
 
-            <InputField
-                name="email"
-                id="email"
-                label="Email"
-            />
+                <SelectField
+                  name="industry"
+                  id="industry"
+                  label="Industry"
+                  options={industries}
+                />
 
-            <SelectField
-                name="location"
-                id="location"
-                label="Location"
-                options= {locations}
-             />
+                <SelectField
+                  name="size"
+                  id="size"
+                  label="Size"
+                  options={sizes}
+                />
 
-            <SelectField
-                name="industry"
-                id="industry"
-                label="Industry"
-                options={industries}
-            />
+                <SelectField
+                  name="age"
+                  id="age"
+                  label="Years Since Establishment"
+                  options={ages}
+                />
 
-            <SelectField
-                name="size"
-                id="size"
-                label="Size"
-                options={sizes}
-            />
+                <SelectField
+                  name="preference"
+                  id="preference"
+                  label="Attendance Recording Strategy"
+                  options={preferences}
+                />
+              </Section>
 
-            <SelectField
-                name="age"
-                id="age"
-                label="Years Since Establishment"
-                options={ages}
-            />
+              <Section3>
+                <ContentWrapper>
+                  <PolicyRadioButtons
+                    name="Policy"
+                    id="Policy"
+                    label="Policy"
+                  />
+                  <InputField name="hours" id="hours" label="Hours" />
+                </ContentWrapper>
+                <ButtonWrapper>
+                  <SButton type="submit">Register Company</SButton>
+                </ButtonWrapper>
+              </Section3>
+            </MainSections>
+          </Form>
+        </Formik>
 
-            <SelectField
-                name="preference"
-                id="preference"
-                label="Attendance Recording Strategy"
-                options={preferences}
-            />
- 
-              
-            </Section>
+        <SidebarSectionsWrapper>
+          {/* Upload Logo  */}
+          <SidebarSection1>
+            <form onSubmit={formHandler}>
+              <Stack direction="column" spacing={5} alignItems="center">
+                <label htmlFor="contained-button-file">
+                  <Box textAlign="center">
+                    <Input
+                      accept="image/*"
+                      id="contained-button-file"
+                      type="file"
+                    />
+                    <Button
+                      type="submit"
+                      color="grey"
+                      variant="contained"
+                      component="span"
+                      variant="outlined"
+                      style={{
+                        maxWidth: "170px",
+                        maxHeight: "150px",
+                        minWidth: "170px",
+                        minHeight: "150px",
+                        border: "dashed",
+                        fontSize: "13px",
+                      }}
+                    >
+                      <Stack direction="column" spacing={5} alignItems="center">
+                        <InsertPhotoOutlinedIcon /> Upload Logo{" "}
+                      </Stack>
+                    </Button>
+                  </Box>
+                </label>
+                <Button type="submit" variant="contained">
+                  Upload
+                </Button>
+              </Stack>
+            </form>
+          </SidebarSection1>
 
-            <Section3>
+          {/* end of Upload Logo  */}
 
-            <PolicyRadioButtons 
-                name="Policy" 
-                id="Policy" 
-                label="Policy"
-            />
-            <InputField name="hours" id="hours" label="Hours" />
-            
-            <SButton type="submit" >Register Company</SButton>
+          {/* the Sidebar Section (uploads) */}
 
-            </Section3>
-
-          </MainSections>
-        </Form>
-    </Formik>
-
-     {/* Upload Logo  */}
-
-    <SidebarSection>
-
-    <form onSubmit={formHandler}>
-      <Stack direction="column" spacing={5} alignItems="center" >
-          <label htmlFor="contained-button-file">
-             <Box textAlign='center'>
-                <Input accept="image/*" id="contained-button-file" type="file" />
-                <Button type="submit" color="grey" variant="contained" component="span" variant="outlined" style={{
-                 maxWidth: "170px",
-                 maxHeight: "150px",
-                 minWidth: "170px",
-                 minHeight: "150px",
-                 border: 'dashed',
-                fontSize: '13px'
-               }}>
-                <Stack direction="column" spacing={5} alignItems="center" > 
-                <InsertPhotoOutlinedIcon/> Upload Logo </Stack> 
-               </Button>
-             </Box>
-         </label>
-           <Button type="submit" variant="contained">Upload</Button>
-      </Stack>
-</form>
-
-</SidebarSection>
-
-    {/* end of Upload Logo  */}
-
-               {/* the Sidebar Section (uploads) */}
-               
-          <SidebarSection>
-
+          <SidebarSection2>
             <Stack direction="column" justify="center" spacing={5}>
-            
-        
-            <Box textAlign='center'>
-            <label htmlFor="contained-button-file">
-            <Input accept="image/*" id="contained-button-file" multiple type="file" />
-              <Button variant="contained" component="span" variant="outlined" style={{
-                maxWidth: "170px",
-                maxHeight: "80px",
-                minWidth: "170px",
-                minHeight: "80px",
-                border: 'dashed',
-                fontSize: '11px'
-                }}>
-            <Stack direction="column" spacing={5} alignItems="center" > 
-            <UploadFileRoundedIcon/> Upload departments </Stack> 
-            </Button>
-            </label>
-            </Box>
+              <Box textAlign="center">
+                <label htmlFor="contained-button-file">
+                  <Input
+                    accept="image/*"
+                    id="contained-button-file"
+                    multiple
+                    type="file"
+                  />
+                  <Button
+                    variant="contained"
+                    component="span"
+                    variant="outlined"
+                    style={{
+                      maxWidth: "170px",
+                      maxHeight: "80px",
+                      minWidth: "170px",
+                      minHeight: "80px",
+                      border: "dashed",
+                      fontSize: "11px",
+                    }}
+                  >
+                    <Stack direction="column" spacing={5} alignItems="center">
+                      <UploadFileRoundedIcon /> Upload departments{" "}
+                    </Stack>
+                  </Button>
+                </label>
+              </Box>
 
-            <Box textAlign='center'>
-            <label htmlFor="contained-button-file">
-            <Input accept="image/*" id="contained-button-file" multiple type="file" />
-              <Button variant="contained" component="span" variant="outlined" style={{
-                maxWidth: "170px",
-                maxHeight: "80px",
-                minWidth: "170px",
-                minHeight: "80px",
-                border: 'dashed',
-                fontSize: '11px'
-                }}>
-            
-            <Stack direction="column" spacing={5} alignItems="center" > 
-            <UploadFileRoundedIcon/> Upload Employees </Stack> 
-            </Button>
-            </label>
-            </Box>
-            <Box textAlign='center'>
-            <label htmlFor="contained-button-file">
-            <Input accept="image/*" id="contained-button-file" multiple type="file" />
-              <Button variant="contained" component="span" variant="outlined" style={{
-                maxWidth: "170px",
-                maxHeight: "80px",
-                minWidth: "170px",
-                minHeight: "80px",
-                border: 'dashed',
-                fontSize: '11px'
-                }}>
-            
-            <Stack direction="column" spacing={5} alignItems="center" > 
-            <UploadFileRoundedIcon/> Upload Geofence Info </Stack> 
-            </Button>
-            </label>
-            </Box>
-               
+              <Box textAlign="center">
+                <label htmlFor="contained-button-file">
+                  <Input
+                    accept="image/*"
+                    id="contained-button-file"
+                    multiple
+                    type="file"
+                  />
+                  <Button
+                    variant="contained"
+                    component="span"
+                    variant="outlined"
+                    style={{
+                      maxWidth: "170px",
+                      maxHeight: "80px",
+                      minWidth: "170px",
+                      minHeight: "80px",
+                      border: "dashed",
+                      fontSize: "11px",
+                    }}
+                  >
+                    <Stack direction="column" spacing={5} alignItems="center">
+                      <UploadFileRoundedIcon /> Upload Employees{" "}
+                    </Stack>
+                  </Button>
+                </label>
+              </Box>
+              <Box textAlign="center">
+                <label htmlFor="contained-button-file">
+                  <Input
+                    accept="image/*"
+                    id="contained-button-file"
+                    multiple
+                    type="file"
+                  />
+                  <Button
+                    variant="contained"
+                    component="span"
+                    variant="outlined"
+                    style={{
+                      maxWidth: "170px",
+                      maxHeight: "80px",
+                      minWidth: "170px",
+                      minHeight: "80px",
+                      border: "dashed",
+                      fontSize: "11px",
+                    }}
+                  >
+                    <Stack direction="column" spacing={5} alignItems="center">
+                      <UploadFileRoundedIcon /> Upload Geofence Info{" "}
+                    </Stack>
+                  </Button>
+                </label>
+              </Box>
             </Stack>
-
-
-          </SidebarSection>
-          </SetionsWrapper>
-</div>
-   
+          </SidebarSection2>
+        </SidebarSectionsWrapper>
+      </SectionsWrapper>
+    </div>
   );
 };
 
