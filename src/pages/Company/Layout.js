@@ -22,14 +22,19 @@ const Content = styled.div`
     background-color: #F5F5F5;
 `
 
-const Layout = ({ children }) => {
+const Layout = ({ children, user }) => {
     return (
-        <Container>
-            <Sidebar />
-            <Content>
-                {children}
-            </Content>
-        </Container>
+        user ?
+            (<Container>
+                <Sidebar />
+                <Content>
+                    {children}
+                </Content>
+            </Container >)
+            :
+            (<div>
+                404 Not found
+            </div>)
     );
 };
 

@@ -58,7 +58,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route exact path="/reset" element={<ResetPassword />} />
             <Route exact path="/checkly" element={<ChecklyProfile />} />
-            <Route exact path="/admin/dashboard" element={<Layout children={<Dashboard />} />} />
+            <Route exact path="/admin/dashboard" element={<Layout user={userinfo} children={<Dashboard />} />} />
             <Route exact path="/admin/departments" element={<Layout children={<Departments />} />} />
             <Route exact path="/admin/employees" element={<Layout children={<AddEmployee />} />} />
             <Route exact path="/admin/analytics" element={<Layout children={<Analytics />} />} />
