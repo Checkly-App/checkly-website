@@ -374,7 +374,10 @@ const uploadFiles = (file) => {
   return (
     <div>
 
-<SidebarSection>
+
+    <SetionsWrapper>
+
+{/* <SidebarSection>
 
           <form onSubmit={formHandler}>
           <Stack direction="column" spacing={5} alignItems="center" >
@@ -400,7 +403,7 @@ const uploadFiles = (file) => {
 
 
           
-  </SidebarSection>
+  </SidebarSection> */}
 
     <Formik
       initialValues={{ ...initialValues }}
@@ -509,6 +512,35 @@ const uploadFiles = (file) => {
           </Form>
     </Formik>
 
+
+    <SidebarSection>
+
+<form onSubmit={formHandler}>
+<Stack direction="column" spacing={5} alignItems="center" >
+<label htmlFor="contained-button-file">
+  <Box textAlign='center'>
+  <Input accept="image/*" id="contained-button-file" type="file" />
+    <Button type="submit" color="grey" variant="contained" component="span" variant="outlined" style={{
+      maxWidth: "170px",
+      maxHeight: "150px",
+      minWidth: "170px",
+      minHeight: "150px",
+      border: 'dashed',
+      fontSize: '13px'
+      }}>
+  <Stack direction="column" spacing={5} alignItems="center" > 
+  <InsertPhotoOutlinedIcon/> Upload Logo </Stack> 
+  </Button>
+  </Box>
+  </label>
+  <Button type="submit" variant="contained">Upload</Button>
+  </Stack>
+</form>
+
+
+
+</SidebarSection>
+
           {/* the Sidebar Section */}
           <SidebarSection>
 
@@ -571,6 +603,7 @@ const uploadFiles = (file) => {
 
 
           </SidebarSection>
+          </SetionsWrapper>
 </div>
    
   );
