@@ -6,7 +6,6 @@ import Upload from "../components/Forms/Upload";
 import PolicyRadioButtons from "../components/Forms/PrefrenceRadioButtons";
 import SelectField from "../components/Forms/SelectField";
 import RadioGroup from "@mui/material/RadioGroup";
-// import { set, onValue } from "firebase/database"; //ref
 import {getDatabase, ref as ref_database, set, onValue } from "firebase/database";
 import { database, auth, storage } from "../utilities/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -23,7 +22,7 @@ import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import FormLabel from "@mui/material/FormLabel";
 import logo from "../assets/images/logo.svg";
-import { ref, uploadBytesResumable } from "firebase/storage"; //ref
+import { ref, uploadBytesResumable } from "firebase/storage"; 
 
 // Main COntainer
 const SectionsWrapper = styled.div`
@@ -135,6 +134,7 @@ const FormTitle = styled.h1`
 
 const SButton = styled.button`
   width: 15em;
+  cursor: pointer;
   height: 3em;
   font-size: 1em;
   font-weight: 500;
@@ -399,7 +399,6 @@ const AddCompany = () => {
   };
 
   const uploadFiles = (file) => {
-    //
     if (!file) return;
     const sotrageRef = ref(storage, `Companies/${file.name}`);
     const uploadTask = uploadBytesResumable(sotrageRef, file);
@@ -412,10 +411,11 @@ const AddCompany = () => {
         <Formik
           initialValues={{ ...initialValues }}
           validationSchema={validationSchema}
-          onSubmit={(values) => {
+          onSubmit={(values, { resetForm }) => {
             console.log(values);
             addCompany(values);
             alert(JSON.stringify(values, null, 2));
+            resetForm();
           }}
         >
           <Form>
