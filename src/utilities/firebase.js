@@ -15,6 +15,9 @@ const firebaseConfig = {
 }
 
 export const app = initializeApp(firebaseConfig);
+const uauthenticatedApp = initializeApp(firebaseConfig, "Secondary");
 export const auth = getAuth(app);
+export const authSignup = getAuth(uauthenticatedApp);
 export const database = getDatabase(app);
 export const functions = getFunctions(app);
+

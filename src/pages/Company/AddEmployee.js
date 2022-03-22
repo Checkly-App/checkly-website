@@ -6,10 +6,10 @@ import { MdOutlineAlternateEmail } from "react-icons/md";
 import SelectField from '../../components/Forms/SelectField';
 import RadioButtons from '../../components/Forms/RadioButtons';
 import { set, ref, onValue } from 'firebase/database';
-import { database, auth, functions } from '../../utilities/firebase';
+import { database, auth, functions, authSignup } from '../../utilities/firebase';
 import DateField from '../../components/Forms/DateField';
 import { format } from 'date-fns';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import styled from 'styled-components';
 import { httpsCallable } from 'firebase/functions';
 import { Alert, AlertTitle, CircularProgress, Snackbar } from '@mui/material';
@@ -72,6 +72,9 @@ const Button = styled.button`
     margin-left: auto;
 
 `
+const Progress = styled(CircularProgress)`
+    margin-left: auto;
+`
 const MainTitle = styled.h1`
     font-size: 2em;
     font-weight: 500;
@@ -113,6 +116,7 @@ const AddEmployee = () => {
      * Use Effect to fecth all of the company's departments
      */
     useEffect(() => {
+        console.log(auth.currentUser.uid)
         onValue(ref(database, 'Department'), (snapshot) => {
             const data = snapshot.val();
             var departments = [];
@@ -131,7 +135,7 @@ const AddEmployee = () => {
             setErrorDetails({});
             setDepartments([]);
             setEmployees([]);
-        };
+        }
     }, []);
 
     useEffect(() => {
@@ -239,7 +243,8 @@ const AddEmployee = () => {
 
         const password = uuidv4().slice(0, 8);
 
-        createUserWithEmailAndPassword(auth, employee.email, password).then((result) => {
+        createUserWithEmailAndPassword(authSignup, employee.email, password).then((result) => {
+            signOut(authSignup);
             sendEmail({
                 email: employee.email,
                 name: employee.fullName,
@@ -345,7 +350,7 @@ const AddEmployee = () => {
                             id='position'
                             label='Position' />
                     </Section>
-                    {isLoading ? <CircularProgress /> : <Button type='submit'>  Add an employee </Button>}
+                    {isLoading ? <Progress /> : <Button type='submit'>  Add an employee </Button>}
                 </SetionsWrapper>
                 {error ?
                     (<Snackbar
