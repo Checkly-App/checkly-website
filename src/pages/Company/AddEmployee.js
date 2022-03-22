@@ -69,7 +69,7 @@ const Button = styled.button`
     border-radius: 0.5em;
     border: none;
     background: linear-gradient(90deg, #56BBEB 0%, #58AAF3 100%);
-      margin-left: auto;
+    margin-left: auto;
 
 `
 const MainTitle = styled.h1`

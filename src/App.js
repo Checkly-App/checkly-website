@@ -13,6 +13,7 @@ import ChecklyProfile from './pages/Checkly Admin/ChecklyProfile';
 import ResetPassword from './pages/Authentication/ResetPassword';
 import Layout from './pages/Company/Layout';
 import Home from './pages/Home';
+import NotFound from './pages/NotFound';
 
 const theme = createTheme({
   palette: {
@@ -54,7 +55,7 @@ function App() {
       <div className="App">
         <Router>
           <Routes>
-            {userinfo ? <Route component={() => (<div>404 Not found </div>)} /> : <Route exact path="/login" element={<Login />} />}
+            {userinfo ? <Route component={() => (<NotFound />)} /> : <Route exact path="/login" element={<Login />} />}
             <Route path="/" element={<Home />} />
             <Route exact path="/reset" element={<ResetPassword />} />
             <Route exact path="/checkly" element={<ChecklyProfile />} />
@@ -63,6 +64,7 @@ function App() {
             <Route exact path="/admin/employees" element={<Layout children={<AddEmployee />} />} />
             <Route exact path="/admin/analytics" element={<Layout children={<Analytics />} />} />
             <Route exact path="/admin/services" element={<Layout children={<Services />} />} />
+            <Route exact path="*" element={<NotFound />} />
           </Routes>
         </Router>
       </div >

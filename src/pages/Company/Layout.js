@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Sidebar from '../../components/Sidebar/Sidebar';
+import NotFound from '../NotFound';
 
 const Container = styled.div`
     height: 100vh;
@@ -31,10 +32,7 @@ const Layout = ({ children, user }) => {
                     {children}
                 </Content>
             </Container >)
-            :
-            (<div>
-                404 Not found
-            </div>)
+            : <NotFound />
     );
 };
 
