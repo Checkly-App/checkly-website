@@ -60,10 +60,10 @@ function App() {
             <Route exact path="/reset" element={<ResetPassword />} />
             <Route exact path="/checkly" element={<ChecklyProfile />} />
             <Route exact path="/admin/dashboard" element={<Layout user={userinfo} children={<Dashboard />} />} />
-            <Route exact path="/admin/departments" element={<Layout children={<Departments />} />} />
-            <Route exact path="/admin/employees" element={<Layout children={<AddEmployee />} />} />
-            <Route exact path="/admin/analytics" element={<Layout children={<Analytics />} />} />
-            <Route exact path="/admin/services" element={<Layout children={<Services />} />} />
+            <Route exact path="/admin/departments" element={<Layout user={userinfo} children={<Departments />} />} />
+            <Route exact path="/admin/employees" element={<Layout user={userinfo} children={<AddEmployee />} />} />
+            <Route exact path="/admin/analytics" element={<Layout user={userinfo} children={<Analytics />} />} />
+            <Route exact path="/admin/services" element={<Layout user={userinfo} children={<Services />} />} />
             <Route exact path="*" element={<NotFound />} />
           </Routes>
         </Router>
