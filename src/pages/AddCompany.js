@@ -6,7 +6,8 @@ import Upload from "../components/Forms/Upload";
 import PolicyRadioButtons from "../components/Forms/PrefrenceRadioButtons";
 import SelectField from "../components/Forms/SelectField";
 import RadioGroup from "@mui/material/RadioGroup";
-import { set, onValue } from "firebase/database"; //ref
+// import { set, onValue } from "firebase/database"; //ref
+import {getDatabase, ref as ref_database, set, onValue } from "firebase/database";
 import { database, auth, storage } from "../utilities/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import styled, { keyframes } from "styled-components";
@@ -26,9 +27,9 @@ import { ref, uploadBytesResumable } from "firebase/storage"; //ref
 
 // Main COntainer
 const SectionsWrapper = styled.div`
-  margin: 5em 0 5rem 3rem;
+  margin: 5em 5em 5em 7em;
   display: flex;
-  justify-content: center;
+  // justify-content: center;
   // width: 100%;
 `;
 
@@ -45,7 +46,7 @@ const Section = styled.div`
   grid-template-columns: 1fr 1fr;
   column-gap: 1.5em;
   row-gap: 0.75em;
-  width: 50em;
+  width: 40em;
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
@@ -90,7 +91,6 @@ const ContentWrapper = styled.div`
 `;
 const ButtonWrapper = styled.div`
   display: flex;
-
   justify-content: flex-end;
 `;
 
@@ -349,7 +349,6 @@ const AddCompany = () => {
     age: "",
     Policy: "",
     hours: "",
-    file: "",
   };
 
   const validationSchema = Yup.object({
@@ -366,17 +365,20 @@ const AddCompany = () => {
   });
 
   const addCompany = (company) => {
+  
     createUserWithEmailAndPassword(auth, company.email, "123456")
       .then((result) => {
-        set(ref(database, "Company/" + result.user.uid), {
+        set(ref_database(database, "Company/" + result.user.uid), {
           name: company.name,
+          com_id: Math.ceil(Math.random() * (9999 - 1000) + 100),
+          geo_id: Math.ceil(Math.random() * (9999 - 1000) + 100),
           abbreviation: company.abbreviation,
           email: company.email,
           location: company.location,
-          size: company.size,
+          size: (company.size).substring(0, (company.size).indexOf(' ')),
           industry: company.industry,
-          age: company.age,
-          Policy: company.Policy,
+          age: (company.age).substring(0, (company.age).indexOf(' ')),
+          policy: company.Policy,
           working_hours: company.hours,
           attendance_strategy: company.preference,
         });
@@ -399,47 +401,20 @@ const AddCompany = () => {
   const uploadFiles = (file) => {
     //
     if (!file) return;
-    const sotrageRef = ref(storage, `files/${file.name}`);
+    const sotrageRef = ref(storage, `Companies/${file.name}`);
     const uploadTask = uploadBytesResumable(sotrageRef, file);
   };
 
   return (
     <div>
       <SectionsWrapper>
-        {/* <SidebarSection>
-
-          <form onSubmit={formHandler}>
-          <Stack direction="column" spacing={5} alignItems="center" >
-          <label htmlFor="contained-button-file">
-            <Box textAlign='center'>
-            <Input accept="image/*" id="contained-button-file" type="file" />
-              <Button type="submit" color="grey" variant="contained" component="span" variant="outlined" style={{
-                maxWidth: "170px",
-                maxHeight: "150px",
-                minWidth: "170px",
-                minHeight: "150px",
-                border: 'dashed',
-                fontSize: '13px'
-                }}>
-            <Stack direction="column" spacing={5} alignItems="center" > 
-            <InsertPhotoOutlinedIcon/> Upload Logo </Stack> 
-            </Button>
-            </Box>
-            </label>
-            <Button type="submit" variant="contained">Upload</Button>
-            </Stack>
-          </form>
-
-
-          
-  </SidebarSection> */}
 
         <Formik
           initialValues={{ ...initialValues }}
           validationSchema={validationSchema}
           onSubmit={(values) => {
             console.log(values);
-            // addCompany(values);
+            addCompany(values);
             alert(JSON.stringify(values, null, 2));
           }}
         >
@@ -449,10 +424,10 @@ const AddCompany = () => {
 
               <Section2>
                 <ButtonCircle2
-                  style={{ zIndex: 1, marginTop: -90, marginLeft: 355 }} //Relative instead of absloute
+                  style={{ zIndex: 1, marginTop: -90, marginLeft: 320 }} 
                 ></ButtonCircle2>
                 <Avatar
-                  style={{ zIndex: 1, marginTop: -108, marginLeft: 372 }}
+                  style={{ zIndex: 1, marginTop: -108, marginLeft: 337 }}
                   background-color="white"
                   alt="R"
                   src={logo}
@@ -555,14 +530,14 @@ const AddCompany = () => {
                       }}
                     >
                       <Stack direction="column" spacing={5} alignItems="center">
-                        <InsertPhotoOutlinedIcon /> Upload Logo{" "}
+                        <InsertPhotoOutlinedIcon /> Select Logo{" "}
                       </Stack>
                     </Button>
                   </Box>
                 </label>
-                <Button type="submit" variant="contained">
+                <SButton style={{maxWidth: '170px', maxHeight: "30px" }} type="submit">
                   Upload
-                </Button>
+                </SButton>
               </Stack>
             </form>
           </SidebarSection1>
@@ -595,7 +570,7 @@ const AddCompany = () => {
                     }}
                   >
                     <Stack direction="column" spacing={5} alignItems="center">
-                      <UploadFileRoundedIcon /> Upload departments{" "}
+                      <UploadFileRoundedIcon /> Select departments{" "}
                     </Stack>
                   </Button>
                 </label>
@@ -623,7 +598,7 @@ const AddCompany = () => {
                     }}
                   >
                     <Stack direction="column" spacing={5} alignItems="center">
-                      <UploadFileRoundedIcon /> Upload Employees{" "}
+                      <UploadFileRoundedIcon /> Select Employees{" "}
                     </Stack>
                   </Button>
                 </label>
@@ -650,11 +625,14 @@ const AddCompany = () => {
                     }}
                   >
                     <Stack direction="column" spacing={5} alignItems="center">
-                      <UploadFileRoundedIcon /> Upload Geofence Info{" "}
+                      <UploadFileRoundedIcon /> Select Geofence Info{" "}
                     </Stack>
                   </Button>
                 </label>
               </Box>
+              <SButton style={{maxWidth: '170px', maxHeight: "30px" }} type="submit">
+                  Upload
+                </SButton>
             </Stack>
           </SidebarSection2>
         </SidebarSectionsWrapper>
