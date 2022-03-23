@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useContext } from 'react';
+import { React, useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import InputField from '../../components/Forms/InputField';
@@ -13,7 +13,7 @@ import Logo from '../../assets/images/logo.svg';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { ref, onValue } from 'firebase/database';
 import { database } from '../../utilities/firebase';
-import { Alert, AlertTitle, CircularProgress, Snackbar } from '@mui/material';
+import { Alert, AlertTitle, Snackbar } from '@mui/material';
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -32,7 +32,7 @@ const Login = () => {
 
   const closeSnackbar = () => {
     setOpenSnackbar(false);
-};
+  };
   useEffect(() => {
     const ac = new AbortController();
     const auth = getAuth();
@@ -40,7 +40,7 @@ const Login = () => {
       if (userAuth) {
         const index = userAuth?.email.indexOf("@")
         const subst = userAuth?.email.substring(index)
-        if (subst == "@checkly.org") {
+        if (subst === "@checkly.org") {
           navigate("/checkly")
         }
         else {
@@ -51,27 +51,24 @@ const Login = () => {
       }
       ac.abort()
     })
-    return unsubscribe   
-  }, [])
+    return unsubscribe
+  }, [navigate])
 
   const initialValues = {
     Password: '',
     email: '',
   };
 
-  const [userRole, setuserRole] = useState(false);
 
   const emailValid = (email) => {
 
     const index = email.indexOf("@")
     const subst = email.substring(index)
 
-    if (subst == "@checkly.org") {
-      setuserRole(true)
+    if (subst === "@checkly.org") {
       return true
     }
     else {
-      setuserRole(false)
       return false
     }
   }
@@ -81,7 +78,7 @@ const Login = () => {
       const data = snapshot.val();
 
       for (let id in data) {
-        if (data[id]['email'] == email) { // TODO: - 
+        if (data[id]['email'] === email) { // TODO: - 
           cheak = false
         }
       }
@@ -183,7 +180,7 @@ const Login = () => {
         <div className="col-md-6 red" style={mystyle1}>
           <h2 style={{ paddingTop: "12%" }}>Welcome To Checkly</h2>
           <p style={subTitle}>login to checkly to unlock its capabilities</p>
-{/* 
+          {/* 
           {count ? <p class=" alert-danger" role="alert">
             {count}</p> : null} */}
 
@@ -224,16 +221,16 @@ const Login = () => {
             }}>
 
             <Form>
-            <Snackbar
-                        autoHideDuration={6000}
-                        open={openSnackbar}
-                        onClose={closeSnackbar}
-                        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}>
-                        <Alert onClose={closeSnackbar} severity='error' variant='filled'>
-                            <AlertTitle>Error</AlertTitle>
-                            {count}
-                        </Alert>
-                    </Snackbar>
+              <Snackbar
+                autoHideDuration={6000}
+                open={openSnackbar}
+                onClose={closeSnackbar}
+                anchorOrigin={{ vertical: 'top', horizontal: 'left' }}>
+                <Alert onClose={closeSnackbar} severity='error' variant='filled'>
+                  <AlertTitle>Error</AlertTitle>
+                  {count}
+                </Alert>
+              </Snackbar>
               <Grid item xs={12}>
                 <InputField
 
@@ -271,7 +268,7 @@ const Login = () => {
           <Grid item xs={12}>
             <button style={Button1} onClick={() => navigate("/reset")}>  Forgot password? </button>
           </Grid>
-        
+
         </div>
         {/* </div> */}
         <div className="col-md-6 blue" style={mystyle}
