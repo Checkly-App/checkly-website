@@ -1,8 +1,13 @@
-// import logo from './assets/images/logo.svg';
+import logo from './assets/images/logo.svg';
 import "./App.css";
 import AddCompany from "./pages/AddCompany";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import styled from "styled-components";
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import { indigo } from '@mui/material/colors';
+
+const color = indigo[500];
 
 const theme = createTheme({
   palette: {
@@ -56,7 +61,12 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <AppContainer className="App">
-        <SideBar> Sidebar Content</SideBar>
+        <SideBar> 
+          <Button variant="text">Dashboard</Button>
+          <Button variant="text">Companies</Button>
+          <Button variant="text">Requests</Button>
+          <Button variant="text">Analytics</Button>
+        </SideBar>
         <Content>
           <AddCompany />
         </Content>

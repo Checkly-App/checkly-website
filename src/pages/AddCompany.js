@@ -2,11 +2,9 @@ import { React, useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import InputField from "../components/Forms/InputField";
-import Upload from "../components/Forms/Upload";
 import PolicyRadioButtons from "../components/Forms/PrefrenceRadioButtons";
-import SelectField from "../components/Forms/SelectField";
-import RadioGroup from "@mui/material/RadioGroup";
-import {getDatabase, ref as ref_database, set, onValue } from "firebase/database";
+import GeneralSelectField from "../components/Forms/GeneralSelectField";
+import { ref as ref_database, set } from "firebase/database";
 import { database, auth, storage } from "../utilities/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import styled, { keyframes } from "styled-components";
@@ -16,11 +14,6 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
 import InsertPhotoOutlinedIcon from "@mui/icons-material/InsertPhotoOutlined";
-import Radio from "@mui/material/Radio";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import FormHelperText from "@mui/material/FormHelperText";
-import FormLabel from "@mui/material/FormLabel";
 import logo from "../assets/images/logo.svg";
 import { ref, uploadBytesResumable } from "firebase/storage"; 
 
@@ -338,6 +331,9 @@ const preferences = [
 ];
 
 const AddCompany = () => {
+
+  var random_id = Math.ceil(Math.random() * (9999 - 1000) + 100);
+
   const initialValues = {
     name: "",
     abbreviation: "",
@@ -352,16 +348,15 @@ const AddCompany = () => {
   };
 
   const validationSchema = Yup.object({
-    // name: Yup.string().required("Name is required"),
-    // abbreviation: Yup.string().required("Name is required"),
-    // location: Yup.string().required("Location is required"),
-    // size: Yup.string().required("Size is required"),
-    // industry: Yup.string().required("Industry is required"),
-    // preference: Yup.string().required("Preference is required"),
-    // email: Yup.string().email("Invalid email").required("Email is required"),
-    // age: Yup.string().required("Company's age is required"),
-    // Flexible: Yup.string().required("Working hours are required"),
-    // Fixed: Yup.string().required("Working hours are required"),
+    name: Yup.string().required("Name is required"),
+    abbreviation: Yup.string().required("Name is required"),
+    location: Yup.string().required("Location is required"),
+    size: Yup.string().required("Size is required"),
+    industry: Yup.string().required("Industry is required"),
+    preference: Yup.string().required("Preference is required"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    age: Yup.string().required("Company's age is required"),
+    hours: Yup.string().required("Working hours are required"),
   });
 
   const addCompany = (company) => {
@@ -370,7 +365,7 @@ const AddCompany = () => {
       .then((result) => {
         set(ref_database(database, "Company/" + result.user.uid), {
           name: company.name,
-          com_id: Math.ceil(Math.random() * (9999 - 1000) + 100),
+          com_id: random_id,
           geo_id: Math.ceil(Math.random() * (9999 - 1000) + 100),
           abbreviation: company.abbreviation,
           email: company.email,
@@ -400,7 +395,7 @@ const AddCompany = () => {
 
   const uploadFiles = (file) => {
     if (!file) return;
-    const sotrageRef = ref(storage, `Companies/${file.name}`);
+    const sotrageRef = ref(storage, `Companies/${random_id}`);
     const uploadTask = uploadBytesResumable(sotrageRef, file);
   };
 
@@ -449,35 +444,35 @@ const AddCompany = () => {
 
                 <InputField name="email" id="email" label="Email" />
 
-                <SelectField
+                <GeneralSelectField
                   name="location"
                   id="location"
                   label="Location"
                   options={locations}
                 />
 
-                <SelectField
+                <GeneralSelectField
                   name="industry"
                   id="industry"
                   label="Industry"
                   options={industries}
                 />
 
-                <SelectField
+                <GeneralSelectField
                   name="size"
                   id="size"
                   label="Size"
                   options={sizes}
                 />
 
-                <SelectField
+                <GeneralSelectField
                   name="age"
                   id="age"
                   label="Years Since Establishment"
                   options={ages}
                 />
 
-                <SelectField
+                <GeneralSelectField
                   name="preference"
                   id="preference"
                   label="Attendance Recording Strategy"
@@ -630,7 +625,7 @@ const AddCompany = () => {
                   </Button>
                 </label>
               </Box>
-              <SButton style={{maxWidth: '170px', maxHeight: "30px" }} type="submit">
+              <SButton style={{maxWidth: '170px', maxHeight: "30px" }}>
                   Upload
                 </SButton>
             </Stack>
