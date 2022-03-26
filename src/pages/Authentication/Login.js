@@ -100,7 +100,7 @@ const Login = () => {
     background: "linear-gradient(#56BBEB, #58AAF3)",
     height: "100vh",
     margin: "auto",
-    paddingTop: "8%",
+    paddingTop: "12%",
     paddingLeft: "5%",
     paddingRight: "5%"
   };
@@ -108,8 +108,8 @@ const Login = () => {
     maxHeight: "100vh",
     textAlign: "center",
     margin: "auto",
-    paddingLeft: "6%",
-    paddingRight: "6%"
+    paddingLeft: "8%",
+    paddingRight: "8%"
   };
   const subTitle = {
     color: "gray",
@@ -136,6 +136,8 @@ const Login = () => {
     color: "#2CB1EF",
     border: "none",
     cursor: "pointer",
+    paddingTop:"2%",
+    paddingLeft:"17em"
   };
   const overlay = {
     //  position: "absolute", 
@@ -152,25 +154,32 @@ const Login = () => {
   return (
     <div className="container-fluid ">
       <div className="row"  >
-        <nav className="navbar navbar-expand-lg navbar-light" style={{ position: "absolute" }}>
+      <nav className="navbar navbar-expand-lg navbar-light" style={{ position: "absolute" }}>
           <div className="container-fluid justify-content-center">
             <img src={Logo} alt="logo" style={{ width: "30px", height: "30px" }} /> <a style={{ fontWeight: "500", paddingLeft: "4px" }}>  Checkly</a>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>
             </button>
-            <div className="collapse navbar-collapse" id="navbarNavDropdown" style={{ marginLeft: "12em" }}>
+            <div className="collapse navbar-collapse" id="navbarNavDropdown" style={{ marginLeft: "23em" }}>
               <ul className="navbar-nav m-auto">
                 <li className="nav-item">
-                  <a className="nav-link active blue" aria-current="page" href="#" style={{ color: "Black", padding: "1em 2em" }}>Home</a>
+                  <a  className="nav-link active blue" aria-current="page" href="#" style={{ color: "Black", padding: "1em 2em" }}>Home</a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>About</a>
+                  <a  className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>Values</a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>Services</a>
+                  <a className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>About us</a>
+                </li>
+                
+                <li className="nav-item">
+                  <a  className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>Services</a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>Contact</a>
+                  <a  className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>Contact</a>
+                </li>
+                <li className="nav-item" style={{paddingTop:'0.6em'}}>
+                  <a className="nav-link white" href="#" style={{ color: "white", padding: "0.3em 1.5em" ,borderRadius: '10px',border:'white 1px solid'}}>Login</a>
                 </li>
               </ul>
             </div>
@@ -255,6 +264,7 @@ const Login = () => {
 
               <Grid item xs={12}>
                 <button style={Button} type='submit'>  Login to your account </button>
+                
               </Grid>
 
 
@@ -265,7 +275,7 @@ const Login = () => {
 
 
           </Formik >
-          <Grid item xs={12}>
+          <Grid item xs={12} >
             <button style={Button1} onClick={() => navigate("/reset")}>  Forgot password? </button>
           </Grid>
 
