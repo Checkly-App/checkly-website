@@ -137,7 +137,9 @@ const Login = () => {
     border: "none",
     cursor: "pointer",
     paddingTop:"2%",
-    paddingLeft:"17em"
+   // paddingLeft:"17em",
+    textAlign: "right",
+    textDecoration: "none",
   };
   const overlay = {
     //  position: "absolute", 
@@ -276,7 +278,10 @@ const Login = () => {
 
           </Formik >
           <Grid item xs={12} >
-            <button style={Button1} onClick={() => navigate("/reset")}>  Forgot password? </button>
+            {/* <button style={Button1} onClick={() => navigate("/reset")}>  Forgot password? </button> */}
+            <p  style={Button1}>
+                    <a style={Button1} href="/reset"> Forgot password?</a>
+                </p>
           </Grid>
 
         </div>
