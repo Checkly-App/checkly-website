@@ -6,6 +6,8 @@ import styled from "styled-components";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const theme = createTheme({
   palette: {
@@ -23,6 +25,7 @@ const theme = createTheme({
     },
   },
 });
+
 
 const AppContainer = styled.div`
   // height: 100vh;
@@ -56,7 +59,7 @@ const Content = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 1.5em;
+  font-size: 1.3em;
   font-weight: 400;
   margin: 0em 0em 1em 0em;
   text-align: center;
@@ -67,15 +70,26 @@ function App() {
     <ThemeProvider theme={theme}>
       <AppContainer className="App">
         <SideBar> 
+        <Stack direction="column" spacing={80} alignItems="center" >
+        <Stack direction="column" spacing={0} alignItems="center" >
           <Stack direction="row" spacing={1} alignItems="center" >
         <Avatar 
                   alt="logo"
                   src={logo}
-                  sx={{ width: 40, height: 135 }}
+                  sx={{ width: 40, height: 70 }}
                 />
         <Title>Checkly</Title>
+       
                </Stack>
-               
+               <Divider style={{width:'100%'}} variant="middle" />    
+               </Stack>
+               <Stack direction="column" spacing={1} alignItems="center" >
+               <Divider style={{width:'100%'}} variant="middle" /> 
+               <Button color="primary" startIcon={<LogoutIcon />}>
+  Logout
+</Button>
+               </Stack>
+               </Stack>
         </SideBar>
         <Content>
           <AddCompany />
