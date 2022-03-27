@@ -315,21 +315,6 @@ const ages = [
   },
 ];
 
-const preferences = [
-  {
-    key: "QR-Code",
-    name: "QR-Code",
-  },
-  {
-    key: "Location-Based",
-    name: "Location-Based",
-  },
-  {
-    key: "Both",
-    name: "Both",
-  },
-];
-
 const AddCompany = () => {
 
   var random_id = Math.ceil(Math.random() * (9999 - 1000) + 100);
@@ -341,7 +326,6 @@ const AddCompany = () => {
     location: "",
     size: "",
     industry: "",
-    preference: "",
     age: "",
     Policy: "",
     hours: "",
@@ -353,7 +337,6 @@ const AddCompany = () => {
     location: Yup.string().required("Location is required"),
     size: Yup.string().required("Size is required"),
     industry: Yup.string().required("Industry is required"),
-    preference: Yup.string().required("Preference is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
     age: Yup.string().required("Company's age is required"),
     hours: Yup.string().required("Working hours are required"),
@@ -375,7 +358,6 @@ const AddCompany = () => {
           age: (company.age).substring(0, (company.age).indexOf(' ')),
           policy: company.Policy,
           working_hours: company.hours,
-          attendance_strategy: company.preference,
         });
       })
       .catch((error) => {
@@ -409,7 +391,7 @@ const AddCompany = () => {
           onSubmit={(values, { resetForm }) => {
             console.log(values);
             addCompany(values);
-            alert(JSON.stringify(values, null, 2));
+            alert("Comapny has been registered successfully");
             resetForm();
           }}
         >
@@ -472,12 +454,6 @@ const AddCompany = () => {
                   options={ages}
                 />
 
-                <GeneralSelectField
-                  name="preference"
-                  id="preference"
-                  label="Attendance Recording Strategy"
-                  options={preferences}
-                />
               </Section>
 
               <Section3>
