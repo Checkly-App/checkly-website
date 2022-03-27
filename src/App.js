@@ -3,11 +3,8 @@ import "./App.css";
 import AddCompany from "./pages/AddCompany";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import styled from "styled-components";
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import { indigo } from '@mui/material/colors';
-
-const color = indigo[500];
+import Avatar from "@mui/material/Avatar";
+import Stack from "@mui/material/Stack";
 
 const theme = createTheme({
   palette: {
@@ -50,7 +47,7 @@ const SideBar = styled.div`
 const Content = styled.div`
   // grid-area: main;
   // display: subgrid;
-  align-items: center;
+  align-items: center; 
   width: 85%;
   height: 100%;
 
@@ -62,10 +59,15 @@ function App() {
     <ThemeProvider theme={theme}>
       <AppContainer className="App">
         <SideBar> 
-          <Button variant="text">Dashboard</Button>
-          <Button variant="text">Companies</Button>
-          <Button variant="text">Requests</Button>
-          <Button variant="text">Analytics</Button>
+          <Stack direction="row" spacing={1} alignItems="center" >
+        <Avatar 
+                  style={{ zIndex: 1, marginTop: 0, marginLeft: -90}}
+                  alt="logo"
+                  src={logo}
+                  sx={{ width: 40, height: 135 }}
+                />
+        <label> Checkly </label>
+               </Stack>
         </SideBar>
         <Content>
           <AddCompany />
