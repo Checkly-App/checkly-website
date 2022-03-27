@@ -5,6 +5,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import styled from "styled-components";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
+import Divider from '@mui/material/Divider';
 
 const theme = createTheme({
   palette: {
@@ -40,7 +41,7 @@ const SideBar = styled.div`
   width: 15%;
   // height: 100%;
   flex-direction: column;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
   background-color: white;
 `;
@@ -54,6 +55,13 @@ const Content = styled.div`
   background-color: #f5f5f5;
 `;
 
+const Title = styled.h1`
+  font-size: 1.5em;
+  font-weight: 400;
+  margin: 0em 0em 1em 0em;
+  text-align: center;
+`;
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -61,13 +69,13 @@ function App() {
         <SideBar> 
           <Stack direction="row" spacing={1} alignItems="center" >
         <Avatar 
-                  style={{ zIndex: 1, marginTop: 0, marginLeft: -90}}
                   alt="logo"
                   src={logo}
                   sx={{ width: 40, height: 135 }}
                 />
-        <label> Checkly </label>
+        <Title>Checkly</Title>
                </Stack>
+               
         </SideBar>
         <Content>
           <AddCompany />
