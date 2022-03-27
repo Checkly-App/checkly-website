@@ -70,26 +70,25 @@ function App() {
     <ThemeProvider theme={theme}>
       <AppContainer className="App">
         <SideBar> 
-        <Stack direction="column" spacing={80} alignItems="center" >
-        <Stack direction="column" spacing={0} alignItems="center" >
-          <Stack direction="row" spacing={1} alignItems="center" >
-        <Avatar 
-                  alt="logo"
-                  src={logo}
-                  sx={{ width: 40, height: 70 }}
-                />
-        <Title>Checkly</Title>
-       
+          <Stack direction="column" spacing={85} alignItems="center" >
+            <Stack direction="column" spacing={0} alignItems="center" >
+                <Stack direction="row" spacing={1} alignItems="center" >
+                   <Avatar 
+                    alt="logo"
+                    src={logo}
+                    sx={{ width: 40, height: 70 }}
+                  />
+                  <Title>Checkly</Title>
                </Stack>
-               <Divider style={{width:'100%'}} variant="middle" />    
+              <Divider style={{width:'100%'}} variant="middle" />    
+            </Stack>
+               <Stack direction="column" spacing={1} alignItems="left" style={{ marginLeft: -100 }}>
+                <Divider style={{width:'100%'}} variant="middle" /> 
+                <Button color="primary" startIcon={<LogoutIcon />}>
+                  Logout
+                </Button>
                </Stack>
-               <Stack direction="column" spacing={1} alignItems="center" >
-               <Divider style={{width:'100%'}} variant="middle" /> 
-               <Button color="primary" startIcon={<LogoutIcon />}>
-  Logout
-</Button>
-               </Stack>
-               </Stack>
+            </Stack>
         </SideBar>
         <Content>
           <AddCompany />
