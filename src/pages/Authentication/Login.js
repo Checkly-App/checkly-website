@@ -100,7 +100,7 @@ const Login = () => {
     background: "linear-gradient(#56BBEB, #58AAF3)",
     height: "100vh",
     margin: "auto",
-    paddingTop: "12%",
+  //  paddingTop: "10%",
     paddingLeft: "5%",
     paddingRight: "5%"
   };
@@ -126,8 +126,8 @@ const Login = () => {
     maxHeight: "100vh",
     padding: "10px",
     paddingLeft: "30px",
-    paddingRight: "30px",
-    borderRadius: "5px",
+    paddingRight: "10px",
+    borderRadius: "4px",
     border: "none",
     cursor: "pointer",
   };
@@ -147,7 +147,7 @@ const Login = () => {
 
     // //  //top:"50"
     // // left:"0",
-    //  paddingTop:"5em" ,
+      paddingTop:"20%" ,
     //   paddingLeft:"5%" ,
     //margin: " auto" ,
     // Padding: "50em 55px",
@@ -286,7 +286,7 @@ const Login = () => {
 
         </div>
         {/* </div> */}
-        <div className="col-md-6 blue" style={mystyle}
+        <div className="col-md-6 red" style={mystyle}
         >
           {/* <img src={UILogin}  alt="logo" style={overlay}/>  */}
           {/* <div class="container" style={mystyle}> */}

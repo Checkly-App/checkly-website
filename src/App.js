@@ -8,6 +8,7 @@ import Dashboard from './pages/Company/Dashboard';
 import Analytics from './pages/Company/Analytics';
 import Services from './pages/Company/Services';
 import AddEmployee from './pages/Company/AddEmployee';
+import ViewEmployees from './pages/Company/ViewEmployees';
 import Login from './pages/Authentication/Login';
 import ChecklyProfile from './pages/Checkly Admin/ChecklyProfile';
 import ResetPassword from './pages/Authentication/ResetPassword';
@@ -61,7 +62,9 @@ function App() {
             <Route exact path="/checkly" element={<ChecklyProfile />} />
             <Route exact path="/admin/dashboard" element={<Layout user={userinfo} children={<Dashboard />} />} />
             <Route exact path="/admin/departments" element={<Layout user={userinfo} children={<Departments />} />} />
-            <Route exact path="/admin/employees" element={<Layout user={userinfo} children={<AddEmployee />} />} />
+            <Route exact path="/admin/employees" element={<Layout user={userinfo} children={<ViewEmployees />} />} />
+            <Route exact path="/admin/Addemployee" element={<Layout user={userinfo} children={<AddEmployee />} />} />
+
             <Route exact path="/admin/analytics" element={<Layout user={userinfo} children={<Analytics />} />} />
             <Route exact path="/admin/services" element={<Layout user={userinfo} children={<Services />} />} />
             <Route exact path="*" element={<NotFound />} />
