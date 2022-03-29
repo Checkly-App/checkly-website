@@ -15,7 +15,8 @@ import Box from "@mui/material/Box";
 import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
 import InsertPhotoOutlinedIcon from "@mui/icons-material/InsertPhotoOutlined";
 import logo from "../assets/images/logo.svg";
-import { ref, uploadBytesResumable } from "firebase/storage"; 
+import { ref, uploadBytesResumable } from "firebase/storage";
+import { Alert, AlertTitle, Snackbar } from '@mui/material'; 
 
 // Main COntainer
 const SectionsWrapper = styled.div`
@@ -319,6 +320,12 @@ const AddCompany = () => {
 
   var random_id = Math.ceil(Math.random() * (9999 - 1000) + 100);
 
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const closeSnackbar = () => {
+    setOpenSnackbar(false);
+  };
+
   const initialValues = {
     name: "",
     abbreviation: "",
@@ -359,6 +366,12 @@ const AddCompany = () => {
           policy: company.Policy,
           working_hours: company.hours,
         });
+        set(ref_database(database, "Department/" + company.abbreviation + "Default"), {
+          company_id: result.user.uid,
+          dep_id: "0",
+          manager: "TBD",
+          name: "Default",
+        });
       })
       .catch((error) => {
         // var errorCode = error.code;
@@ -391,11 +404,20 @@ const AddCompany = () => {
           onSubmit={(values, { resetForm }) => {
             console.log(values);
             addCompany(values);
-            alert("Comapny has been registered successfully");
             resetForm();
+            setOpenSnackbar(true); 
           }}
         >
           <Form>
+          <Snackbar
+                autoHideDuration={6000}
+                open={openSnackbar}
+                onClose={closeSnackbar}
+                anchorOrigin={{ vertical: 'top', horizontal: 'left' }}>
+                <Alert onClose={closeSnackbar} severity='info' variant='filled'>
+                  <AlertTitle>Comapny has been registered successfully!</AlertTitle>
+                </Alert>
+              </Snackbar>
             <MainSections>
               {/* header */}
 
