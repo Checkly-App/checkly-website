@@ -6,7 +6,7 @@ const ChartTitle = styled.h1`
     font-size: 1em;
     font-weight: 500;
 `
-const WeeklyDistribution = styled.div`
+const ChartContainer = styled.div`
     padding: 2em;
     grid-area: cell3;
     background: linear-gradient(165deg, #FFFFFF 70%, #F6F6F6 100%);
@@ -15,7 +15,7 @@ const WeeklyDistribution = styled.div`
 `
 const Weekly = (props) => {
     return (
-        <WeeklyDistribution>
+        <ChartContainer>
             <ChartTitle>Weekly distrubtion</ChartTitle>
             <ResponsiveContainer width='100%' height='100%' >
                 <BarChart
@@ -48,7 +48,7 @@ const Weekly = (props) => {
                     <Bar dataKey='Abscence' fill='#F65786' />
                 </BarChart>
             </ResponsiveContainer>
-        </WeeklyDistribution>
+        </ChartContainer>
     );
 };
 

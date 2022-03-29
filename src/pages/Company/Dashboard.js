@@ -1,9 +1,15 @@
 import { format } from 'date-fns';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Filter from '../../components/Charts/Filter';
+import CheckIn from '../../components/Charts/CheckIn';
+import Overtime from '../../components/Charts/Overtime';
+import Timeline from '../../components/Charts/Timeline';
 import Total from '../../components/Charts/Total';
 import Weekly from '../../components/Charts/Weekly';
+import Worked from '../../components/Charts/Worked';
+import LateMinutes from '../../components/Charts/LateMinutes';
+import Arrival from '../../components/Charts/Arrival';
+import Departure from '../../components/Charts/Departure';
 
 export const Construction = styled.div`
     min-height: 100vh;
@@ -34,74 +40,21 @@ const Subtitle = styled.h1`
 const Container = styled.div`
     overflow-y: scroll;
     min-height: 100vh;
-    padding: 3em 4rem;
+    padding: 3em 3rem;
     grid-template-columns: 30% 30% 30%;
-    grid-template-rows: 10em 20em 20em 10em;
+    grid-template-rows: 10em 20em 20em 10em 10em;
     display: grid;
     grid-template-areas:'cell1 cell2 cell3' 
                         'cell4 cell4 cell3' 
                         'cell5 cell6 cell7' 
-                        'cell8 cell9 cell10';
+                        'cell8 cell8 cell9'
+                        'cell8 cell8 cell10';
     grid-gap: 2em;
+    justify-content: center;
 `
-const Timeline = styled.div`
-    grid-area: cell4;
-    background: linear-gradient(165deg, #FFFFFF 70%, #F6F6F6 100%);
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 1em;
-`
-const Overtime = styled.div`
-    grid-area: cell5;
-    background: linear-gradient(165deg, #FFFFFF 70%, #F6F6F6 100%);
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 1em;
-`
-const Worked = styled.div`
-    grid-area: cell6;
-    background: linear-gradient(165deg, #FFFFFF 70%, #F6F6F6 100%);
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 1em;
-`
-const CheckIn = styled.div`
-    grid-area: cell7;
-    background: linear-gradient(165deg, #FFFFFF 70%, #F6F6F6 100%);
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 1em;
-`
-const LateMinutes = styled.div`
-    grid-area: cell8;
-    background: linear-gradient(165deg, #FFFFFF 70%, #F6F6F6 100%);
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 1em;
-`
-const Departure = styled.div`
-    grid-area: cell9;
-    background: linear-gradient(165deg, #FFFFFF 70%, #F6F6F6 100%);
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 1em;
-`
-const Arrival = styled.div`
-    grid-area: cell10;
-    background: linear-gradient(165deg, #FFFFFF 70%, #F6F6F6 100%);
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 1em;
-`
-
-
 
 const Dashboard = () => {
     const today = format(new Date(), 'MMMM dd, yyyy');
-
-    // const [attendanceFilter, setAttendanceFilter] = useState(10);
-    const handleChange = (event) => {
-        console.log(event.target.value)
-        // setAge(event.target.value);
-    };
-
-    const filters = [
-        { value: 'Monthly' },
-        { value: 'Yearly' },
-    ]
 
     const weeklyData = [
         {
@@ -139,7 +92,6 @@ const Dashboard = () => {
 
     return (
         <Wrapper>
-            <Filter filters={filters} label='attendance' id='attendance' val='Monthly' handleChange={handleChange} />
             <Title>Acme Corporations</Title>
             <Subtitle>{today}</Subtitle>
             <Container>
@@ -157,12 +109,12 @@ const Dashboard = () => {
                     background={['#F65786', '#C4C4C4']} />
                 <Weekly data={weeklyData} />
                 <Timeline />
-                <Overtime />
                 <Worked />
                 <CheckIn />
+                <Overtime />
                 <LateMinutes />
-                <Departure />
                 <Arrival />
+                <Departure />
             </Container>
         </Wrapper>
 

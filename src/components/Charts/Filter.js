@@ -19,6 +19,16 @@ const SelectInput = muiStyled(InputBase)(({ theme }) => ({
     '&:focus': {
         borderRadius: 10,
     },
+    '&:before': {
+        borderRadius: 10,
+    },
+    '&:after': {
+        borderRadius: 10,
+    },
+    '& .MuiInputBase-input:focus': {
+        borderRadius: 10,
+    },
+
     '& .MuiSelect-iconStandard': {
         color: 'white',
         fill: 'white'
