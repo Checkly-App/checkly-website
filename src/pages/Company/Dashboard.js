@@ -10,6 +10,48 @@ import Worked from '../../components/Charts/Worked';
 import LateMinutes from '../../components/Charts/LateMinutes';
 import Arrival from '../../components/Charts/Arrival';
 import Departure from '../../components/Charts/Departure';
+import { data } from './AttendanceData'
+import { at, groupBy } from 'lodash';
+import moment from 'moment';
+
+// const abscenceJson = {
+//     "date": `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`,
+//     "status": "abscent"
+// }
+// abscenceArray.push(abscenceJson)
+
+// const weeklyData = [
+//     {
+//         name: 'Sun',
+//         Abscence: 400,
+//         Attendance: 240,
+//         Late: 200,
+//     },
+//     {
+//         name: 'Mon',
+//         Abscence: 300,
+//         Attendance: 138,
+//         Late: 220,
+//     },
+//     {
+//         name: 'Tue',
+//         Abscence: 200,
+//         Attendance: 580,
+//         Late: 229,
+//     },
+//     {
+//         name: 'Wed',
+//         Abscence: 270,
+//         Attendance: 308,
+//         Late: 200,
+//     },
+//     {
+//         name: 'Thu',
+//         Abscence: 190,
+//         Attendance: 480,
+//         Late: 281,
+//     }
+// ];
 
 export const Construction = styled.div`
     min-height: 100vh;
@@ -55,39 +97,119 @@ const Container = styled.div`
 
 const Dashboard = () => {
     const today = format(new Date(), 'MMMM dd, yyyy');
+    const [attendance, setAttendance] = useState(0);
+    const [abscence, setAbscence] = useState(0);
+    const [companyAbscences, setCompanyAbscences] = useState(["1-12-2022"]);
+    const [companyAttendance, setcompanyAttendance] = useState(["1-12-2022"]);
+    const [companyLate, setcompanyLate] = useState(["1-12-2022"]);
+    const [weeklyData, setWeeklyData] = useState([{
+        name: 'Sun',
+        Abscence: 400,
+        Attendance: 240,
+        Late: 200,
+    }]);
 
-    const weeklyData = [
-        {
-            name: 'Sun',
-            Abscence: 400,
-            Attendance: 240,
-            Late: 200,
-        },
-        {
-            name: 'Mon',
-            Abscence: 300,
-            Attendance: 138,
-            Late: 220,
-        },
-        {
-            name: 'Tue',
-            Abscence: 200,
-            Attendance: 580,
-            Late: 229,
-        },
-        {
-            name: 'Wed',
-            Abscence: 270,
-            Attendance: 308,
-            Late: 200,
-        },
-        {
-            name: 'Thu',
-            Abscence: 190,
-            Attendance: 480,
-            Late: 281,
+    useEffect(() => {
+        calculateTotal(); // to calculate a company's total attendance
+    }, []);
+
+    useEffect(() => {
+        calculateWeeklyDistribution(); // to calculate the weekly attendance 
+    }, [companyAttendance]);
+
+    const calculateTotal = () => {
+        let abscenceArray = [];
+        let attendanceArray = [];
+        let lateArray = [];
+
+        for (var k = 0; k < data.length; k++) {
+            for (var i = 0; i < data[k].length; i++) {
+                let start = data[k][i]['date'];
+                if (i + 1 !== data[k].length) {
+                    let end = data[k][i + 1]['date'];
+                    let missingDates = getDates(toDate(start), toDate(end));
+                    missingDates.forEach(function (date) {
+                        abscenceArray.push(date);
+                    })
+                }
+
+                let attendance = {
+                    "date": toDate(start),
+                    "check-in": data[k][i]["check-in"],
+                    "check-out": data[k][i]["check-out"],
+                    "working-hours": data[k][i]["working-hours"],
+                }
+
+                if (data[k][i]['status'] === "Late")
+                    lateArray.push(attendance);
+
+                attendanceArray.push(attendance);
+                console.log(data[k][i])
+            }
+
         }
-    ];
+
+        setCompanyAbscences(abscenceArray);
+        setcompanyAttendance(attendanceArray);
+        setcompanyLate(lateArray);
+
+        setAbscence(abscenceArray.length);
+        setAttendance(attendanceArray.length);
+    }
+
+    // Function that parses string to date 
+    const toDate = (string) => {
+        const firstDash = string.indexOf("-");
+        const secondDash = string.indexOf("-", firstDash + 1);
+        const day = parseInt(string.slice(0, firstDash));
+        const month = parseInt(string.slice(firstDash + 1, secondDash)) - 1;
+        const year = parseInt(string.slice(secondDash + 1));
+
+        return new Date(year, month, day, 0, 0, 0, 0, 0);
+    }
+
+    // Function that gets the missing dates 
+    const getDates = (startDate, endDate) => {
+        const dates = []
+        let currentDate = startDate
+        currentDate.setDate(currentDate.getDate() + 1)
+
+        const addDays = function (days) {
+            const date = new Date(this.valueOf())
+            date.setDate(date.getDate() + days)
+            return date
+        }
+
+        while (currentDate < endDate) {
+            dates.push(currentDate)
+            currentDate = addDays.call(currentDate, 1)
+        }
+
+        return dates
+    }
+
+    const calculateWeeklyDistribution = () => {
+        let abscences = groupBy(companyAbscences, (dt) => moment(dt).format('ddd'));
+        let attendance = groupBy(companyAttendance, (dt) => moment(dt['date']).format('ddd'));
+        let late = groupBy(companyLate, (dt) => moment(dt['date']).format('ddd'));
+
+        let daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu'];
+        let weekly = [];
+
+        for (let i = 0; i < daysOfWeek.length; i++) {
+            const day = daysOfWeek[i];
+            const week = {
+                name: `${day}`,
+                Abscence: day in abscences ? abscences[day].length : 0,
+                Attendance: day in attendance ? attendance[day].length : 0,
+                Late: day in late ? late[day].length : 0,
+            }
+            weekly.push(week);
+        }
+
+        setWeeklyData(weekly)
+
+    }
 
 
     return (
@@ -99,13 +221,13 @@ const Dashboard = () => {
                     cell='cell1'
                     title='Total attendance'
                     labels={['Attendance', 'Abscence']}
-                    data={[1524, 273]}
+                    data={[attendance, abscence]}
                     background={['#2CB1EF', '#C4C4C4']} />
                 <Total
                     cell='cell2'
                     title='Total abscence'
                     labels={['Abscence', 'Attendance']}
-                    data={[273, 1524]}
+                    data={[abscence, attendance]}
                     background={['#F65786', '#C4C4C4']} />
                 <Weekly data={weeklyData} />
                 <Timeline />
