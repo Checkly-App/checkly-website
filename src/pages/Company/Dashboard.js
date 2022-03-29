@@ -14,45 +14,6 @@ import { data } from './AttendanceData'
 import { at, groupBy } from 'lodash';
 import moment from 'moment';
 
-// const abscenceJson = {
-//     "date": `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`,
-//     "status": "abscent"
-// }
-// abscenceArray.push(abscenceJson)
-
-// const weeklyData = [
-//     {
-//         name: 'Sun',
-//         Abscence: 400,
-//         Attendance: 240,
-//         Late: 200,
-//     },
-//     {
-//         name: 'Mon',
-//         Abscence: 300,
-//         Attendance: 138,
-//         Late: 220,
-//     },
-//     {
-//         name: 'Tue',
-//         Abscence: 200,
-//         Attendance: 580,
-//         Late: 229,
-//     },
-//     {
-//         name: 'Wed',
-//         Abscence: 270,
-//         Attendance: 308,
-//         Late: 200,
-//     },
-//     {
-//         name: 'Thu',
-//         Abscence: 190,
-//         Attendance: 480,
-//         Late: 281,
-//     }
-// ];
-
 export const Construction = styled.div`
     min-height: 100vh;
     display: flex;
