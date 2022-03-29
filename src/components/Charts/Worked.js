@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Filter from '../../components/Charts/Filter';
-import { CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { CartesianGrid, XAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 
 const ChartTitle = styled.h1`
     font-size: 1em;
@@ -25,7 +25,93 @@ const FilterWrapper = styled.div`
 `
 const Worked = () => {
     const [timelineFilter, setTimelineFilter] = useState('Monthly');
-    const data = [
+    const [data, setData] = useState([
+        {
+            name: 'Jan',
+            uv: 400,
+            pv: 240,
+            amt: 240,
+        },
+        {
+            name: 'Feb',
+            uv: 300,
+            pv: 138,
+            amt: 220,
+        },
+        {
+            name: 'Mar',
+            uv: 200,
+            pv: 480,
+            amt: 220,
+        },
+        {
+            name: 'Apr',
+            uv: 270,
+            pv: 398,
+            amt: 200,
+        },
+        {
+            name: 'May',
+            uv: 180,
+            pv: 400,
+            amt: 211,
+        },
+        {
+            name: 'Jun',
+            uv: 230,
+            pv: 380,
+            amt: 250,
+        }
+    ]);
+
+    useEffect(() => {
+        if (timelineFilter === 'Weekly')
+            setData(weeklyData)
+        if (timelineFilter === 'Monthly')
+            setData(monthlyData)
+    }, [timelineFilter]);
+
+    const weeklyData = [
+        {
+            name: 'Jan',
+            uv: 400,
+            pv: 240,
+            amt: 240,
+        },
+        {
+            name: 'Feb',
+            uv: 300,
+            pv: 138,
+            amt: 220,
+        },
+        {
+            name: 'Mar',
+            uv: 200,
+            pv: 480,
+            amt: 220,
+        },
+        {
+            name: 'Apr',
+            uv: 270,
+            pv: 398,
+            amt: 200,
+        },
+        {
+            name: 'May',
+            uv: 180,
+            pv: 400,
+            amt: 211,
+        },
+        {
+            name: 'Jun',
+            uv: 230,
+            pv: 380,
+            amt: 250,
+        }
+    ];
+
+
+    const monthlyData = [
         {
             name: 'Jan',
             uv: 400,
@@ -66,6 +152,8 @@ const Worked = () => {
 
 
     const filters = [
+        { value: 'Daily' },
+        { value: 'Weekly' },
         { value: 'Monthly' },
         { value: 'Yearly' },
     ]
@@ -78,7 +166,7 @@ const Worked = () => {
     return (
         <ChartContainer>
             <FilterWrapper>
-                <ChartTitle>Overtime Hours</ChartTitle>
+                <ChartTitle>Worked hours</ChartTitle>
                 <Filter filters={filters} label='attendance' id='attendance' val={timelineFilter} handleChange={handleChange} />
             </FilterWrapper>
             <ResponsiveContainer width="100%" height="90%">

@@ -44,9 +44,12 @@ const ChartTitle = styled.h1`
 
 const Departure = () => {
     const [value, setValue] = useState(new Date(1776, 6, 4, 12, 30, 0, 0));
+    const [hour, setHour] = useState(5);
+    const [minute, setMinute] = useState(20);
+    const [abbreviation, setAbbreviation] = useState('pm');
 
     useEffect(() => {
-        setValue(new Date(1776, 6, 4, 12, 30, 0, 0))
+        setValue(new Date(1776, 6, 4, hour, minute, 0, 0))
     }, []);
 
     return (
@@ -55,18 +58,18 @@ const Departure = () => {
                 hourHandWidth={2}
                 hourMarksWidth={1}
                 hourMarksLength={12}
-                hourHandLength={50}
+                hourHandLength={30}
                 minuteHandWidth={2}
                 minuteMarksLength={4}
-                minuteHandLength={60}
+                minuteHandLength={50}
                 secondHandLength={70}
                 size={100}
                 value={value} />
             <Details>
-                <ChartTitle> Departure Time </ChartTitle>
+                <ChartTitle> Departure time </ChartTitle>
                 <ChartValue>
-                    <h1>5:48</h1>
-                    <Unit>pm</Unit>
+                    <h1>{hour}:{minute}</h1>
+                    <Unit>{abbreviation}</Unit>
                 </ChartValue>
             </Details>
         </ChartContainer>

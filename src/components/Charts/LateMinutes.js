@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Filter from '../../components/Charts/Filter';
-import { CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 
 const ChartContainer = styled.div`
     padding: 2em;
@@ -22,58 +22,92 @@ const FilterWrapper = styled.div`
 `
 const LateMinutes = () => {
     const [timelineFilter, setTimelineFilter] = useState('Monthly');
-    const data = [
+    const monthlyData = [
         {
             'name': 'Jan',
-            'Late': 316,
+            'Late': 103
         },
         {
             'name': 'Feb',
-            'Late': 483,
+            'Late': 283
         },
         {
             'name': 'Mar',
-            'Late': 452,
+            'Late': 402
         },
         {
             'name': 'Apr',
-            'Late': 420,
+            'Late': 103
         },
         {
             'name': 'May',
-            'Late': 921,
+            'Late': 293
         },
         {
             'name': 'Jun',
-            'Late': 394,
+            'Late': 203
         },
         {
             'name': 'Jul',
-            'Late': 567,
+            'Late': 283
         },
         {
             'name': 'Aug',
-            'Late': 746,
+            'Late': 103
         },
         {
             'name': 'Sep',
-            'Late': 475,
+            'Late': 302
         },
         {
             'name': 'Oct',
-            'Late': 928,
+            'Late': 836
         },
         {
             'name': 'Nov',
-            'Late': 834,
+            'Late': 320
         },
         {
             'name': 'Dec',
-            'Late': 123,
+            'Late': 100
         }
     ]
 
+    const weeklyData = [
+        {
+            'name': 'Jan 1',
+            'Late': 83
+        },
+        {
+            'name': 'Jan 7',
+            'Late': 28
+        },
+        {
+            'name': 'Jan 14',
+            'Late': 49
+        },
+        {
+            'name': 'Jan 21',
+            'Late': 20
+        },
+        {
+            'name': 'Jan 28',
+            'Late': 21
+        },
+    ]
+
+    const [data, setData] = useState(monthlyData);
+
+    useEffect(() => {
+        if (timelineFilter === 'Weekly')
+            setData(weeklyData)
+        if (timelineFilter === 'Monthly')
+            setData(monthlyData)
+    }, [timelineFilter]);
+
     const filters = [
+        { value: 'Daily' },
+        { value: 'Weekly' },
         { value: 'Monthly' },
         { value: 'Yearly' },
     ]
@@ -86,7 +120,7 @@ const LateMinutes = () => {
     return (
         <ChartContainer>
             <FilterWrapper>
-                <ChartTitle>Weekly distrubtion</ChartTitle>
+                <ChartTitle>Late minutes</ChartTitle>
                 <Filter filters={filters} label='attendance' id='attendance' val={timelineFilter} handleChange={handleChange} />
             </FilterWrapper>
             <ResponsiveContainer width='100%' >

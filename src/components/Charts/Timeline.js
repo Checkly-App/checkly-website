@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Filter from '../../components/Charts/Filter';
 import { CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
@@ -22,7 +22,164 @@ const FilterWrapper = styled.div`
 `
 const Timeline = () => {
     const [timelineFilter, setTimelineFilter] = useState('Monthly');
-    const data = [
+    const [data, setData] = useState([
+        {
+            'name': 'Jan',
+            'Abscence': 4000,
+            'Attendance': 2400,
+            'amt': 2400
+        },
+        {
+            'name': 'Feb',
+            'Abscence': 45,
+            'Attendance': 1398,
+            'amt': 2210
+        },
+        {
+            'name': 'Mar',
+            'Abscence': 2000,
+            'Attendance': 9800,
+            'amt': 2290
+        },
+        {
+            'name': 'Apr',
+            'Abscence': 2780,
+            'Attendance': 3908,
+            'amt': 2000
+        },
+        {
+            'name': 'May',
+            'Abscence': 1890,
+            'Attendance': 4800,
+            'amt': 2181
+        },
+        {
+            'name': 'Jun',
+            'Abscence': 2390,
+            'Attendance': 3800,
+            'amt': 2500
+        },
+        {
+            'name': 'Jul',
+            'Abscence': 3490,
+            'Attendance': 4300,
+            'amt': 2100
+        },
+        {
+            'name': 'Aug',
+            'Abscence': 3490,
+            'Attendance': 4300,
+            'amt': 2100
+        },
+        {
+            'name': 'Sep',
+            'Abscence': 3490,
+            'Attendance': 4300,
+            'amt': 2100
+        },
+        {
+            'name': 'Oct',
+            'Abscence': 3490,
+            'Attendance': 4300,
+            'amt': 2100
+        },
+        {
+            'name': 'Nov',
+            'Abscence': 3490,
+            'Attendance': 4300,
+            'amt': 2100
+        },
+        {
+            'name': 'Dec',
+            'Abscence': 3490,
+            'Attendance': 4300,
+            'amt': 2100
+        }
+    ]);
+
+    useEffect(() => {
+        if (timelineFilter === 'Weekly')
+            setData(weeklyData)
+        if (timelineFilter === 'Monthly')
+            setData(monthlyData)
+    }, [timelineFilter]);
+
+    const weeklyData = [
+        {
+            'name': 'Jan',
+            'Abscence': 4000,
+            'Attendance': 2400,
+            'amt': 2400
+        },
+        {
+            'name': 'Feb',
+            'Abscence': 45,
+            'Attendance': 1398,
+            'amt': 2210
+        },
+        {
+            'name': 'Mar',
+            'Abscence': 2000,
+            'Attendance': 9800,
+            'amt': 2290
+        },
+        {
+            'name': 'Apr',
+            'Abscence': 2780,
+            'Attendance': 3908,
+            'amt': 2000
+        },
+        {
+            'name': 'May',
+            'Abscence': 1890,
+            'Attendance': 4800,
+            'amt': 2181
+        },
+        {
+            'name': 'Jun',
+            'Abscence': 2390,
+            'Attendance': 3800,
+            'amt': 2500
+        },
+        {
+            'name': 'Jul',
+            'Abscence': 3490,
+            'Attendance': 4300,
+            'amt': 2100
+        },
+        {
+            'name': 'Aug',
+            'Abscence': 3490,
+            'Attendance': 4300,
+            'amt': 2100
+        },
+        {
+            'name': 'Sep',
+            'Abscence': 3490,
+            'Attendance': 4300,
+            'amt': 2100
+        },
+        {
+            'name': 'Oct',
+            'Abscence': 3490,
+            'Attendance': 4300,
+            'amt': 2100
+        },
+        {
+            'name': 'Nov',
+            'Abscence': 3490,
+            'Attendance': 4300,
+            'amt': 2100
+        },
+        {
+            'name': 'Dec',
+            'Abscence': 3490,
+            'Attendance': 4300,
+            'amt': 2100
+        }
+    ]
+
+    const monthlyData = [
         {
             'name': 'Jan',
             'Abscence': 4000,
@@ -98,6 +255,7 @@ const Timeline = () => {
     ]
 
     const filters = [
+        { value: 'Weekly' },
         { value: 'Monthly' },
         { value: 'Yearly' },
     ]
@@ -112,7 +270,7 @@ const Timeline = () => {
     return (
         <ChartContainer>
             <FilterWrapper>
-                <ChartTitle>Weekly distrubtion</ChartTitle>
+                <ChartTitle>Timeline</ChartTitle>
                 <Filter filters={filters} label='attendance' id='attendance' val={timelineFilter} handleChange={handleChange} />
             </FilterWrapper>
             <ResponsiveContainer width='100%' >
