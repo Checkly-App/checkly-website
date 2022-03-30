@@ -1,6 +1,6 @@
 const functions = require('firebase-functions');
 const sgMail = require('@sendgrid/mail');
-const cors = require('cors')({ origin: 'https://checkly-292d2--gp-demo-test-8diufwpu.web.app' });
+const cors = require('cors')({ origin: 'http://192.168.11.101:3000' });
 require('dotenv').config()
 
 sgMail.setApiKey(process.env.SEND_GRID_API_KEY);

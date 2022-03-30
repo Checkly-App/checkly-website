@@ -169,19 +169,19 @@ const AddBatchEmployees = () => {
         //     return;
         // }
 
-        // const password = uuidv4().slice(0, 8);
+        const password = uuidv4().slice(0, 8);
         
         // TEMP password
-        const password = "123456"
+        // const password = "123456"
 
         parsedCsvData.forEach((employee) => {
             createUserWithEmailAndPassword(authSignup, employee.email, password).then((result) => {
-                signOut(authSignup)
-                // sendEmail({
-                //     email: employee.email,
-                //     name: employee.fullName,
-                //     password: password,
-                // })
+                signOut(authSignup);
+                sendEmail({
+                    email: employee.email,
+                    name: employee.name,
+                    password: password,
+                })
                 .then(() => {
                     set(ref(database, 'Employee/' + result.user.uid), {
                         name: employee.name,
