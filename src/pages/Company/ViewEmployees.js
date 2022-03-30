@@ -1,14 +1,13 @@
 import { React, useState, useEffect } from 'react';
-import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
 
-import { set, ref, onValue } from 'firebase/database';
-import { database, auth, functions, authSignup } from '../../utilities/firebase';
-import { MdAccountCircle } from "react-icons/md";
-
+import 'bootstrap/dist/js/bootstrap.bundle.min';
+import { ref, onValue } from 'firebase/database';
+import { database, auth } from '../../utilities/firebase';
+import { MdAccountCircle ,MdSearch} from "react-icons/md";
+import '../../Styles/EmployeeCard.css'
 import styled from 'styled-components';
 
-import {  CircularProgress } from '@mui/material';
+
 
 
 import Card from '@mui/material/Card';
@@ -20,6 +19,7 @@ import { Grid  ,TextField} from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 <link
   rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
@@ -76,9 +76,7 @@ const MainWrapper = styled.div`
 `
 
 const ViewEmployees = () => {
-    /**
-     * Use States
-     */
+  
   
   
     const [employees, setEmployees] = useState([{
@@ -87,22 +85,30 @@ const ViewEmployees = () => {
         position: '',
         department: '',
     }]);
+    const [searchterm, setsearchterm] = useState("");
 const input ={
     backgroundColor :"white",
-    margin :"1em",
-    marginLeft:"4em"
-   , width :"600px" ,
+
+  
+   width: "90%" , 
+  
+   padding: "5px 5px 5px 10px", /* Add some padding */
+   border: "1px solid #ddd", /* Add a grey border */
+   marginBottom: "12px" ,
+   marginLeft:"5%",/* Add some space below the input */
+   borderRadius:"12px"
  
 }
-    /**
-     * Use Effect to fecth all of the company's departments
-     */
+
+
+const handleMouseEnter = e => {
+    e.target.style.border = "none"
+  }
+
+    
      
      const navigate = useNavigate()
     useEffect(() => {
-        console.log(auth.currentUser.uid)
-      
-        
         onValue(ref(database, 'Employee'), (snapshot) => {
             const data = snapshot.val();
             var employsarray = [];
@@ -154,23 +160,10 @@ const input ={
 
    
    
-    /**
-     * Form's Initial Values
-     */
-    // const initialValues = {
-    //     fullName: '',
-    //     nationalID: '',
-    //     phoneNumber: '',
-    //     birthdate: null,
-    //     address: '',
-    //     gender: 'Female',
-    //     email: '',
-    //     employeeID: '',
-    //     department: '',
-    //     position: ''
-    // };
+    
     const emp = ()=> {
-console.log(employees)
+
+ navigate("/admin/Addemployee")
     }
 
     return (
@@ -193,32 +186,62 @@ console.log(employees)
  
  <div className="container">
  
+ 
+  
+
+{/* <div className="input-group" style={input}>
+<i className="fa fa-envelope icon"><MdSearch size="20px"  style={{paddingLeft:"0em" ,marginTop:"0.3em"}}/></i>
+  <input  className="inputsearch"  type="text" placeholder="Search for names ,departments,position.." onChange={(event)=>{setsearchterm(event.target.value)}} onMouseEnter={handleMouseEnter} />
+  
+</div> */}
+<input  className="inputsearch"  type="text" placeholder="Search for names ,departments,position.." onChange={(event)=>{setsearchterm(event.target.value)}} />
+
                     <div className="row">
                    
- <TextField id="outlined-search" label="Search " fullWidth  type="search" style={input} />
-    { employees.map((emp)=> {
+
+    { employees.filter((emp)=>{
+
+        if (searchterm === ""){
+          
+return emp
+        }else if (emp.name.toLowerCase().includes(searchterm.toLowerCase())) {
+            
+            return emp
+        }
+        else if (emp.department.toLowerCase().includes(searchterm.toLowerCase())) {
+            
+            return emp
+        }
+        else if (emp.position.toLowerCase().includes(searchterm.toLowerCase())) {
+            
+            return emp
+        }
+    }
+    
+    
+    ).map((emp,Index)=> {
 
     return (    
-    <Grid item xs={4} style={{paddingBottom:"1em"}}>
-<Card sx={{ maxWidth: 250 ,minHeight:260 }}>
+    <Grid item xs={4} style={{paddingBottom:"1em"}} key={Index}>
+<Card sx={{ maxWidth: 250 ,minHeight:260 } }>
       <CardActionArea>
         
         <CardContent>
             { emp.tokens == "null" ? <MdAccountCircle 
         
-        size="140px" color='lightgray' style={{paddingLeft:"0em" ,marginLeft:"2em"}}/> :   <img src={emp.tokens} style={{borderRadius:"90%", width:"170px",height:"140px",paddingLeft:"2em" ,marginLeft:"1em"}} alt="logo"  />}
+         color='lightgray' style={{padding:"0.5em" ,marginLeft:"0em",height:"160px",width:"220px"}}/> :   <img src={emp.tokens} style={{ width:"250px",height:"150px",paddingRight:"3em",paddingLeft:"0.3em" ,marginBottom:"0.5em"}} alt="logo"  />}
 
             
         
             
           <Typography gutterBottom variant="body1" component="div" textAlign="center" fontWeight="bold">
-            {emp.name}
+            {emp?.name}
           </Typography>
           <Typography variant="body2" color="text.secondary" textAlign="center">
-         {emp.department}
+         {emp?.department}
           </Typography>
           <Typography variant="body2" color="#56BBEB" textAlign="center">
-         {emp.position}
+         {emp?.position}
           </Typography>
         </CardContent>
       </CardActionArea>

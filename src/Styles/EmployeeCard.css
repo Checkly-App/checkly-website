@@ -1,0 +1,23 @@
+
+.inputsearch{
+    background-color: rgb(255, 255, 255);
+    border : none;
+    width: 80%;
+    font-size: 12px;
+    background-color :"white";
+
+  
+    
+   
+    padding: 10px 10px 10px 10px; /* Add some padding */
+    border: 1px solid #ddd; /* Add a grey border */
+    margin-bottom: 12px ;
+    margin-left:5%;/* Add some space below the input */
+    border-radius:12px;
+}
+
+  input[type=text]:focus {
+    outline: #58AAF3;
+    border-color: #58AAF3;
+  }
+ 
