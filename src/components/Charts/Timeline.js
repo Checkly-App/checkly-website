@@ -26,28 +26,35 @@ const Timeline = (props) => {
     const [timelineFilter, setTimelineFilter] = useState('Monthly');
     const [data, setData] = useState([]);
     const filters = [
+        { value: 'Daily' },
         { value: 'Weekly' },
         { value: 'Monthly' },
         { value: 'Yearly' },
     ]
 
     useEffect(() => {
+        if (timelineFilter === 'Daily')
+            calculateTimeline(props.abscenceData, props.attendanceData, 'DD MMM', 'daily');
         if (timelineFilter === 'Weekly')
-            calculateTimeline(props.abscenceData, props.attendanceData, 'ww YYYY');
+            calculateTimeline(props.abscenceData, props.attendanceData, 'ww YYYY', 'weekly');
         if (timelineFilter === 'Monthly')
-            calculateTimeline(props.abscenceData, props.attendanceData, 'MMM YYYY');
+            calculateTimeline(props.abscenceData, props.attendanceData, 'MMM YYYY', 'monthly');
         if (timelineFilter === 'Yearly')
-            calculateTimeline(props.abscenceData, props.attendanceData, 'YYYY');
+            calculateTimeline(props.abscenceData, props.attendanceData, 'YYYY', 'yearly');
 
     }, [timelineFilter]);
 
-    const calculateTimeline = (companyAbscences, companyAttendance, formatString) => {
+    const calculateTimeline = (companyAbscences, companyAttendance, formatString, type) => {
         let abscences = groupBy(companyAbscences, (dt) => moment(dt).format(formatString));
         let attendance = groupBy(companyAttendance, (dt) => moment(dt['date']).format(formatString));
 
+        console.log(attendance)
         let keys = Object.keys(attendance);
         let data = [];
+        console.log(keys)
 
+        // if (type === 'daily' && keys.length > 7)
+        //     keys = keys.slice(-7)
 
         for (let i = 0; i < keys.length; i++) {
             const group = keys[i];
