@@ -17,6 +17,9 @@ const SideBarWrapper = styled.div`
   align-items: center;
   justify-content: space-around;
   background-color: white;
+    @media  (max-width: 768px) {
+        display: none;
+    }
 `
 const Wrapper = styled.div`
     width: 100%;

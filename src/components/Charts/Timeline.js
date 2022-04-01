@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Filter from '../../components/Charts/Filter';
 import { CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { groupBy } from 'lodash';
+import moment from 'moment';
 
 const ChartContainer = styled.div`
     padding: 2em;
@@ -20,260 +22,59 @@ const FilterWrapper = styled.div`
     justify-content: space-between;
     align-items: center;
 `
-const Timeline = () => {
+const Timeline = (props) => {
     const [timelineFilter, setTimelineFilter] = useState('Monthly');
-    const [data, setData] = useState([
-        {
-            'name': 'Jan',
-            'Abscence': 4000,
-            'Attendance': 2400,
-            'amt': 2400
-        },
-        {
-            'name': 'Feb',
-            'Abscence': 45,
-            'Attendance': 1398,
-            'amt': 2210
-        },
-        {
-            'name': 'Mar',
-            'Abscence': 2000,
-            'Attendance': 9800,
-            'amt': 2290
-        },
-        {
-            'name': 'Apr',
-            'Abscence': 2780,
-            'Attendance': 3908,
-            'amt': 2000
-        },
-        {
-            'name': 'May',
-            'Abscence': 1890,
-            'Attendance': 4800,
-            'amt': 2181
-        },
-        {
-            'name': 'Jun',
-            'Abscence': 2390,
-            'Attendance': 3800,
-            'amt': 2500
-        },
-        {
-            'name': 'Jul',
-            'Abscence': 3490,
-            'Attendance': 4300,
-            'amt': 2100
-        },
-        {
-            'name': 'Aug',
-            'Abscence': 3490,
-            'Attendance': 4300,
-            'amt': 2100
-        },
-        {
-            'name': 'Sep',
-            'Abscence': 3490,
-            'Attendance': 4300,
-            'amt': 2100
-        },
-        {
-            'name': 'Oct',
-            'Abscence': 3490,
-            'Attendance': 4300,
-            'amt': 2100
-        },
-        {
-            'name': 'Nov',
-            'Abscence': 3490,
-            'Attendance': 4300,
-            'amt': 2100
-        },
-        {
-            'name': 'Dec',
-            'Abscence': 3490,
-            'Attendance': 4300,
-            'amt': 2100
-        }
-    ]);
-
-    useEffect(() => {
-        if (timelineFilter === 'Weekly')
-            setData(weeklyData)
-        if (timelineFilter === 'Monthly')
-            setData(monthlyData)
-    }, [timelineFilter]);
-
-    const weeklyData = [
-        {
-            'name': 'Jan',
-            'Abscence': 4000,
-            'Attendance': 2400,
-            'amt': 2400
-        },
-        {
-            'name': 'Feb',
-            'Abscence': 45,
-            'Attendance': 1398,
-            'amt': 2210
-        },
-        {
-            'name': 'Mar',
-            'Abscence': 2000,
-            'Attendance': 9800,
-            'amt': 2290
-        },
-        {
-            'name': 'Apr',
-            'Abscence': 2780,
-            'Attendance': 3908,
-            'amt': 2000
-        },
-        {
-            'name': 'May',
-            'Abscence': 1890,
-            'Attendance': 4800,
-            'amt': 2181
-        },
-        {
-            'name': 'Jun',
-            'Abscence': 2390,
-            'Attendance': 3800,
-            'amt': 2500
-        },
-        {
-            'name': 'Jul',
-            'Abscence': 3490,
-            'Attendance': 4300,
-            'amt': 2100
-        },
-        {
-            'name': 'Aug',
-            'Abscence': 3490,
-            'Attendance': 4300,
-            'amt': 2100
-        },
-        {
-            'name': 'Sep',
-            'Abscence': 3490,
-            'Attendance': 4300,
-            'amt': 2100
-        },
-        {
-            'name': 'Oct',
-            'Abscence': 3490,
-            'Attendance': 4300,
-            'amt': 2100
-        },
-        {
-            'name': 'Nov',
-            'Abscence': 3490,
-            'Attendance': 4300,
-            'amt': 2100
-        },
-        {
-            'name': 'Dec',
-            'Abscence': 3490,
-            'Attendance': 4300,
-            'amt': 2100
-        }
-    ]
-
-    const monthlyData = [
-        {
-            'name': 'Jan',
-            'Abscence': 4000,
-            'Attendance': 2400,
-            'amt': 2400
-        },
-        {
-            'name': 'Feb',
-            'Abscence': 3000,
-            'Attendance': 1398,
-            'amt': 2210
-        },
-        {
-            'name': 'Mar',
-            'Abscence': 2000,
-            'Attendance': 9800,
-            'amt': 2290
-        },
-        {
-            'name': 'Apr',
-            'Abscence': 2780,
-            'Attendance': 3908,
-            'amt': 2000
-        },
-        {
-            'name': 'May',
-            'Abscence': 1890,
-            'Attendance': 4800,
-            'amt': 2181
-        },
-        {
-            'name': 'Jun',
-            'Abscence': 2390,
-            'Attendance': 3800,
-            'amt': 2500
-        },
-        {
-            'name': 'Jul',
-            'Abscence': 3490,
-            'Attendance': 4300,
-            'amt': 2100
-        },
-        {
-            'name': 'Aug',
-            'Abscence': 3490,
-            'Attendance': 4300,
-            'amt': 2100
-        },
-        {
-            'name': 'Sep',
-            'Abscence': 3490,
-            'Attendance': 4300,
-            'amt': 2100
-        },
-        {
-            'name': 'Oct',
-            'Abscence': 3490,
-            'Attendance': 4300,
-            'amt': 2100
-        },
-        {
-            'name': 'Nov',
-            'Abscence': 3490,
-            'Attendance': 4300,
-            'amt': 2100
-        },
-        {
-            'name': 'Dec',
-            'Abscence': 3490,
-            'Attendance': 4300,
-            'amt': 2100
-        }
-    ]
-
+    const [data, setData] = useState([]);
     const filters = [
         { value: 'Weekly' },
         { value: 'Monthly' },
         { value: 'Yearly' },
     ]
 
-    const handleChange = (event) => {
-        console.log(event.target.value)
-        setTimelineFilter(event.target.value);
-    };
+    useEffect(() => {
+        if (timelineFilter === 'Weekly')
+            calculateTimeline(props.abscenceData, props.attendanceData, 'ww YYYY');
+        if (timelineFilter === 'Monthly')
+            calculateTimeline(props.abscenceData, props.attendanceData, 'MMM YYYY');
+        if (timelineFilter === 'Yearly')
+            calculateTimeline(props.abscenceData, props.attendanceData, 'YYYY');
+
+    }, [timelineFilter]);
+
+    const calculateTimeline = (companyAbscences, companyAttendance, formatString) => {
+        let abscences = groupBy(companyAbscences, (dt) => moment(dt).format(formatString));
+        let attendance = groupBy(companyAttendance, (dt) => moment(dt['date']).format(formatString));
+
+        let keys = Object.keys(attendance);
+        let data = [];
 
 
+        for (let i = 0; i < keys.length; i++) {
+            const group = keys[i];
+            const object = {
+                name: `${group}`,
+                Abscence: group in abscences ? abscences[group].length : 0,
+                Attendance: group in attendance ? attendance[group].length : 0,
+            }
+            console.log(object)
+            data.push(object);
+        }
+
+        setData(data)
+    }
 
     return (
         <ChartContainer>
             <FilterWrapper>
                 <ChartTitle>Timeline</ChartTitle>
-                <Filter filters={filters} label='attendance' id='attendance' val={timelineFilter} handleChange={handleChange} />
+                <Filter
+                    filters={filters}
+                    label='attendance'
+                    id='attendance'
+                    val={timelineFilter}
+                    handleChange={(event) => { setTimelineFilter(event.target.value) }} />
             </FilterWrapper>
-            <ResponsiveContainer width='100%' >
+            <ResponsiveContainer width='100%' height='100%'>
                 <LineChart data={data}
                     margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
                     <CartesianGrid

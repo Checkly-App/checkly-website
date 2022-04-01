@@ -13,6 +13,10 @@ const Container = styled.div`
     grid-template-areas: 'bar main';
     justify-items: stretch;
     justify-content: center;
+    @media  (max-width: 768px) {
+        grid-template-columns: 1fr ;
+        grid-template-areas: 'main';
+    }
 `
 
 const Content = styled.div`

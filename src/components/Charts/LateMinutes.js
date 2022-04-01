@@ -123,7 +123,7 @@ const LateMinutes = () => {
                 <ChartTitle>Late minutes</ChartTitle>
                 <Filter filters={filters} label='attendance' id='attendance' val={timelineFilter} handleChange={handleChange} />
             </FilterWrapper>
-            <ResponsiveContainer width='100%' >
+            <ResponsiveContainer width='100%' height='100%'>
                 <LineChart data={data}
                     margin={{ top: 15, right: 10, left: 10, bottom: 15 }}>
                     <CartesianGrid

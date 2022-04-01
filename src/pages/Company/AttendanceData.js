@@ -1,6 +1,13 @@
 export const data = [
     [
         {
+            "date": "26-2-2021",
+            "check-in": "9:09 AM",
+            "check-out": "5:39 PM",
+            "status": "Late",
+            "working-hours": "5 hours"
+        },
+        {
             "date": "2-3-2021",
             "check-in": "9:09 AM",
             "check-out": "5:39 PM",

@@ -11,7 +11,7 @@ import LateMinutes from '../../components/Charts/LateMinutes';
 import Arrival from '../../components/Charts/Arrival';
 import Departure from '../../components/Charts/Departure';
 import { data } from './AttendanceData'
-import { at, groupBy } from 'lodash';
+import { groupBy } from 'lodash';
 import moment from 'moment';
 
 export const Construction = styled.div`
@@ -25,8 +25,9 @@ const Wrapper = styled.div`
     flex-direction: column;
     align-items: stretch;
     margin: 1em 4em;
-        @media (max-width: 768px) {
-            margin: 2em 3em;
+    @media (max-width: 768px) {
+            margin: 0;
+            padding: 0;
     }
 `
 const Title = styled.h1`
@@ -41,7 +42,8 @@ const Subtitle = styled.h1`
     margin: 0 0 0 4rem;
 `
 const Container = styled.div`
-    overflow-y: scroll;
+    overflow-y: hidden;
+    overflow-x: hidden;
     min-height: 100vh;
     padding: 3em 3rem;
     grid-template-columns: 30% 30% 30%;
@@ -54,6 +56,16 @@ const Container = styled.div`
                         'cell8 cell8 cell10';
     grid-gap: 2em;
     justify-content: center;
+    @media (max-width: 768px) {
+            padding: 1rem;
+            grid-gap: 1em;
+            grid-template-columns: 100%; 
+            grid-template-rows: repeat(2, 5%) 15% repeat(5, 10%) repeat(2, 5%);
+            grid-template-areas:'cell1' 'cell2' 'cell3' 
+                                'cell4' 'cell5' 'cell6' 
+                                'cell7' 'cell8' 'cell9' 
+                                'cell10';
+    }
 `
 
 const Dashboard = () => {
@@ -105,9 +117,7 @@ const Dashboard = () => {
                     lateArray.push(attendance);
 
                 attendanceArray.push(attendance);
-                console.log(data[k][i])
             }
-
         }
 
         setCompanyAbscences(abscenceArray);
@@ -167,9 +177,7 @@ const Dashboard = () => {
             }
             weekly.push(week);
         }
-
         setWeeklyData(weekly)
-
     }
 
 
@@ -191,7 +199,9 @@ const Dashboard = () => {
                     data={[abscence, attendance]}
                     background={['#F65786', '#C4C4C4']} />
                 <Weekly data={weeklyData} />
-                <Timeline />
+                <Timeline
+                    attendanceData={companyAttendance}
+                    abscenceData={companyAbscences} />
                 <Worked />
                 <CheckIn />
                 <Overtime />
