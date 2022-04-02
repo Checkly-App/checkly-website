@@ -10,9 +10,12 @@ import Worked from '../../components/Charts/Worked';
 import LateMinutes from '../../components/Charts/LateMinutes';
 import Arrival from '../../components/Charts/Arrival';
 import Departure from '../../components/Charts/Departure';
-import { data } from './AttendanceData'
+import { data } from './AttendanceData';
+import ChecklyLogo from '../ChecklyLogo';
+
 import { groupBy } from 'lodash';
 import moment from 'moment';
+import { calculateTimeline } from './heplers';
 
 export const Construction = styled.div`
     min-height: 100vh;
@@ -81,13 +84,18 @@ const Dashboard = () => {
         Attendance: 240,
         Late: 200,
     }]);
+    const [timelineData, setTimelineData] = useState();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         calculateTotal(); // to calculate a company's total attendance
     }, []);
 
     useEffect(() => {
-        calculateWeeklyDistribution(); // to calculate the weekly attendance 
+        calculateWeeklyDistribution();// to calculate the weekly attendance 
+        const timeline = calculateTimeline(companyAbscences, companyAttendance, 'MMM YYYY', 'monthly');
+        setTimelineData(timeline);
+        setLoading(false);
     }, [companyAttendance]);
 
     const calculateTotal = () => {
@@ -98,13 +106,13 @@ const Dashboard = () => {
         for (var k = 0; k < data.length; k++) {
             for (var i = 0; i < data[k].length; i++) {
                 let start = data[k][i]['date'];
-                if (i + 1 !== data[k].length) {
-                    let end = data[k][i + 1]['date'];
-                    let missingDates = getDates(toDate(start), toDate(end));
-                    missingDates.forEach(function (date) {
-                        abscenceArray.push(date);
-                    })
-                }
+                let end = (i + 1 === data[k].length) ? moment().format("DD-MM-YYYY") : data[k][i + 1]['date'];
+
+                let missingDates = getDates(toDate(start), toDate(end));
+
+                missingDates.forEach(function (date) {
+                    abscenceArray.push(date);
+                })
 
                 let attendance = {
                     "date": toDate(start),
@@ -182,36 +190,38 @@ const Dashboard = () => {
 
 
     return (
-        <Wrapper>
-            <Title>Acme Corporations</Title>
-            <Subtitle>{today}</Subtitle>
-            <Container>
-                <Total
-                    cell='cell1'
-                    title='Total attendance'
-                    labels={['Attendance', 'Abscence']}
-                    data={[attendance, abscence]}
-                    background={['#2CB1EF', '#C4C4C4']} />
-                <Total
-                    cell='cell2'
-                    title='Total abscence'
-                    labels={['Abscence', 'Attendance']}
-                    data={[abscence, attendance]}
-                    background={['#F65786', '#C4C4C4']} />
-                <Weekly data={weeklyData} />
-                <Timeline
-                    attendanceData={companyAttendance}
-                    abscenceData={companyAbscences} />
-                <Worked />
-                <CheckIn />
-                <Overtime />
-                <LateMinutes />
-                <Arrival />
-                <Departure />
-            </Container>
-        </Wrapper>
+        loading ? <ChecklyLogo /> :
+            <Wrapper>
+                <Title>Acme Corporations</Title>
+                <Subtitle>{today}</Subtitle>
+                <Container>
+                    <Total
+                        cell='cell1'
+                        title='Total attendance'
+                        labels={['Attendance', 'Abscence']}
+                        data={[attendance, abscence]}
+                        background={['#2CB1EF', '#C4C4C4']} />
+                    <Total
+                        cell='cell2'
+                        title='Total abscence'
+                        labels={['Abscence', 'Attendance']}
+                        data={[abscence, attendance]}
+                        background={['#F65786', '#C4C4C4']} />
+                    <Weekly data={weeklyData} />
+                    <Timeline
+                        attendanceData={companyAttendance}
+                        abscenceData={companyAbscences}
+                        default={timelineData} />
+                    <Worked />
+                    <CheckIn />
+                    <Overtime />
+                    <LateMinutes />
+                    <Arrival />
+                    <Departure />
+                </Container>
+            </Wrapper>
 
     );
-};
+}
 
 export default Dashboard;

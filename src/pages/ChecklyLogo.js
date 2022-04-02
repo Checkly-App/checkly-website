@@ -7,7 +7,7 @@ const ChecklyLogo = () => {
     const navigate = useNavigate();
 
     return (
-        <div>
+        <div className="App-logo-container">
             <img onClick={() => navigate("/login")} role="button" src={logo} className="App-logo" alt="logo" />
         </div>
     );
