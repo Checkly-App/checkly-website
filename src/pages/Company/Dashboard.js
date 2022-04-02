@@ -114,10 +114,11 @@ const Dashboard = () => {
                     abscenceArray.push(date);
                 })
 
+
                 let attendance = {
                     "date": toDate(start),
-                    "check-in": data[k][i]["check-in"],
-                    "check-out": data[k][i]["check-out"],
+                    "check-in": moment(data[k][i]["check-in"].toLowerCase(), "HH:mm").toDate(),
+                    "check-out": moment(data[k][i]["check-out"].toLowerCase(), "HH:mm").toDate(),
                     "working-hours": data[k][i]["working-hours"],
                 }
 
@@ -131,7 +132,6 @@ const Dashboard = () => {
         setCompanyAbscences(abscenceArray);
         setcompanyAttendance(attendanceArray);
         setcompanyLate(lateArray);
-
         setAbscence(abscenceArray.length);
         setAttendance(attendanceArray.length);
     }
@@ -212,8 +212,10 @@ const Dashboard = () => {
                         attendanceData={companyAttendance}
                         abscenceData={companyAbscences}
                         default={timelineData} />
-                    <Worked />
-                    <CheckIn />
+                    <Worked
+                        data={companyAttendance} />
+                    <CheckIn
+                        attendanceData={companyAttendance} />
                     <Overtime />
                     <LateMinutes />
                     <Arrival />
