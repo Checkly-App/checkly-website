@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Sidebar from '../../components/Sidebar/Sidebar';
-import NotFound from '../NotFound';
+import ChecklyLogo from '../ChecklyLogo';
 
 const Container = styled.div`
     height: 100vh;
@@ -36,7 +36,7 @@ const Layout = ({ children, user }) => {
                     {children}
                 </Content>
             </Container >)
-            : <NotFound />
+            : <ChecklyLogo />
     );
 };
 

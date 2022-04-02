@@ -15,7 +15,7 @@ import ChecklyLogo from '../ChecklyLogo';
 
 import { groupBy } from 'lodash';
 import moment from 'moment';
-import { calculateTimeline } from './heplers';
+import { calculateTimeline } from './Heplers';
 
 export const Construction = styled.div`
     min-height: 100vh;
