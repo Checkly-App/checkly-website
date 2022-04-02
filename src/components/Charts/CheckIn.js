@@ -66,8 +66,8 @@ const CheckIn = (props) => {
 
         if (type === 'daily' && keys.length > 7)
             keys = keys.slice(-7)
-        if (type === 'monthly' && keys.length > 12)
-            keys = keys.slice(-12)
+        if (type === 'monthly' && keys.length > 6)
+            keys = keys.slice(-6)
         if (type === 'weekly' && keys.length > 8)
             keys = keys.slice(-8)
         if (type === 'yearly' && keys.length > 5)
@@ -82,7 +82,6 @@ const CheckIn = (props) => {
                 name: `${group}`,
                 'Average Check-in': group in attendance ? average : 0,
             }
-
 
             data.push(object);
         }

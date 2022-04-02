@@ -12,7 +12,6 @@ import Arrival from '../../components/Charts/Arrival';
 import Departure from '../../components/Charts/Departure';
 import { data } from './AttendanceData';
 import ChecklyLogo from '../ChecklyLogo';
-
 import { groupBy } from 'lodash';
 import moment from 'moment';
 import { calculateTimeline } from './Heplers';
@@ -119,7 +118,7 @@ const Dashboard = () => {
                     "date": toDate(start),
                     "check-in": moment(data[k][i]["check-in"].toLowerCase(), "HH:mm").toDate(),
                     "check-out": moment(data[k][i]["check-out"].toLowerCase(), "HH:mm").toDate(),
-                    "working-hours": data[k][i]["working-hours"],
+                    "working-hours": parseInt(data[k][i]["working-hours"].slice(0, data[k][i]["working-hours"].indexOf(' '))),
                 }
 
                 if (data[k][i]['status'] === "Late")
@@ -213,10 +212,11 @@ const Dashboard = () => {
                         abscenceData={companyAbscences}
                         default={timelineData} />
                     <Worked
-                        data={companyAttendance} />
+                        attendanceData={companyAttendance} />
                     <CheckIn
                         attendanceData={companyAttendance} />
-                    <Overtime />
+                    <Overtime
+                        attendanceData={companyAttendance} />
                     <LateMinutes />
                     <Arrival />
                     <Departure />
