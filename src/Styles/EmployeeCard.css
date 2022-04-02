@@ -5,15 +5,9 @@
     width: 80%;
     font-size: 12px;
     background-color :"white";
-
+color: #58AAF3;
   
     
-   
-    padding: 10px 10px 10px 10px; /* Add some padding */
-    border: 1px solid #ddd; /* Add a grey border */
-    margin-bottom: 12px ;
-    margin-left:5%;/* Add some space below the input */
-    border-radius:12px;
 }
 
   input[type=text]:focus {
@@ -21,3 +15,72 @@
     border-color: #58AAF3;
   }
  
+.flip-card {
+    background-color: transparent;
+    width: 250px;
+    height: 260px;
+    perspective: 1000px;
+    border-radius: 25px;
+  }
+  
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 25px;
+
+  }
+  
+  .flip-card:focus {
+      outline: 0;
+  }
+  
+  .flip-card:hover .flip-card-inner,
+  .flip-card:focus .flip-card-inner{
+    transform: rotateY(180deg);
+    cursor: pointer;
+  }
+  .hoverButten:hover{
+      background-color: white;
+      color: #58AAF3;
+  }
+  
+  .flip-card-front,
+  .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+  }
+  
+  .flip-card-front {
+   
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1px;
+
+  }
+  
+  .flip-card-back {
+    background: linear-gradient(90deg, #56BBEB 0%, #58AAF3 100%);
+    color: white;
+    transform: rotateY(180deg);
+    z-index: 1;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20%;
+    border-radius: 12px;
+  }
+  h3 {
+    font-size: 20px;
+    font-family: Verdana, sans-serif;
+    font-weight: bold;
+    color: #fff;
+  }
+  

@@ -98,11 +98,12 @@ const Login = () => {
   const mystyle = {
     fontFamily: "Arial",
     background: "linear-gradient(#56BBEB, #58AAF3)",
+    textAlign: "center",
     height: "100vh",
     margin: "auto",
   //  paddingTop: "10%",
-    paddingLeft: "5%",
-    paddingRight: "5%"
+   // paddingLeft: "5%",
+   // paddingRight: "5%"
   };
   const mystyle1 = {
     maxHeight: "100vh",
@@ -144,10 +145,10 @@ const Login = () => {
   const overlay = {
     //  position: "absolute", 
     width: "80%",
-
+marginTop:"5em",
     // //  //top:"50"
     // // left:"0",
-      paddingTop:"20%" ,
+      paddingTop:"3%" ,
     //   paddingLeft:"5%" ,
     //margin: " auto" ,
     // Padding: "50em 55px",
@@ -157,12 +158,12 @@ const Login = () => {
     <div className="container-fluid ">
       <div className="row"  >
       <nav className="navbar navbar-expand-lg navbar-light" style={{ position: "absolute" }}>
-          <div className="container-fluid justify-content-center">
-            <img src={Logo} alt="logo" style={{ width: "30px", height: "30px" }} /> <a style={{ fontWeight: "500", paddingLeft: "4px" }}>  Checkly</a>
-            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <div className="container-fluid ">
+          <div style={{paddingTop:"1%"}}> <img src={Logo} alt="logo" style={{ width: "35px", height: "35px" }} /> <a style={{ fontWeight: "500",fontSize:"20px"}}>  Checkly</a></div> 
+            {/* <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse" id="navbarNavDropdown" style={{ marginLeft: "23em" }}>
+            </button> */}
+            {/* <div className="collapse navbar-collapse" id="navbarNavDropdown" style={{ marginLeft: "23em" }}>
               <ul className="navbar-nav m-auto">
                 <li className="nav-item">
                   <a  className="nav-link active blue" aria-current="page" href="#" style={{ color: "Black", padding: "1em 2em" }}>Home</a>
@@ -184,7 +185,7 @@ const Login = () => {
                   <a className="nav-link white" href="#" style={{ color: "white", padding: "0.3em 1.5em" ,borderRadius: '10px',border:'white 1px solid'}}>Login</a>
                 </li>
               </ul>
-            </div>
+            </div> */}
           </div>
         </nav>
 
@@ -205,6 +206,7 @@ const Login = () => {
                 signInWithEmailAndPassword(auth, values.email, values.Password)
                   .then((userCredential) => {
                     const user = userCredential.user;
+                    console.log(user)
                     setCount(null)
                     if (emailValid(values.email)) {
                       window.history.replaceState(null, null, "/checkly")
@@ -216,9 +218,8 @@ const Login = () => {
                     }
                   })
                   .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    console.log(errorMessage)
+                   
+                    console.log(error)
                     setCount("InValid Email /Password")
                     setOpenSnackbar(true);
 
@@ -291,8 +292,9 @@ const Login = () => {
           {/* <img src={UILogin}  alt="logo" style={overlay}/>  */}
           {/* <div class="container" style={mystyle}> */}
           {/* <img src=".../public/logo512.png" alt="Italian Trulli" /> */}
-
+          <div className="col-md-12 red" style={{height: "100vh"}}>
           <img src={Loginpic} alt="logo" style={overlay} />
+          </div>
 
           {/* <h1 style={{fontSize:"50px"}}>Adavnce <br/>Rapidly</h1> */}
           {/*  <p style={{fontSize:"10px" , paddingLeft:"5%"}}>“The ideal conditions for making things are created when machines, facilities, and people work together to add value without generating any waste.”

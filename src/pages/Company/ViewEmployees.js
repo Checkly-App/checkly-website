@@ -1,13 +1,19 @@
-import { React, useState, useEffect } from 'react';
+import {  useState, useEffect } from 'react';
 
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import { ref, onValue } from 'firebase/database';
+import { ref, onValue,remove } from 'firebase/database';
 import { database, auth } from '../../utilities/firebase';
 import { MdAccountCircle ,MdSearch} from "react-icons/md";
 import '../../Styles/EmployeeCard.css'
 import styled from 'styled-components';
-
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import * as React from 'react';
 
 
 import Card from '@mui/material/Card';
@@ -15,8 +21,8 @@ import CardContent from '@mui/material/CardContent';
 
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
-import { Grid  ,TextField} from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Grid  } from '@mui/material';
+import {  useNavigate } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -27,15 +33,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
   crossorigin="anonymous"
 />
 
-
-/**
- * Send Email Cloud Function 
- */
-
-
-/**
- * Styled Components 
- */
 
 const SetionsWrapper = styled.div`
     display: flex;
@@ -80,17 +77,43 @@ const ViewEmployees = () => {
   
   
     const [employees, setEmployees] = useState([{
+        id :'',
         tokens:'',
         name:'',
         position: '',
         department: '',
+        nationalID: '',
+        phoneNumber: '',
+        birthdate: null,
+        address: '',
+        gender: '',
+        email: '',
+        employeeID: '',
     }]);
     const [searchterm, setsearchterm] = useState("");
+    const [load, setload] = useState(true);
+    const [open, setOpen] = React.useState(false);
+    const [index, setIndex] = useState({ id :'',
+    tokens:'',
+    name:'',
+    position: '',
+    department: '',
+    nationalID: '',
+    phoneNumber: '',
+    birthdate: null,
+    address: '',
+    gender: '',
+    email: '',
+    employeeID: '',});
+
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  
 const input ={
     backgroundColor :"white",
 
   
-   width: "90%" , 
+   width: "80%" , 
   
    padding: "5px 5px 5px 10px", /* Add some padding */
    border: "1px solid #ddd", /* Add a grey border */
@@ -99,27 +122,48 @@ const input ={
    borderRadius:"12px"
  
 }
-
-
-const handleMouseEnter = e => {
-    e.target.style.border = "none"
-  }
+const Buttonc = {
+    background: "linear-gradient(90deg, #56BBEB 0%, #58AAF3 100% ) " ,
+    color: "white",
+   width:"120px",
+    padding: "10px",
+    paddingLeft: "10px",
+    paddingRight: "10px",
+    marginBottom:"0.5em",
+    borderRadius: "12px",
+    border: " 1px solid white",
+    cursor: "pointer",
+  };
 
     
      
      const navigate = useNavigate()
     useEffect(() => {
+     
+      
         onValue(ref(database, 'Employee'), (snapshot) => {
             const data = snapshot.val();
             var employsarray = [];
             for (let id in data) {
                
                     const employee = {
-                        
+                        id: id,
                         tokens:data[id]['image_token'],
                         name:data[id]['name'],
                         position: data[id]['position'],
-                        department:data[id] ['department'],
+                        department:data[id]['department'],
+                        nationalID: data[id]['national_id'],
+                        phoneNumber: data[id]['phone_number'],
+                        birthdate: data[id]['birthdate'],
+                        address: data[id]['address'],
+                        gender: data[id]['gender'],
+                        email: data[id]['email'],
+                        employeeID:data[id]['employee_id'],
+                       
+                   
+                   
+                  
+                  
                     };
                     onValue(ref(database, 'Department'), (snapshot) => {
                         const data = snapshot.val();
@@ -136,7 +180,9 @@ const handleMouseEnter = e => {
                                 };
                                 if (namedeb.comid === auth.currentUser.uid){
                                 employee.department = namedeb.namedep
-                                employsarray.push(employee)}
+                                employsarray.push(employee)
+                           
+                            }
                             }
                                
                                 
@@ -146,25 +192,73 @@ const handleMouseEnter = e => {
                        
                     });
                     
-                   
+                
                 }
-           setEmployees(employsarray)
-           
-        });
-        return () => {
-           
-           
-            setEmployees([]);
+              
+                setEmployees(employsarray)
+                setload(false)
+        }
+        
+        );
+     
+        return () => {   
+           setEmployees([]);
         }
     }, []);
 
-   
    
     
     const emp = ()=> {
 
  navigate("/admin/Addemployee")
     }
+ 
+          const toEdit=(index)=>{
+            navigate('/admin/Edit',{state:{ id :index.id,
+            tokens:index.tokens,
+            name:index.name,
+            position: index.position,
+            department: index.department,
+            nationalID:index.nationalID,
+            phoneNumber: index.phoneNumber,
+            birthdate: index.birthdate,
+            address: index.address,
+            gender: index.gender,
+            email: index.email,
+            employeeID: index.employeeID,}});
+              }
+              const toView=(index)=>{
+                navigate('/admin/Edit',{state:{ id :index.id,
+                tokens:index.tokens,
+                name:index.name,
+                position: index.position,
+                department: index.department,
+                nationalID:index.nationalID,
+                phoneNumber: index.phoneNumber,
+                birthdate: index.birthdate,
+                address: index.address,
+                gender: index.gender,
+                email: index.email,
+                employeeID: index.employeeID,}});
+                  }
+                  const Delete=(index)=>{
+                      setIndex(index)
+                      setOpen(true);
+                  
+                      }
+                      
+   
+    
+      const handleClosedelete = () => {
+       remove (ref(database, 'Employee/'+index.id))
+          console.log(index.id)
+        
+        setOpen(false);
+      };
+      const handleClosecancel = () => {
+     
+      setOpen(false);
+    };
 
     return (
        
@@ -181,6 +275,7 @@ const handleMouseEnter = e => {
                     <div className="col-6 col-md-6" style={{padding:"5%" ,paddingLeft:"40%" ,marginLeft:"auto"}}>
                     <Button onClick={emp}>  Add new employee </Button>
                     </div>
+                    
                     </div></div>
 
  
@@ -189,70 +284,115 @@ const handleMouseEnter = e => {
  
   
 
-{/* <div className="input-group" style={input}>
-<i className="fa fa-envelope icon"><MdSearch size="20px"  style={{paddingLeft:"0em" ,marginTop:"0.3em"}}/></i>
-  <input  className="inputsearch"  type="text" placeholder="Search for names ,departments,position.." onChange={(event)=>{setsearchterm(event.target.value)}} onMouseEnter={handleMouseEnter} />
+<div className="input-group" style={input}>
+<i className="fa fa-envelope icon"><MdSearch size="18px"  style={{ marginBottom:"0.1em",marginRight:"0.1em"}}/></i>
+  <input  className="inputsearch"  type="text" placeholder="Search for names ,departments,position.." onChange={(event)=>{setsearchterm(event.target.value)}}  />
   
-</div> */}
-<input  className="inputsearch"  type="text" placeholder="Search for names ,departments,position.." onChange={(event)=>{setsearchterm(event.target.value)}} />
+</div>
 
                     <div className="row">
                    
 
-    { employees.filter((emp)=>{
+{load === false && employees.filter((emp)=>{
 
-        if (searchterm === ""){
-          
+if (searchterm === ""){
+  
 return emp
-        }else if (emp.name.toLowerCase().includes(searchterm.toLowerCase())) {
-            
-            return emp
-        }
-        else if (emp.department.toLowerCase().includes(searchterm.toLowerCase())) {
-            
-            return emp
-        }
-        else if (emp.position.toLowerCase().includes(searchterm.toLowerCase())) {
-            
-            return emp
-        }
-    }
+}else if (emp.name.toLowerCase().includes(searchterm.toLowerCase())) {
     
+    return emp
+}
+else if (emp.department.toLowerCase().includes(searchterm.toLowerCase())) {
     
-    ).map((emp,Index)=> {
+    return emp
+}
+else if (emp.position.toLowerCase().includes(searchterm.toLowerCase())) {
+    
+    return emp
+}
+return null ;
+}
 
-    return (    
-    <Grid item xs={4} style={{paddingBottom:"1em"}} key={Index}>
+
+).map((emp,Index)=> {
+
+return (    
+<Grid item xs={4} style={{paddingBottom:"1em"}} key={Index} >
+ 
+<div className="flip-card" tabIndex="0">
+  <div className="flip-card-inner">
+    <div className="flip-card-front">
+   
 <Card sx={{ maxWidth: 250 ,minHeight:260 } }>
       <CardActionArea>
         
         <CardContent>
-            { emp.tokens == "null" ? <MdAccountCircle 
+        { emp.tokens === "null" ? <MdAccountCircle 
         
-         color='lightgray' style={{padding:"0.5em" ,marginLeft:"0em",height:"160px",width:"220px"}}/> :   <img src={emp.tokens} style={{ width:"250px",height:"150px",paddingRight:"3em",paddingLeft:"0.3em" ,marginBottom:"0.5em"}} alt="logo"  />}
+        color='lightgray' style={{padding:"0.5em" ,marginLeft:"0em",width:"150px",height:"130px"}}/> :   <img src={emp.tokens} style={{ width:"130px",height:"130px" ,marginBottom:"0.5em",margin:"1em",overflow: "hidden", borderRadius: "50%"}} alt="logo"  />}
 
             
         
             
           <Typography gutterBottom variant="body1" component="div" textAlign="center" fontWeight="bold">
-            {emp?.name}
+           {emp.name}
           </Typography>
           <Typography variant="body2" color="text.secondary" textAlign="center">
-         {emp?.department}
+        {emp.department}
           </Typography>
           <Typography variant="body2" color="#56BBEB" textAlign="center">
-         {emp?.position}
+         {emp.position}
           </Typography>
         </CardContent>
       </CardActionArea>
     </Card>
-    </Grid> )
-  }  )
-}
     
-    
+    </div>
+    <div className="flip-card-back">
+        <div>
+    <button style={Buttonc}  onClick={()=>{toView(emp)}} className="hoverButten">   View  </button></div>
+    <div>   <button style={Buttonc}  onClick={()=>{toEdit(emp)}}>  Edit  </button></div>
+    <div>   <button style={Buttonc}  onClick={()=>{Delete(emp)}}>  Delete  </button></div>
 
-    </div> </div>
+
+
+    </div>
+  </div>
+
+</div> 
+</ Grid >
+
+)
+}  )
+}
+
+
+    </div>
+    <Dialog
+        fullScreen={fullScreen}
+        open={open}
+       // onClose={handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {"Are you sure?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+          Are you sure you want to delete thin employee ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleClosecancel}>
+           Cancel
+          </Button>
+          <Button onClick={handleClosedelete} autoFocus>
+           Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+    
+     </div>
                     </SetionsWrapper>
                    
     )

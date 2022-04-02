@@ -21,10 +21,12 @@ const SelectField = ({ name, options, ...other }) => {
         size: 'small',
         fullWidth: true,
         margin: 'none',
+    value:0,
         InputProps: {
             style: { textAlign: 'left' }
         },
         onChange: handleChange,
+        
     };
 
     if (data && data.touched && data.error) {

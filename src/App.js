@@ -15,7 +15,7 @@ import ResetPassword from './pages/Authentication/ResetPassword';
 import Layout from './pages/Company/Layout';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
-
+import Edit from './pages/Company/EditEmployessInformaton'
 const theme = createTheme({
   palette: {
     primary: {
@@ -66,6 +66,8 @@ function App() {
             <Route exact path="/admin/Addemployee" element={<Layout user={userinfo} children={<AddEmployee />} />} />
 
             <Route exact path="/admin/analytics" element={<Layout user={userinfo} children={<Analytics />} />} />
+            <Route exact path="/admin/Edit" element={<Layout user={userinfo} children={<Edit />} />} />
+
             <Route exact path="/admin/services" element={<Layout user={userinfo} children={<Services />} />} />
             <Route exact path="*" element={<NotFound />} />
           </Routes>

@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import Loginpic from '../../assets/images/Loginpic.png';
 import { ref, onValue } from 'firebase/database';
 import { database } from '../../utilities/firebase';
-import { Alert, AlertTitle, CircularProgress, Snackbar } from '@mui/material';
+import { Alert, AlertTitle,  Snackbar } from '@mui/material';
 
 import Logo from '../../assets/images/logo.svg';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
@@ -29,7 +29,7 @@ const ResetPaaword = () => {
   const [count, setCount] = useState(null);
   const [issend, setIssend] = useState(null);
   const [iserror, setiserror] = useState(null);
-    const navigate = useNavigate()
+  //  const navigate = useNavigate()
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -75,21 +75,16 @@ const ResetPaaword = () => {
 
     });
   const mystyle = {
-    //   color: "white",
-
-    //  // background: linear-gradient( rgba(255,0,0,0), rgba(255,0,0,1)),
-    //  padding:'9%',
-    //   paddingLeft: "10%",
-    //   paddingRight: "10%",
-
-    fontFamily: "Arial",
-    background: "linear-gradient(#56BBEB, #58AAF3)",
+   
     height: "100vh",
+  // maxHeight:"100vh",
+   fontFamily: "Arial",
+   background: "linear-gradient(#56BBEB, #58AAF3)",
+   textAlign: "center",
     margin: "auto",
-    paddingTop: "11%",
-    paddingLeft: "5%",
-    paddingRight: "5%"
-
+  //  paddingTop: "10%",
+   // paddingLeft: "5%",
+   // paddingRight: "5%"
   };
   const mystyle1 = {
     // padding: "10%",
@@ -128,7 +123,11 @@ const ResetPaaword = () => {
   const overlay = {
     //  position: "absolute", 
     width: "80%",
-
+  
+    marginTop:"3em",
+        // //  //top:"50"
+        // // left:"0",
+          paddingTop:"2%" ,
     // //  //top:"50"
     // // left:"0",
     //  paddingTop:"5em" ,
@@ -142,31 +141,17 @@ const ResetPaaword = () => {
     <div className="container-fluid " id='height'>
       <div className="row" id='height' >
         <nav className="navbar navbar-expand-lg navbar-light" style={{ position: "absolute" }}>
-          <div className="container-fluid justify-content-center">
-            <img src={Logo} alt="logo" style={{ width: "30px", height: "30px" }} /> <a style={{ fontWeight: "500", paddingLeft: "4px" }}>  Checkly</a>
-            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-              <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse" id="navbarNavDropdown" style={{ marginLeft: "23em" }}>
-              <ul className="navbar-nav m-auto">
-                <li className="nav-item">
-                  <a onClick={navigate("")} className="nav-link active blue" aria-current="page" href="#" style={{ color: "Black", padding: "1em 2em" }}>Home</a>
-                </li>
-                <li className="nav-item">
-                  <a  onClick={navigate("")} className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>Values</a>
-                </li>
-                <li className="nav-item">
-                  <a onClick={navigate("")} className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>About us</a>
-                </li>
-                
-                <li className="nav-item">
-                  <a onClick={navigate("")} className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>Services</a>
-                </li>
-                <li className="nav-item">
-                  <a onClick={navigate("")} className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>Contact</a>
-                </li>
-                <li className="nav-item" style={{paddingTop:'0.6em'}}>
-                  <a onClick={navigate("/login")} className="nav-link white" href="#" style={{ color: "white", padding: "0.3em 1.5em" ,borderRadius: '10px',border:'white 1px solid'}}>Login</a>
+          <div className="container-fluid">
+          <div style={{paddingTop:"1%"}}> <img src={Logo} alt="logo" style={{ width: "35px", height: "35px" }} /> <a style={{ fontWeight: "500",fontSize:"20px"}}>  Checkly</a>
+          
+          </div> 
+          
+            <div >
+              
+              <ul className="navbar-nav" >
+               
+                <li className="nav-item" style={{paddingTop:'0.6em', padding: "0.3em 0em",float:"right"}}>
+                  <a  href="/login" className="nav-link white" style={{ color: "white", padding: "0.3em 1.5em" ,borderRadius: '10px',border:'white 1px solid'}}>Login</a>
                 </li>
               </ul>
             </div>
@@ -175,17 +160,12 @@ const ResetPaaword = () => {
 
 
         <div className="col-md-6 red" style={mystyle1}>
-          {/* <div class="container" style={mystyle1}> */}
-          {/* {issend ? <div class="alert alert-success" role="alert">
-            {issend}
-          </div> : null} */}
+        
 
           <h2 tyle={{ paddingTop: "12%" }}>Reset Your Password</h2>
 
           <p style={subTitle}>Enter your E-mail to receive your password replacement E-mail</p>
 
-          {/* {count ? <p class=" alert-danger" role="alert">
-            {count}</p> : null} */}
           <Formik
             initialValues={{ ...initialValues }}
             validationSchema={validationSchema}
@@ -203,7 +183,7 @@ const ResetPaaword = () => {
 
                   })
                   .catch((error) => {
-
+                   console.log(error)
                     setCount("Please enter a valid email")
                     setiserror(true)
 
@@ -271,14 +251,13 @@ const ResetPaaword = () => {
 
         </div>
         <div className="col-md-6 blue" style={mystyle}>
-          {/* <img src={UILogin}  alt="logo" style={overlay}/>  */}
+        
 
 
+        
           <img src={Loginpic} alt="logo" style={overlay} />
-
-          {/* <h1 style={{fontSize:"50px"}}>Adavnce <br/>Rapidly</h1>
-    <p style={{fontSize:"10px" , paddingLeft:"5%"}}>“The ideal conditions for making things are created when machines, facilities, and people work together to add value without generating any waste.”
--Kiichiro Toyoda, founder of Toyota Motor Corporation, strongly believed in this philosoph</p>  */}
+         
+        
 
         </div>
       </div>
