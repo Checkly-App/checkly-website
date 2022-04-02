@@ -113,11 +113,13 @@ const Dashboard = () => {
                     abscenceArray.push(date);
                 })
 
+                const check_out = moment(data[k][i]["check-out"].toLowerCase(), "hh:mm A");
+                const check_in = moment(data[k][i]["check-in"].toLowerCase(), "hh:mm A");
 
                 let attendance = {
                     "date": toDate(start),
-                    "check-in": moment(data[k][i]["check-in"].toLowerCase(), "HH:mm").toDate(),
-                    "check-out": moment(data[k][i]["check-out"].toLowerCase(), "HH:mm").toDate(),
+                    "check-in": new Date(1776, 6, 4, check_in.hours(), check_in.minutes(), 0, 0),
+                    "check-out": new Date(1776, 6, 4, check_out.hours(), check_out.minutes(), 0, 0),
                     "working-hours": parseInt(data[k][i]["working-hours"].slice(0, data[k][i]["working-hours"].indexOf(' '))),
                 }
 
@@ -211,15 +213,12 @@ const Dashboard = () => {
                         attendanceData={companyAttendance}
                         abscenceData={companyAbscences}
                         default={timelineData} />
-                    <Worked
-                        attendanceData={companyAttendance} />
-                    <CheckIn
-                        attendanceData={companyAttendance} />
-                    <Overtime
-                        attendanceData={companyAttendance} />
+                    <Worked attendanceData={companyAttendance} />
+                    <CheckIn attendanceData={companyAttendance} />
+                    <Overtime attendanceData={companyAttendance} />
                     <LateMinutes />
-                    <Arrival />
-                    <Departure />
+                    <Arrival attendanceData={companyAttendance} />
+                    <Departure attendanceData={companyAttendance} />
                 </Container>
             </Wrapper>
 

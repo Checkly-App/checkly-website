@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import 'react-clock/dist/Clock.css';
 import Clock from 'react-clock/dist/umd/Clock';
 import '../../Styles/ReactClock.css';
+import moment from 'moment';
 
 const ChartContainer = styled.div`
     padding: 2em;
@@ -42,14 +43,38 @@ const ChartTitle = styled.h1`
     margin: 0;
 `
 
-const Departure = () => {
+const Departure = (props) => {
     const [value, setValue] = useState(new Date(1776, 6, 4, 12, 30, 0, 0));
     const [hour, setHour] = useState(5);
     const [minute, setMinute] = useState(20);
     const [abbreviation, setAbbreviation] = useState('pm');
 
     useEffect(() => {
-        setValue(new Date(1776, 6, 4, hour, minute, 0, 0))
+        const data = props.attendanceData;
+        const count = data.length;
+
+        let hours = 0;
+        let minutes = 0;
+
+        for (let i = 0; i < count; i++) {
+            const time = data[i]['check-out'];
+            // console.log(time)
+            hours += (time.getHours() * 3600);
+            minutes += (time.getMinutes() * 60);
+        }
+
+        let totalSeconds = (hours + minutes) / count;
+
+        const avgHours = Math.floor(totalSeconds / 3600);
+        totalSeconds %= 3600;
+        const avgMinutes = Math.floor(totalSeconds / 60);
+
+        const date = new Date(1776, 6, 4, avgHours, avgMinutes, 0, 0);
+
+        setHour(avgHours);
+        setMinute(avgMinutes);
+        setAbbreviation(moment(date).format("a"));
+        setValue(date);
     }, []);
 
     return (
