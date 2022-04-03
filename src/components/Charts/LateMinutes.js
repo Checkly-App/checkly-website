@@ -113,7 +113,6 @@ const LateMinutes = () => {
     ]
 
     const handleChange = (event) => {
-        console.log(event.target.value)
         setTimelineFilter(event.target.value);
     };
 

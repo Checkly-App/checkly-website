@@ -83,8 +83,6 @@ const Login = () => {
         }
       }
     });
-
-    console.log(cheak)
     return cheak
 
   }
@@ -189,7 +187,6 @@ const Login = () => {
             validationSchema={validationSchema}
             onSubmit={(values) => {
               const v = isCompany(values.email)
-              console.log(v)
               if (isCompany(values.email)) {
                 signInWithEmailAndPassword(auth, values.email, values.Password)
                   .then((userCredential) => {
@@ -207,7 +204,6 @@ const Login = () => {
                   .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
-                    console.log(errorMessage)
                     setCount("InValid Email /Password")
                     setOpenSnackbar(true);
 

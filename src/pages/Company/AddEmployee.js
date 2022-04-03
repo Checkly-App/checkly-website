@@ -116,7 +116,6 @@ const AddEmployee = () => {
      * Use Effect to fecth all of the company's departments
      */
     useEffect(() => {
-        console.log(auth.currentUser.uid)
         onValue(ref(database, 'Department'), (snapshot) => {
             const data = snapshot.val();
             var departments = [];

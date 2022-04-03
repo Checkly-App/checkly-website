@@ -34,7 +34,7 @@ const ResetPaaword = () => {
 
   const closeSnackbar = () => {
     setOpenSnackbar(false);
-};
+  };
   const initialValues = {
 
     email: '',
@@ -42,7 +42,6 @@ const ResetPaaword = () => {
   };
 
   const isCompany = (email) => {
-    console.log(email)
     var cheak = true
     onValue(ref(database, 'Employee'), (snapshot) => {
       const data = snapshot.val();
@@ -60,10 +59,7 @@ const ResetPaaword = () => {
 
     });
 
-    console.log(cheak)
     return cheak
-    // console.log(isValid)
-    // console.log(count1)
   }
 
   const validationSchema =
@@ -183,7 +179,6 @@ const ResetPaaword = () => {
             validationSchema={validationSchema}
             onSubmit={(values) => {
               const v = isCompany(values.email)
-              console.log(v)
               if (isCompany(values.email)) {
                 sendPasswordResetEmail(auth, values.email)
                   .then(() => {
@@ -215,27 +210,27 @@ const ResetPaaword = () => {
             }}>
 
             <Form>
-            {iserror ?
-                    (<Snackbar
-                        autoHideDuration={6000}
-                        open={openSnackbar}
-                        onClose={closeSnackbar}
-                        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}>
-                        <Alert onClose={closeSnackbar} severity='error' variant='filled'>
-                            <AlertTitle>Error</AlertTitle>
-                            {count}
-                        </Alert>
-                    </Snackbar>) :
-                    (<Snackbar
-                        open={openSnackbar}
-                        autoHideDuration={6000}
-                        onClose={closeSnackbar}
-                        anchorOrigin={{ vertical: 'top', horizontal: 'left' }} >
-                        <Alert severity='success' variant='filled'>
-                            <AlertTitle>Success!</AlertTitle>
-                           {issend}
-                        </Alert>
-                    </Snackbar>)}
+              {iserror ?
+                (<Snackbar
+                  autoHideDuration={6000}
+                  open={openSnackbar}
+                  onClose={closeSnackbar}
+                  anchorOrigin={{ vertical: 'top', horizontal: 'left' }}>
+                  <Alert onClose={closeSnackbar} severity='error' variant='filled'>
+                    <AlertTitle>Error</AlertTitle>
+                    {count}
+                  </Alert>
+                </Snackbar>) :
+                (<Snackbar
+                  open={openSnackbar}
+                  autoHideDuration={6000}
+                  onClose={closeSnackbar}
+                  anchorOrigin={{ vertical: 'top', horizontal: 'left' }} >
+                  <Alert severity='success' variant='filled'>
+                    <AlertTitle>Success!</AlertTitle>
+                    {issend}
+                  </Alert>
+                </Snackbar>)}
               <Grid item xs={12}>
                 <InputField
 
