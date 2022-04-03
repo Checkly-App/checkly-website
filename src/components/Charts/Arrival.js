@@ -6,7 +6,7 @@ import '../../Styles/ReactClock.css';
 import moment from 'moment';
 
 const ChartContainer = styled.div`
-    padding: 2em;
+    padding: 1.5em;
     grid-area: cell9;
     background: linear-gradient(165deg, #FFFFFF 70%, #F6F6F6 100%);
     box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
@@ -15,14 +15,13 @@ const ChartContainer = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    justify-items: stretch;
-    padding: 2em;
+    justify-items: center;
 `
 const Details = styled.div`
     display: flex;
     flex: 1.5;
     height: 100%;
-    margin-left: 1.5em;
+    margin-left: 1.25em;
     flex-direction: column;
     justify-content: flex-end;
 `

@@ -1,4 +1,4 @@
-import { React } from 'react';
+import { React, useState } from 'react';
 import styled from 'styled-components';
 import logo from '../../assets/images/logo.svg';
 import side from '../../assets/images/sidePiece.svg';
@@ -8,19 +8,39 @@ import { sideBarData } from './Data';
 import { useNavigate } from "react-router-dom"
 import { signOut } from "firebase/auth";
 import { getAuth } from "firebase/auth";
+import { HiOutlineMenuAlt2, HiX } from "react-icons/hi";
 
 const SideBarWrapper = styled.div`
-  grid-area: bar;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  background-color: white;
+    grid-area: bar;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    background-color: white;
     @media  (max-width: 768px) {
         display: none;
-    }
+        /* grid-area: main;
+        position: fixed;
+        width: 100vw;
+        min-height: 100vh;
+        top: 0;
+        left: ${(props) => props.open ? '0' : '-100vw'};
+        z-index: 1000; */
+    } 
 `
+// const MenuIcon = styled.div`
+//  @media  (max-width: 768px) {
+//         position: absolute;
+//         top: 0;
+//         left: 0;
+//         width: 20em;
+//         height: 20em;
+//         color: red;
+//         font-size: xx-large;
+//         z-index: 10000;
+//     }
+// `
 const Wrapper = styled.div`
     width: 100%;
     display: flex;
@@ -28,6 +48,7 @@ const Wrapper = styled.div`
     justify-items: center;
     align-items: ${props => props.nav ? 'center' : 'center'};
     flex-direction: column;
+    background-color: white;
 `
 const NavItem = styled.li`
     width: 100%;
@@ -47,17 +68,17 @@ const Link = styled(NavLink)`
     justify-content: center;
     text-decoration: none;
 
-     ${NavItem}:hover &{
-        color: #2CB1EF;
-     }
-
-     &.active {
-        background-image: url(${side});
-        background-repeat: no-repeat;
-        background-position: right center;
-        background-size: contain;
-        color: #2CB1EF;
+    ${NavItem}:hover &{
+    color: #2CB1EF;
     }
+
+    &.active {
+    background-image: url(${side});
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: contain;
+    color: #2CB1EF;
+    }   
 `
 const LogoutWrapper = styled.div`
     width: 100%;
@@ -79,7 +100,7 @@ const NavTitle = styled.span`
 `
 const Logo = styled.img`
     width: 6em;
-`;
+`
 const LogoCaption = styled.h1`
     font-weight: 500;
     font-size: 1.75em;
@@ -90,10 +111,13 @@ const Divider = styled.div`
     height: 0.5px;
     width: 80%;
     margin: 0 2em;
-`
+`;
+
 
 const Sidebar = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [open, setOpen] = useState(true);
+
 
     const logout = () => {
         const auth = getAuth();
@@ -105,14 +129,18 @@ const Sidebar = () => {
     }
 
     return (
-        <SideBarWrapper>
-            <Wrapper>
-                <Logo src={logo} />
-                <LogoCaption></LogoCaption>
-            </Wrapper>
-            <Wrapper nav>
-                {
-                    sideBarData.map((item, index) => {
+        <>
+            {/* <MenuIcon >
+                {open ? <HiX onClick={() => { setOpen(!open) }} /> : <HiOutlineMenuAlt2 onClick={() => { setOpen(!open) }} />}
+            </MenuIcon> */}
+            <SideBarWrapper open={open}>
+
+                <Wrapper>
+                    <Logo src={logo} />
+                    <LogoCaption></LogoCaption>
+                </Wrapper>
+                <Wrapper nav>
+                    {sideBarData.map((item, index) => {
                         return (
                             <NavItem key={index}>
                                 <Link to={item.path}>
@@ -121,21 +149,21 @@ const Sidebar = () => {
                                 </Link>
                             </NavItem>
                         );
-                    })
-                }
-            </Wrapper>
-            <Wrapper>
-                <Divider />
-                <NavItem onClick={logout}>
-                    <LogoutWrapper>
-                        <Icon>
-                            <MdLogout size={22} />
-                        </Icon>
-                        <NavTitle>Logout</NavTitle>
-                    </LogoutWrapper>
-                </NavItem>
-            </Wrapper>
-        </SideBarWrapper>
+                    })}
+                </Wrapper>
+                <Wrapper>
+                    <Divider />
+                    <NavItem onClick={logout}>
+                        <LogoutWrapper>
+                            <Icon>
+                                <MdLogout size={22} />
+                            </Icon>
+                            <NavTitle>Logout</NavTitle>
+                        </LogoutWrapper>
+                    </NavItem>
+                </Wrapper>
+            </SideBarWrapper>
+        </>
     );
 };
 
