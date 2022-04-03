@@ -1,20 +1,6 @@
-import { format } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import CheckIn from '../../components/Charts/CheckIn';
-import Overtime from '../../components/Charts/Overtime';
-import Timeline from '../../components/Charts/Timeline';
-import Total from '../../components/Charts/Total';
-import Weekly from '../../components/Charts/Weekly';
-import Worked from '../../components/Charts/Worked';
-import LateMinutes from '../../components/Charts/LateMinutes';
-import Arrival from '../../components/Charts/Arrival';
-import Departure from '../../components/Charts/Departure';
-import { data } from './AttendanceData';
-import ChecklyLogo from '../ChecklyLogo';
-import { groupBy } from 'lodash';
 import moment from 'moment';
-import { calculateTimeline } from './Heplers';
 
 export const Construction = styled.div`
     min-height: 100vh;
@@ -71,157 +57,29 @@ const Container = styled.div`
 `
 
 const Dashboard = () => {
-    const today = format(new Date(), 'MMMM dd, yyyy');
-    const [attendance, setAttendance] = useState(0);
-    const [abscence, setAbscence] = useState(0);
-    const [companyAbscences, setCompanyAbscences] = useState(["1-12-2022"]);
-    const [companyAttendance, setcompanyAttendance] = useState(["1-12-2022"]);
-    const [companyLate, setcompanyLate] = useState(["1-12-2022"]);
-    const [weeklyData, setWeeklyData] = useState([{
-        name: 'Sun',
-        Abscence: 400,
-        Attendance: 240,
-        Late: 200,
-    }]);
-    const [timelineData, setTimelineData] = useState();
-    const [loading, setLoading] = useState(true);
+    const [greeting, setGreeting] = useState('Good evening');
 
     useEffect(() => {
-        calculateTotal(); // to calculate a company's total attendance
+        const hour = moment().hour();
+
+        if (hour > 16) {
+            setGreeting("Good evening");
+        }
+
+        if (hour > 11) {
+            return setGreeting("Good afternoon");
+        }
+
+        setGreeting('Good morning');
     }, []);
 
-    useEffect(() => {
-        calculateWeeklyDistribution();// to calculate the weekly attendance 
-        const timeline = calculateTimeline(companyAbscences, companyAttendance, 'MMM YYYY', 'monthly');
-        setTimelineData(timeline);
-        setLoading(false);
-    }, [companyAttendance]);
-
-    const calculateTotal = () => {
-        let abscenceArray = [];
-        let attendanceArray = [];
-        let lateArray = [];
-
-        for (var k = 0; k < data.length; k++) {
-            for (var i = 0; i < data[k].length; i++) {
-                let start = data[k][i]['date'];
-                let end = (i + 1 === data[k].length) ? moment().format("DD-MM-YYYY") : data[k][i + 1]['date'];
-
-                let missingDates = getDates(toDate(start), toDate(end));
-
-                missingDates.forEach(function (date) {
-                    abscenceArray.push(date);
-                })
-
-                const check_out = moment(data[k][i]["check-out"].toLowerCase(), "hh:mm A");
-                const check_in = moment(data[k][i]["check-in"].toLowerCase(), "hh:mm A");
-
-                let attendance = {
-                    "date": toDate(start),
-                    "check-in": new Date(1776, 6, 4, check_in.hours(), check_in.minutes(), 0, 0),
-                    "check-out": new Date(1776, 6, 4, check_out.hours(), check_out.minutes(), 0, 0),
-                    "working-hours": parseInt(data[k][i]["working-hours"].slice(0, data[k][i]["working-hours"].indexOf(' '))),
-                }
-
-                if (data[k][i]['status'] === "Late")
-                    lateArray.push(attendance);
-
-                attendanceArray.push(attendance);
-            }
-        }
-
-        setCompanyAbscences(abscenceArray);
-        setcompanyAttendance(attendanceArray);
-        setcompanyLate(lateArray);
-        setAbscence(abscenceArray.length);
-        setAttendance(attendanceArray.length);
-    }
-
-    // Function that parses string to date 
-    const toDate = (string) => {
-        const firstDash = string.indexOf("-");
-        const secondDash = string.indexOf("-", firstDash + 1);
-        const day = parseInt(string.slice(0, firstDash));
-        const month = parseInt(string.slice(firstDash + 1, secondDash)) - 1;
-        const year = parseInt(string.slice(secondDash + 1));
-
-        return new Date(year, month, day, 0, 0, 0, 0, 0);
-    }
-
-    // Function that gets the missing dates 
-    const getDates = (startDate, endDate) => {
-        const dates = []
-        let currentDate = startDate
-        currentDate.setDate(currentDate.getDate() + 1)
-
-        const addDays = function (days) {
-            const date = new Date(this.valueOf())
-            date.setDate(date.getDate() + days)
-            return date
-        }
-
-        while (currentDate < endDate) {
-            dates.push(currentDate)
-            currentDate = addDays.call(currentDate, 1)
-        }
-
-        return dates
-    }
-
-    const calculateWeeklyDistribution = () => {
-        let abscences = groupBy(companyAbscences, (dt) => moment(dt).format('ddd'));
-        let attendance = groupBy(companyAttendance, (dt) => moment(dt['date']).format('ddd'));
-        let late = groupBy(companyLate, (dt) => moment(dt['date']).format('ddd'));
-
-        let daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu'];
-        let weekly = [];
-
-        for (let i = 0; i < daysOfWeek.length; i++) {
-            const day = daysOfWeek[i];
-            const week = {
-                name: `${day}`,
-                Abscence: day in abscences ? abscences[day].length : 0,
-                Attendance: day in attendance ? attendance[day].length : 0,
-                Late: day in late ? late[day].length : 0,
-            }
-            weekly.push(week);
-        }
-        setWeeklyData(weekly)
-    }
-
-
     return (
-        loading ? <ChecklyLogo /> :
-            <Wrapper>
-                <Title>Acme Corporations</Title>
-                <Subtitle>{today}</Subtitle>
-                <Container>
-                    <Total
-                        cell='cell1'
-                        title='Total attendance'
-                        labels={['Attendance', 'Abscence']}
-                        data={[attendance, abscence]}
-                        background={['#2CB1EF', '#C4C4C4']} />
-                    <Total
-                        cell='cell2'
-                        title='Total abscence'
-                        labels={['Abscence', 'Attendance']}
-                        data={[abscence, attendance]}
-                        background={['#F65786', '#C4C4C4']} />
-                    <Weekly data={weeklyData} />
-                    <Timeline
-                        attendanceData={companyAttendance}
-                        abscenceData={companyAbscences}
-                        default={timelineData} />
-                    <Worked attendanceData={companyAttendance} />
-                    <CheckIn attendanceData={companyAttendance} />
-                    <Overtime attendanceData={companyAttendance} />
-                    <LateMinutes />
-                    <Arrival attendanceData={companyAttendance} />
-                    <Departure attendanceData={companyAttendance} />
-                </Container>
-            </Wrapper>
-
+        <Wrapper>
+            <Title>{greeting}</Title>
+            <Subtitle>Acme Corporations</Subtitle>
+            <Container>
+            </Container>
+        </Wrapper>
     );
 }
 
