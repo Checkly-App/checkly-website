@@ -166,6 +166,13 @@ export const data = [
             "status": "Late",
             "working-hours": "8 hours"
         },
+        {
+            "date": "02-04-2022",
+            "check-in": "8:59 AM",
+            "check-out": "4:59 PM",
+            "status": "On time",
+            "working-hours": "10 hours"
+        },
     ],
     [
         {
@@ -347,6 +354,13 @@ export const data = [
             "check-out": "4:59 PM",
             "status": "Late",
             "working-hours": "6 hours"
+        },
+        {
+            "date": "02-04-2022",
+            "check-in": "8:59 AM",
+            "check-out": "4:59 PM",
+            "status": "On time",
+            "working-hours": "10 hours"
         },
     ],
     [
@@ -719,6 +733,13 @@ export const data = [
             "check-in": "8:59 AM",
             "check-out": "4:59 PM",
             "status": "Late",
+            "working-hours": "10 hours"
+        },
+        {
+            "date": "02-04-2022",
+            "check-in": "8:59 AM",
+            "check-out": "4:59 PM",
+            "status": "On time",
             "working-hours": "10 hours"
         },
     ]

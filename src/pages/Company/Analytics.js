@@ -157,7 +157,6 @@ const Analytics = () => {
         setLoading(false);
     }, [companyAttendance, companyAbscences, companyLate]);
 
-
     // Function that parses string to date 
     const toDate = (string) => {
         const firstDash = string.indexOf("-");
@@ -188,8 +187,6 @@ const Analytics = () => {
 
         return dates
     }
-
-
 
     return (
         loading ? <ChecklyLogo /> :

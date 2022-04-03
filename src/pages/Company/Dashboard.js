@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
+import { BsPeople, BsCalendar4Event } from 'react-icons/bs';
+import { VscTypeHierarchy } from 'react-icons/vsc';
 
 export const Construction = styled.div`
     min-height: 100vh;
@@ -49,26 +51,26 @@ const Container = styled.div`
     }
 `
 const Employees = styled.div`
-   grid-area: cell1;
+    grid-area: cell1;
     background: linear-gradient(160deg, #47CEFF 70%, #2CB1EF 100%);
     box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
     border-radius: 1em;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     justify-items: stretch;
     padding: 2em;
 `;
 const Departments = styled.div`
-   grid-area: cell2;
+    grid-area: cell2;
     background: linear-gradient(160deg, #D980FF 70%, #B86AD9 100%);
     box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
     border-radius: 1em;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     justify-items: stretch;
     padding: 2em;
 `;
@@ -80,7 +82,7 @@ const Meetings = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     justify-items: stretch;
     padding: 2em;
 `;
@@ -94,7 +96,35 @@ const ChartContainer = styled.div`
     flex-direction: column;
     justify-content: space-around;
 `
-
+const Value = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    color: white;
+`
+const Number = styled.h6`
+    font-weight: bold;
+    font-size: 2.5em;
+    margin: 0;
+`
+const Unit = styled.h6`
+    font-weight: 400;
+    font-size: 1em;
+    margin-left: 0.25em;
+`
+const Circle = styled.div`
+    width: 3em;
+    height: 3em;
+    background-color: rgba(255,255,255, 0.3);
+    color: white;
+    fill: white;
+    border-radius: 3em;
+    display: flex;
+    align-self: start;
+    justify-content: center;
+    align-items: center;
+`;
 const Dashboard = () => {
     const [greeting, setGreeting] = useState('Good evening');
 
@@ -115,10 +145,31 @@ const Dashboard = () => {
             <Subtitle>Acme Corporations</Subtitle>
             <Container>
                 <Employees>
+                    <Value>
+                        <Number>1524</Number>
+                        <Unit> Total employees</Unit>
+                    </Value>
+                    <Circle>
+                        <BsPeople size={22} />
+                    </Circle>
                 </Employees>
                 <Departments>
+                    <Value>
+                        <Number>15</Number>
+                        <Unit> Total departments</Unit>
+                    </Value>
+                    <Circle>
+                        <VscTypeHierarchy size={22} />
+                    </Circle>
                 </Departments>
                 <Meetings>
+                    <Value>
+                        <Number>265</Number>
+                        <Unit> Conducted meetings</Unit>
+                    </Value>
+                    <Circle>
+                        <BsCalendar4Event size={22} />
+                    </Circle>
 
                 </Meetings>
                 <ChartContainer>
