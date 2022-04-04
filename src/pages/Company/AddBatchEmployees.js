@@ -484,7 +484,8 @@ const AddBatchEmployees = () => {
                         department: employee.department,
                         position: employee.position,
                         change_image: 0,
-                        image_token: "null"
+                        image_token: "null",
+                        status: "-"
                     });
                     setError(false);
                     setIsLoading(false);
