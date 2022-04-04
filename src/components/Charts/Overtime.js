@@ -88,8 +88,6 @@ const Overtime = (props) => {
             calculateOverTime(props.attendanceData, 'YYYY', 'yearly');
     }, [overTimeFilter, props.attendanceData]);
 
-
-
     const getAverageOvertimeHours = (groupData) => {
         const count = groupData.length;
         var totalOvertime = 0;

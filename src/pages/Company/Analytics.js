@@ -77,7 +77,8 @@ const Analytics = () => {
     const [companyAbscences, setCompanyAbscences] = useState(["1-12-2022"]);
     const [companyAttendance, setcompanyAttendance] = useState(["1-12-2022"]);
     const [companyLate, setcompanyLate] = useState(["1-12-2022"]);
-    const [refrenceHours, setrefrenceHours] = useState(8);
+    const [refrenceHours, setRefrenceHours] = useState(8);
+    const [refrenceCheckIn, setRefrenceCheckIn] = useState(new Date(1776, 6, 4, 8, 30, 0, 0));
     const [weeklyData, setWeeklyData] = useState([{
         name: 'Sun',
         Abscence: 400,
@@ -88,8 +89,9 @@ const Analytics = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        setrefrenceHours(6);
-        // to calculate a company's total attendance
+        setRefrenceHours(6);
+        setRefrenceCheckIn(new Date(1776, 6, 4, 8, 30, 0, 0));
+
         let abscenceArray = [];
         let attendanceArray = [];
         let lateArray = [];
@@ -214,12 +216,13 @@ const Analytics = () => {
                     <Worked attendanceData={companyAttendance} />
                     <CheckIn attendanceData={companyAttendance} />
                     <Overtime attendanceData={companyAttendance} />
-                    <LateMinutes />
+                    <LateMinutes
+                        checkInRefrence={refrenceCheckIn}
+                        lateData={companyLate} />
                     <Arrival attendanceData={companyAttendance} />
                     <Departure attendanceData={companyAttendance} />
                 </Container>
             </Wrapper>
-
     );
 }
 
