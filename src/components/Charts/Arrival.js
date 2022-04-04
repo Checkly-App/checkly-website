@@ -90,7 +90,7 @@ const Arrival = (props) => {
                 size={100}
                 value={value} />
             <Details>
-                <ChartTitle> Arrival </ChartTitle>
+                <ChartTitle> Arrival time </ChartTitle>
                 <ChartValue>
                     <h1>{hour}:{minute}</h1>
                     <Unit>{abbreviation}</Unit>

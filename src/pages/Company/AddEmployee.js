@@ -81,9 +81,9 @@ const MainTitle = styled.h1`
     color: #2CB1EF;
     margin: 0.25em 0;
 `
-const Subtitle = styled.p`
-    font-size: 0.75em;
-    color: #A3A1A1;
+const Subtitle = styled.h1`
+    font-size: 1em;
+    font-weight: 300;
 `
 const MainWrapper = styled.div`
     width: 100%;

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import moment from 'moment';
 import { BsPeople, BsCalendar4Event } from 'react-icons/bs';
 import { VscTypeHierarchy } from 'react-icons/vsc';
+import { CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Line, Area } from 'recharts';
 
 export const Construction = styled.div`
     min-height: 100vh;
@@ -126,17 +127,67 @@ const Circle = styled.div`
     align-items: center;
 `;
 const Dashboard = () => {
-    const [greeting, setGreeting] = useState('Good evening');
+    const [greeting, setGreeting] = useState('Good Evening');
+    const data = [
+        {
+            'name': 'Jan',
+            'Late': 103
+        },
+        {
+            'name': 'Feb',
+            'Late': 283
+        },
+        {
+            'name': 'Mar',
+            'Late': 402
+        },
+        {
+            'name': 'Apr',
+            'Late': 103
+        },
+        {
+            'name': 'May',
+            'Late': 293
+        },
+        {
+            'name': 'Jun',
+            'Late': 203
+        },
+        {
+            'name': 'Jul',
+            'Late': 283
+        },
+        {
+            'name': 'Aug',
+            'Late': 103
+        },
+        {
+            'name': 'Sep',
+            'Late': 302
+        },
+        {
+            'name': 'Oct',
+            'Late': 836
+        },
+        {
+            'name': 'Nov',
+            'Late': 320
+        },
+        {
+            'name': 'Dec',
+            'Late': 100
+        }
+    ]
 
     useEffect(() => {
         const hour = moment().hour();
 
         if (hour > 16)
-            setGreeting("Good evening");
+            setGreeting("Good Evening");
         else if (hour > 11)
-            setGreeting("Good afternoon");
+            setGreeting("Good Afternoon");
         else
-            setGreeting('Good morning');
+            setGreeting('Good Morning');
     }, []);
 
     return (
@@ -170,10 +221,16 @@ const Dashboard = () => {
                     <Circle>
                         <BsCalendar4Event size={22} />
                     </Circle>
-
                 </Meetings>
                 <ChartContainer>
-
+                    <ResponsiveContainer width='100%' height='100%'>
+                        <AreaChart data={data}
+                            margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+                            <XAxis dataKey='name' tick={{ fontSize: 12 }} />
+                            <Tooltip />
+                            <Area type="monotone" dataKey='Late' stroke='#F65786' fill='#F65786' />
+                        </AreaChart>
+                    </ResponsiveContainer>
                 </ChartContainer>
             </Container>
         </Wrapper>

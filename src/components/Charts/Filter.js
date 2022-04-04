@@ -8,7 +8,7 @@ import InputBase from '@mui/material/InputBase';
 
 const SelectInput = muiStyled(InputBase)(({ theme }) => ({
     '& .MuiInputBase-input': {
-        borderRadius: 10,
+        borderRadius: 12,
         position: 'relative',
         background: 'linear-gradient(90deg, #56BBEB 0%, #58AAF3 100%)',
         fontSize: 12,
@@ -17,16 +17,16 @@ const SelectInput = muiStyled(InputBase)(({ theme }) => ({
         transition: theme.transitions.create(['border-color', 'box-shadow']),
     },
     '&:focus': {
-        borderRadius: 10,
+        borderRadius: 12,
     },
     '&:before': {
-        borderRadius: 10,
+        borderRadius: 12,
     },
     '&:after': {
-        borderRadius: 10,
+        borderRadius: 12,
     },
     '& .MuiInputBase-input:focus': {
-        borderRadius: 10,
+        borderRadius: 12,
     },
 
     '& .MuiSelect-iconStandard': {
