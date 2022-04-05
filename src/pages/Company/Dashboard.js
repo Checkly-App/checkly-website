@@ -4,6 +4,9 @@ import moment from 'moment';
 import { BsPeople, BsCalendar4Event } from 'react-icons/bs';
 import { VscTypeHierarchy } from 'react-icons/vsc';
 import { CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Line, Area } from 'recharts';
+import { ref, onValue } from 'firebase/database';
+import { database, auth } from '../../utilities/firebase';
+import ChecklyLogo from '../ChecklyLogo';
 
 export const Construction = styled.div`
     min-height: 100vh;
@@ -128,6 +131,11 @@ const Circle = styled.div`
 `;
 const Dashboard = () => {
     const [greeting, setGreeting] = useState('Good Evening');
+    const [loading, setLoading] = useState(true);
+    const [departments, setDepartments] = useState([]);
+    const [employees, setEmployees] = useState([]);
+    const [meetings, setMeetings] = useState([]);
+
     const data = [
         {
             'name': 'Jan',
@@ -188,52 +196,123 @@ const Dashboard = () => {
             setGreeting("Good Afternoon");
         else
             setGreeting('Good Morning');
+
+        const remove = onValue(ref(database, 'Department'), (snapshot) => {
+            const data = snapshot.val();
+            var departments = [];
+            for (let id in data) {
+                if (data[id]['company_id'] === auth.currentUser.uid) {
+                    const department = {
+                        department: id,
+                        name: data[id]['name']
+                    };
+                    departments.push(department)
+                }
+            }
+            setDepartments(departments);
+        });
+        return () => { remove(); }
     }, []);
 
+    useEffect(() => {
+        const departmentsKeys = [];
+
+        for (let i in departments)
+            departmentsKeys.push(departments[i]['department'])
+
+        const remove = onValue(ref(database, 'Employee'), (snapshot) => {
+            const data = snapshot.val();
+            var employees = [];
+            for (let id in data) {
+                if (departmentsKeys.includes(data[id]['department'])) {  // Fetch employees of a given company
+                    const employee = {
+                        uid: id,
+                        nationalID: data[id]['national_id'],
+                        phoneNumber: data[id]['phone_number'],
+                        employeeID: data[id]['employee_id'],
+                        department: data[id]['department'],
+                    };
+                    employees.push(employee)
+                }
+            }
+            setEmployees(employees);
+
+            return () => { remove() }
+        });
+    }, [departments])
+
+    useEffect(() => {
+        const employeesKeys = [];
+
+        for (let i in employees)
+            employeesKeys.push(employees[i]['uid'])
+
+        const remove = onValue(ref(database, 'Meetings'), (snapshot) => {
+            const data = snapshot.val();
+            var meetings = [];
+            for (let id in data) {
+                if (employeesKeys.includes(data[id]['host'])) {  //Fetch employees of a given company
+                    const meeting = {
+                        end: data[id]['datetime_end'],
+                        start: data[id]['datetime_start'],
+                        host: data[id]['host'],
+                        type: data[id]['type'],
+                    }
+                    meetings.push(meeting)
+                }
+            }
+            setMeetings(meetings);
+            setLoading(false);
+
+            return () => { remove() }
+        });
+    }, [employees])
+
     return (
-        <Wrapper>
-            <Title>{greeting}</Title>
-            <Subtitle>Acme Corporations</Subtitle>
-            <Container>
-                <Employees>
-                    <Value>
-                        <Number>1524</Number>
-                        <Unit> Total employees</Unit>
-                    </Value>
-                    <Circle>
-                        <BsPeople size={22} />
-                    </Circle>
-                </Employees>
-                <Departments>
-                    <Value>
-                        <Number>15</Number>
-                        <Unit> Total departments</Unit>
-                    </Value>
-                    <Circle>
-                        <VscTypeHierarchy size={22} />
-                    </Circle>
-                </Departments>
-                <Meetings>
-                    <Value>
-                        <Number>265</Number>
-                        <Unit> Conducted meetings</Unit>
-                    </Value>
-                    <Circle>
-                        <BsCalendar4Event size={22} />
-                    </Circle>
-                </Meetings>
-                <ChartContainer>
-                    <ResponsiveContainer width='100%' height='100%'>
-                        <AreaChart data={data}
-                            margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-                            <XAxis dataKey='name' tick={{ fontSize: 12 }} />
-                            <Tooltip />
-                            <Area type="monotone" dataKey='Late' stroke='#F65786' fill='#F65786' />
-                        </AreaChart>
-                    </ResponsiveContainer>
-                </ChartContainer>
-            </Container>
-        </Wrapper>
+        loading ? <ChecklyLogo />
+            : <Wrapper>
+                <Title>{greeting}</Title>
+                <Subtitle>Acme Corporations</Subtitle>
+                <Container>
+                    <Employees>
+                        <Value>
+                            <Number>{employees.length}</Number>
+                            <Unit> Total employees</Unit>
+                        </Value>
+                        <Circle>
+                            <BsPeople size={22} />
+                        </Circle>
+                    </Employees>
+                    <Departments>
+                        <Value>
+                            <Number>{departments.length}</Number>
+                            <Unit> Total departments</Unit>
+                        </Value>
+                        <Circle>
+                            <VscTypeHierarchy size={22} />
+                        </Circle>
+                    </Departments>
+                    <Meetings>
+                        <Value>
+                            <Number>{meetings.length}</Number>
+                            <Unit> Conducted meetings</Unit>
+                        </Value>
+                        <Circle>
+                            <BsCalendar4Event size={22} />
+                        </Circle>
+                    </Meetings>
+                    <ChartContainer>
+                        <ResponsiveContainer width='100%' height='100%'>
+                            <AreaChart data={data}
+                                margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+                                <XAxis dataKey='name' tick={{ fontSize: 12 }} />
+                                <Tooltip />
+                                <Area type="monotone" dataKey='Late' stroke='#F65786' fill='#F65786' />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    </ChartContainer>
+                </Container>
+            </Wrapper>
     );
 }
 
