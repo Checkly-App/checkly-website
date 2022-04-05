@@ -1,0 +1,27 @@
+
+
+.dropzone {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    padding: 20px;
+    cursor: pointer;
+    border: 2px dashed #eeeeee;
+    background-color: #fafafa;
+    color: #bdbdbd;
+    outline: none;
+  }
+  .dropzoneReject {
+    border: 2px dashed red;
+  }
+  .dropzoneAccept {
+    border: 2px dashed #4EE69A;
+  }
+  .file {
+    margin-top: 30px;
+    font-size: 1.05em;
+    font-weight: 600;
+    margin: 2em 0em 1em;
+    grid-column: 1 / 3;
+  }
