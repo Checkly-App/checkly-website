@@ -4,7 +4,7 @@ import moment from 'moment';
 import { BsPeople, BsCalendar4Event } from 'react-icons/bs';
 import { VscTypeHierarchy } from 'react-icons/vsc';
 import { CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Line, Area } from 'recharts';
-import { ref, onValue } from 'firebase/database';
+import { ref, onValue, get, child } from 'firebase/database';
 import { database, auth } from '../../utilities/firebase';
 import ChecklyLogo from '../ChecklyLogo';
 
@@ -135,6 +135,7 @@ const Dashboard = () => {
     const [departments, setDepartments] = useState([]);
     const [employees, setEmployees] = useState([]);
     const [meetings, setMeetings] = useState([]);
+    const [company, setCompany] = useState({});
 
     const data = [
         {
@@ -196,6 +197,21 @@ const Dashboard = () => {
             setGreeting("Good Afternoon");
         else
             setGreeting('Good Morning');
+
+
+        get(ref(database, `Company/${auth.currentUser.uid}`)).then((snapshot) => {
+            const data = snapshot.val();
+            const company = {
+                name: data['name'],
+                abbreviation: data['abbreviation'],
+                industry: data['industry'],
+                location: data['location'],
+                working_hours: data['working_hours'],
+            };
+            setCompany(company);
+        }).catch((error) => {
+            console.log(error);
+        });
 
         const remove = onValue(ref(database, 'Department'), (snapshot) => {
             const data = snapshot.val();
@@ -272,7 +288,7 @@ const Dashboard = () => {
         loading ? <ChecklyLogo />
             : <Wrapper>
                 <Title>{greeting}</Title>
-                <Subtitle>Acme Corporations</Subtitle>
+                <Subtitle>{`${company['name']} - ${company['abbreviation']}`}</Subtitle>
                 <Container>
                     <Employees>
                         <Value>

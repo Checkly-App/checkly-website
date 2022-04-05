@@ -13,7 +13,7 @@ import Departure from '../../components/Charts/Departure';
 import ChecklyLogo from '../ChecklyLogo';
 import { groupBy } from 'lodash';
 import moment from 'moment';
-import { ref, onValue } from 'firebase/database';
+import { ref, onValue, get } from 'firebase/database';
 import { database, auth } from '../../utilities/firebase';
 
 export const Construction = styled.div`
@@ -72,6 +72,7 @@ const Container = styled.div`
 
 const Analytics = () => {
     const today = format(new Date(), 'MMMM dd, yyyy');
+    const [company, setCompany] = useState({});
     const [data, setData] = useState([[]]);
     const [attendance, setAttendance] = useState(0);
     const [abscence, setAbscence] = useState(0);
@@ -84,6 +85,21 @@ const Analytics = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        get(ref(database, `Company/${auth.currentUser.uid}`)).then((snapshot) => {
+            const data = snapshot.val();
+            const company = {
+                name: data['name'],
+                abbreviation: data['abbreviation'],
+                industry: data['industry'],
+                location: data['location'],
+                working_hours: data['working_hours'],
+            };
+            setRefrenceHours(parseInt(company['working_hours']));
+            setCompany(company);
+        }).catch((error) => {
+            console.log(error);
+        });
+
         const remove = onValue(ref(database, 'LocationAttendance'), (snapshot) => {
             const dataArray = snapshot.val();
             var dataStructured = [];
@@ -225,7 +241,7 @@ const Analytics = () => {
         loading ? <ChecklyLogo /> :
             data.length <= 0 ? <ChecklyLogo /> :
                 <Wrapper>
-                    <Title>ِACME Corporations</Title>
+                    <Title>{company['abbreviation']}</Title>
                     <Subtitle>{today}</Subtitle>
                     <Container>
                         <Total
