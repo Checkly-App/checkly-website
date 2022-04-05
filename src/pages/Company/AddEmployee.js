@@ -116,7 +116,7 @@ const AddEmployee = () => {
      * Use Effect to fecth all of the company's departments
      */
     useEffect(() => {
-        onValue(ref(database, 'Department'), (snapshot) => {
+        const remove = onValue(ref(database, 'Department'), (snapshot) => {
             const data = snapshot.val();
             var departments = [];
             for (let id in data) {
@@ -134,6 +134,7 @@ const AddEmployee = () => {
             setErrorDetails({});
             setDepartments([]);
             setEmployees([]);
+            remove();
         }
     }, []);
 

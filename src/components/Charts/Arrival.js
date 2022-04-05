@@ -73,7 +73,6 @@ const Arrival = (props) => {
         setHour(avgHours);
         setMinute(avgMinutes);
         setAbbreviation(moment(date).format("a"));
-        console.log(date)
         setValue(date);
     }, [props.attendanceData]);
 

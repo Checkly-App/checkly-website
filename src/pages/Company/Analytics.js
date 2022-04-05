@@ -75,11 +75,11 @@ const Analytics = () => {
     const [data, setData] = useState([[]]);
     const [attendance, setAttendance] = useState(0);
     const [abscence, setAbscence] = useState(0);
-    const [companyAbscences, setCompanyAbscences] = useState();
+    const [companyAbscences, setCompanyAbscences] = useState([]);
     const [companyAttendance, setcompanyAttendance] = useState([]);
     const [companyLate, setcompanyLate] = useState();
-    const [refrenceHours, setRefrenceHours] = useState(6);
-    const [refrenceCheckIn, setRefrenceCheckIn] = useState(new Date(1776, 6, 4, 8, 30, 0, 0));
+    const [refrenceHours, setRefrenceHours] = useState(6); // TODO
+    const [refrenceCheckIn, setRefrenceCheckIn] = useState(new Date(1776, 6, 4, 8, 30, 0, 0));// TODO
     const [weeklyData, setWeeklyData] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -105,17 +105,14 @@ const Analytics = () => {
                 dataStructured.push(userArray)
             }
             setData(dataStructured);
-            console.log("Data fetched: ", data)
             setLoading(false);
         });
 
 
-        return () => { console.log("removing listener"); remove(); }
+        return () => { remove(); }
     }, []);
 
     useEffect(() => {
-        console.log(data)
-
         let abscenceArray = [];
         let attendanceArray = [];
         let lateArray = [];
@@ -169,8 +166,7 @@ const Analytics = () => {
         setcompanyLate(lateArray);
         setAbscence(abscenceArray.length);
         setAttendance(attendanceArray.length);
-        console.log(2)
-    }, [data]);
+    }, [data, refrenceHours]);
 
     useEffect(() => {
         let abscences = groupBy(companyAbscences, (dt) => moment(dt).format('ddd'));
@@ -192,7 +188,6 @@ const Analytics = () => {
         }
 
         setWeeklyData(weekly)
-        console.log(1)
     }, [companyAttendance, companyAbscences, companyLate]);
 
     // Function that parses string to date 
