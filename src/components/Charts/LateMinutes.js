@@ -24,87 +24,14 @@ const FilterWrapper = styled.div`
 `
 const LateMinutes = (props) => {
     const [lateMinutesFilter, setLateMinutesFilter] = useState('Monthly');
+    const [data, setData] = useState();
+
     const filters = [
         { value: 'Daily' },
         { value: 'Weekly' },
         { value: 'Monthly' },
         { value: 'Yearly' },
     ]
-    const monthlyData = [
-        {
-            'name': 'Jan',
-            'Late': 103
-        },
-        {
-            'name': 'Feb',
-            'Late': 283
-        },
-        {
-            'name': 'Mar',
-            'Late': 402
-        },
-        {
-            'name': 'Apr',
-            'Late': 103
-        },
-        {
-            'name': 'May',
-            'Late': 293
-        },
-        {
-            'name': 'Jun',
-            'Late': 203
-        },
-        {
-            'name': 'Jul',
-            'Late': 283
-        },
-        {
-            'name': 'Aug',
-            'Late': 103
-        },
-        {
-            'name': 'Sep',
-            'Late': 302
-        },
-        {
-            'name': 'Oct',
-            'Late': 836
-        },
-        {
-            'name': 'Nov',
-            'Late': 320
-        },
-        {
-            'name': 'Dec',
-            'Late': 100
-        }
-    ]
-
-    const weeklyData = [
-        {
-            'name': 'Jan 1',
-            'Late': 83
-        },
-        {
-            'name': 'Jan 7',
-            'Late': 28
-        },
-        {
-            'name': 'Jan 14',
-            'Late': 49
-        },
-        {
-            'name': 'Jan 21',
-            'Late': 20
-        },
-        {
-            'name': 'Jan 28',
-            'Late': 21
-        },
-    ]
-
-    const [data, setData] = useState(monthlyData);
 
     useEffect(() => {
         function calculateLateMinutes(companyLateAttendance, formatString, type) {
@@ -149,6 +76,23 @@ const LateMinutes = (props) => {
             setData(data)
         }
 
+        function getAverageLateMinutes(groupData) {
+            const count = groupData.length;
+            const checkIn = moment(props.checkInRefrence);
+            var totalLateMinutes = 0;
+
+
+            for (let i = 0; i < groupData.length; i++) {
+                const actualCheckIn = moment(groupData[i]['check-in']);
+                const lateMinutes = actualCheckIn.diff(checkIn, 'minutes');
+                totalLateMinutes += (lateMinutes >= 0 ? lateMinutes : 0);
+            }
+
+            const average = totalLateMinutes / count;
+
+            return Math.round(average);
+        }
+
         if (lateMinutesFilter === 'Daily')
             calculateLateMinutes(props.lateData, 'DD MMM', 'daily');
         if (lateMinutesFilter === 'Weekly')
@@ -157,25 +101,9 @@ const LateMinutes = (props) => {
             calculateLateMinutes(props.lateData, 'MMM YYYY', 'monthly');
         if (lateMinutesFilter === 'Yearly')
             calculateLateMinutes(props.lateData, 'YYYY', 'yearly');
-    }, [lateMinutesFilter, props.lateData]);
+    }, [lateMinutesFilter, props.lateData, props.checkInRefrence]);
 
 
-    const getAverageLateMinutes = (groupData) => {
-        const count = groupData.length;
-        const checkIn = moment(props.checkInRefrence);
-        var totalLateMinutes = 0;
-
-
-        for (let i = 0; i < groupData.length; i++) {
-            const actualCheckIn = moment(groupData[i]['check-in']);
-            const lateMinutes = actualCheckIn.diff(checkIn, 'minutes');
-            totalLateMinutes += (lateMinutes >= 0 ? lateMinutes : 0);
-        }
-
-        const average = totalLateMinutes / count;
-
-        return Math.round(average);
-    }
 
     return (
         <ChartContainer>

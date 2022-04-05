@@ -67,13 +67,13 @@ const Departure = (props) => {
         totalSeconds %= 3600;
         const avgMinutes = Math.floor(totalSeconds / 60);
 
-        const date = new Date(1776, 6, 4, avgHours, avgMinutes, 0, 0);
+        const date = new Date(1776, 6, 4, avgHours ? avgHours : 0, avgMinutes ? avgMinutes : 0, 0, 0);
 
         setHour(avgHours);
         setMinute(avgMinutes);
         setAbbreviation(moment(date).format("a"));
         setValue(date);
-    }, []);
+    }, [props.attendanceData]);
 
     return (
         <ChartContainer>

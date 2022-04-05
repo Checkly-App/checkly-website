@@ -57,6 +57,7 @@ const Arrival = (props) => {
 
         for (let i = 0; i < count; i++) {
             const time = data[i]['check-in'];
+
             hours += (time.getHours() * 3600);
             minutes += (time.getMinutes() * 60);
         }
@@ -67,13 +68,14 @@ const Arrival = (props) => {
         totalSeconds %= 3600;
         const avgMinutes = Math.floor(totalSeconds / 60);
 
-        const date = new Date(1776, 6, 4, avgHours, avgMinutes, 0, 0);
+        const date = new Date(1776, 6, 4, avgHours ? avgHours : 0, avgMinutes ? avgMinutes : 0, 0, 0);
 
         setHour(avgHours);
         setMinute(avgMinutes);
         setAbbreviation(moment(date).format("a"));
+        console.log(date)
         setValue(date);
-    }, []);
+    }, [props.attendanceData]);
 
 
     return (

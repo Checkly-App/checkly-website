@@ -10,11 +10,11 @@ import Worked from '../../components/Charts/Worked';
 import LateMinutes from '../../components/Charts/LateMinutes';
 import Arrival from '../../components/Charts/Arrival';
 import Departure from '../../components/Charts/Departure';
-import { data } from './AttendanceData';
 import ChecklyLogo from '../ChecklyLogo';
 import { groupBy } from 'lodash';
 import moment from 'moment';
-import { calculateTimeline } from './Heplers';
+import { ref, onValue } from 'firebase/database';
+import { database, auth } from '../../utilities/firebase';
 
 export const Construction = styled.div`
     min-height: 100vh;
@@ -72,31 +72,68 @@ const Container = styled.div`
 
 const Analytics = () => {
     const today = format(new Date(), 'MMMM dd, yyyy');
+    const [data, setData] = useState([[]]);
     const [attendance, setAttendance] = useState(0);
     const [abscence, setAbscence] = useState(0);
-    const [companyAbscences, setCompanyAbscences] = useState(["1-12-2022"]);
-    const [companyAttendance, setcompanyAttendance] = useState(["1-12-2022"]);
-    const [companyLate, setcompanyLate] = useState(["1-12-2022"]);
-    const [refrenceHours, setRefrenceHours] = useState(8);
+    const [companyAbscences, setCompanyAbscences] = useState();
+    const [companyAttendance, setcompanyAttendance] = useState([]);
+    const [companyLate, setcompanyLate] = useState();
+    const [refrenceHours, setRefrenceHours] = useState(6);
     const [refrenceCheckIn, setRefrenceCheckIn] = useState(new Date(1776, 6, 4, 8, 30, 0, 0));
-    const [weeklyData, setWeeklyData] = useState([{
-        name: 'Sun',
-        Abscence: 400,
-        Attendance: 240,
-        Late: 200,
-    }]);
-    const [timelineData, setTimelineData] = useState();
+    const [weeklyData, setWeeklyData] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        setRefrenceHours(6);
-        setRefrenceCheckIn(new Date(1776, 6, 4, 8, 30, 0, 0));
+        const remove = onValue(ref(database, 'LocationAttendance'), (snapshot) => {
+            const dataArray = snapshot.val();
+            var dataStructured = [];
+            for (let k in dataArray) {
+                if (k.slice(k.indexOf('-') + 1) !== auth.currentUser.uid)
+                    continue;
+
+                const userArray = [];
+                for (let i in dataArray[k]) {
+                    const attendance = {
+                        "date": i,
+                        "check-in": dataArray[k][i]["check-in"],
+                        "check-out": dataArray[k][i]["check-out"],
+                        "status": dataArray[k][i]["status"],
+                        "working-hours": dataArray[k][i]["working-hours"],
+                    }
+                    userArray.push(attendance);
+                }
+                dataStructured.push(userArray)
+            }
+            setData(dataStructured);
+            console.log("Data fetched: ", data)
+            setLoading(false);
+        });
+
+
+        return () => { console.log("removing listener"); remove(); }
+    }, []);
+
+    useEffect(() => {
+        console.log(data)
 
         let abscenceArray = [];
         let attendanceArray = [];
         let lateArray = [];
 
+
         for (var k = 0; k < data.length; k++) {
+
+            data[k].sort((a, b) => {
+                var start = toDate(a['date']),
+                    end = toDate(b['date']);
+
+                if (start !== end) {
+                    if (start > end) { return 1; }
+                    if (start < end) { return -1; }
+                }
+                return start - end;
+            });
+
             for (var i = 0; i < data[k].length; i++) {
                 let start = data[k][i]['date'];
                 let end = (i + 1 === data[k].length) ? moment().format("DD-MM-YYYY") : data[k][i + 1]['date'];
@@ -132,7 +169,8 @@ const Analytics = () => {
         setcompanyLate(lateArray);
         setAbscence(abscenceArray.length);
         setAttendance(attendanceArray.length);
-    }, [refrenceHours]);
+        console.log(2)
+    }, [data]);
 
     useEffect(() => {
         let abscences = groupBy(companyAbscences, (dt) => moment(dt).format('ddd'));
@@ -152,11 +190,9 @@ const Analytics = () => {
             }
             weekly.push(week);
         }
-        setWeeklyData(weekly)
 
-        const timeline = calculateTimeline(companyAbscences, companyAttendance, 'MMM YYYY', 'monthly');
-        setTimelineData(timeline);
-        setLoading(false);
+        setWeeklyData(weekly)
+        console.log(1)
     }, [companyAttendance, companyAbscences, companyLate]);
 
     // Function that parses string to date 
@@ -192,37 +228,37 @@ const Analytics = () => {
 
     return (
         loading ? <ChecklyLogo /> :
-            <Wrapper>
-                <Title>ِACME Corporations</Title>
-                <Subtitle>{today}</Subtitle>
-                <Container>
-                    <Total
-                        cell='cell1'
-                        title='Total attendance'
-                        labels={['Attendance', 'Abscence']}
-                        data={[attendance, abscence]}
-                        background={['#2CB1EF', '#C4C4C4']} />
-                    <Total
-                        cell='cell2'
-                        title='Total abscence'
-                        labels={['Abscence', 'Attendance']}
-                        data={[abscence, attendance]}
-                        background={['#F65786', '#C4C4C4']} />
-                    <Weekly data={weeklyData} />
-                    <Timeline
-                        attendanceData={companyAttendance}
-                        abscenceData={companyAbscences}
-                        default={timelineData} />
-                    <Worked attendanceData={companyAttendance} />
-                    <CheckIn attendanceData={companyAttendance} />
-                    <Overtime attendanceData={companyAttendance} />
-                    <LateMinutes
-                        checkInRefrence={refrenceCheckIn}
-                        lateData={companyLate} />
-                    <Arrival attendanceData={companyAttendance} />
-                    <Departure attendanceData={companyAttendance} />
-                </Container>
-            </Wrapper>
+            data.length <= 0 ? <ChecklyLogo /> :
+                <Wrapper>
+                    <Title>ِACME Corporations</Title>
+                    <Subtitle>{today}</Subtitle>
+                    <Container>
+                        <Total
+                            cell='cell1'
+                            title='Total attendance'
+                            labels={['Attendance', 'Abscence']}
+                            data={[attendance, abscence]}
+                            background={['#2CB1EF', '#C4C4C4']} />
+                        <Total
+                            cell='cell2'
+                            title='Total abscence'
+                            labels={['Abscence', 'Attendance']}
+                            data={[abscence, attendance]}
+                            background={['#F65786', '#C4C4C4']} />
+                        <Weekly data={weeklyData} />
+                        <Timeline
+                            attendanceData={companyAttendance}
+                            abscenceData={companyAbscences} />
+                        <Worked attendanceData={companyAttendance} />
+                        <CheckIn attendanceData={companyAttendance} />
+                        <Overtime attendanceData={companyAttendance} />
+                        <LateMinutes
+                            checkInRefrence={refrenceCheckIn}
+                            lateData={companyLate} />
+                        <Arrival attendanceData={companyAttendance} />
+                        <Departure attendanceData={companyAttendance} />
+                    </Container>
+                </Wrapper>
     );
 }
 

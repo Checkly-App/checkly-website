@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Filter from '../../components/Charts/Filter';
 import { CartesianGrid, XAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import _, { groupBy } from 'lodash';
+import { groupBy } from 'lodash';
 import moment from 'moment';
 
 const ChartTitle = styled.h1`
@@ -36,6 +36,69 @@ const CheckIn = (props) => {
     ]
 
     useEffect(() => {
+        function calculateCheckIn(companyAttendance, formatString, type) {
+            let attendance = groupBy(companyAttendance, (dt) => moment(dt['date']).format(formatString));
+
+            let keys = Object.keys(attendance);
+            let data = [];
+
+            keys.sort((a, b) => {
+                var start = new Date(a),
+                    end = new Date(b);
+
+                if (start !== end) {
+                    if (start > end) { return 1; }
+                    if (start < end) { return -1; }
+                }
+                return start - end;
+            });
+
+            if (type === 'daily' && keys.length > 7)
+                keys = keys.slice(-7)
+            if (type === 'monthly' && keys.length > 6)
+                keys = keys.slice(-6)
+            if (type === 'weekly' && keys.length > 8)
+                keys = keys.slice(-8)
+            if (type === 'yearly' && keys.length > 5)
+                keys = keys.slice(-5)
+
+            for (let i = 0; i < keys.length; i++) {
+                const group = keys[i];
+
+                const average = getAverageDates(attendance[group]);
+
+                const object = {
+                    name: `${group}`,
+                    'Average Check-in': group in attendance ? average : 0,
+                }
+
+                data.push(object);
+            }
+
+            setData(data)
+        }
+
+        function getAverageDates(groupData) {
+            var count = groupData.length;
+            var hours = 0;
+            var minutes = 0;
+
+            for (let i = 0; i < groupData.length; i++) {
+                const time = groupData[i]['check-in'];
+                hours += (time.getHours() * 3600);
+                minutes += (time.getMinutes() * 60);
+            }
+
+            var totalSeconds = (hours + minutes) / count;
+
+            let avgHours = Math.floor(totalSeconds / 3600);
+            totalSeconds %= 3600;
+            let avgMinutes = Math.floor(totalSeconds / 60);
+
+            return avgHours + (avgMinutes / 100);
+
+        }
+
         if (checkInFilter === 'Daily')
             calculateCheckIn(props.attendanceData, 'DD MMM', 'daily');
         if (checkInFilter === 'Weekly')
@@ -45,70 +108,7 @@ const CheckIn = (props) => {
         if (checkInFilter === 'Yearly')
             calculateCheckIn(props.attendanceData, 'YYYY', 'yearly');
 
-    }, [checkInFilter]);
-
-    const calculateCheckIn = (companyAttendance, formatString, type) => {
-        let attendance = groupBy(companyAttendance, (dt) => moment(dt['date']).format(formatString));
-
-        let keys = Object.keys(attendance);
-        let data = [];
-
-        keys.sort((a, b) => {
-            var start = new Date(a),
-                end = new Date(b);
-
-            if (start !== end) {
-                if (start > end) { return 1; }
-                if (start < end) { return -1; }
-            }
-            return start - end;
-        });
-
-        if (type === 'daily' && keys.length > 7)
-            keys = keys.slice(-7)
-        if (type === 'monthly' && keys.length > 6)
-            keys = keys.slice(-6)
-        if (type === 'weekly' && keys.length > 8)
-            keys = keys.slice(-8)
-        if (type === 'yearly' && keys.length > 5)
-            keys = keys.slice(-5)
-
-        for (let i = 0; i < keys.length; i++) {
-            const group = keys[i];
-
-            const average = getAverageDates(attendance[group]);
-
-            const object = {
-                name: `${group}`,
-                'Average Check-in': group in attendance ? average : 0,
-            }
-
-            data.push(object);
-        }
-
-        setData(data)
-    }
-
-    const getAverageDates = (groupData) => {
-        var count = groupData.length;
-        var hours = 0;
-        var minutes = 0;
-
-        for (let i = 0; i < groupData.length; i++) {
-            const time = groupData[i]['check-in'];
-            hours += (time.getHours() * 3600);
-            minutes += (time.getMinutes() * 60);
-        }
-
-        var totalSeconds = (hours + minutes) / count;
-
-        let avgHours = Math.floor(totalSeconds / 3600);
-        totalSeconds %= 3600;
-        let avgMinutes = Math.floor(totalSeconds / 60);
-
-        return avgHours + (avgMinutes / 100);
-
-    }
+    }, [checkInFilter, props.attendanceData]);
 
     return (
         <ChartContainer>
@@ -116,8 +116,8 @@ const CheckIn = (props) => {
                 <ChartTitle>Check-in hours</ChartTitle>
                 <Filter
                     filters={filters}
-                    label='attendance'
-                    id='attendance'
+                    label='check-in'
+                    id='check-in'
                     val={checkInFilter}
                     handleChange={(event) => { setCheckInFilter(event.target.value) }} />
             </FilterWrapper>
