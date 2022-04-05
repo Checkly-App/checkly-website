@@ -239,7 +239,8 @@ const Analytics = () => {
 
     return (
         loading ? <ChecklyLogo /> :
-            data.length <= 0 ? <ChecklyLogo /> :
+            data.length <= 0 ?
+                <Construction>Not enough data </Construction> :
                 <Wrapper>
                     <Title>{company['abbreviation']}</Title>
                     <Subtitle>{today}</Subtitle>
