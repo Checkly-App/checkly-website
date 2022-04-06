@@ -121,7 +121,7 @@ const FilterButton2 = styled.button`
         background: #2CB1EF;
       }
 `
-const ButtonsContainer = styled.div `
+const ButtonsContainer = styled.div`
     margin-left: auto;
 `
 
@@ -345,8 +345,8 @@ const AddEmployee = () => {
                         <Subtitle>Start by adding an individual employee or a batch of employees</Subtitle>
                     </MainWrapper>
                     <ButtonsContainer>
-                    <FilterButton1  disabled={true} >Add Individual</FilterButton1>
-                    <FilterButton2 onClick={()=> navigate("/admin/employees/AddBatchEmployees")}>Add Batch</FilterButton2>
+                        <FilterButton1 disabled={true} >Add Individual</FilterButton1>
+                        <FilterButton2 onClick={() => navigate("/admin/employees/add-batch")}>Add Batch</FilterButton2>
                     </ButtonsContainer>
                     <Section>
                         <SectionTitle>Personal Information</SectionTitle>

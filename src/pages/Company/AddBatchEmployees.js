@@ -21,12 +21,12 @@ import styled from 'styled-components';
 /**
  * Send Email Cloud Function 
  */
- const sendEmail = httpsCallable(functions, 'sendEmail');
+const sendEmail = httpsCallable(functions, 'sendEmail');
 
 /**
  * Styled Components 
  */
- const Section = styled.div`
+const Section = styled.div`
  background-color: white;
  border-radius: 0.75em;
  padding: 3em;
@@ -62,11 +62,11 @@ const MainTitle = styled.h1`
     color: #2CB1EF;
     margin: 0.25em 0;
 `
-const Subtitle = styled.p`
-    font-size: 0.75em;
-    color: #A3A1A1;
+const Subtitle = styled.h1`
+    font-size: 1em;
+    font-weight: 300;
 `
-const Note = styled.p `
+const Note = styled.p`
     font-size: 0.85em;
     color: #A3A1A1;
 `
@@ -113,7 +113,7 @@ const FilterButton2 = styled.button`
     margin-left: auto;
     margin-bottom: 2em;
 `
-const ButtonsContainer = styled.div `
+const ButtonsContainer = styled.div`
     margin-left: auto;
 `
 const Progress = styled(CircularProgress)`
@@ -125,7 +125,7 @@ const AddBatchEmployees = () => {
     /**
      * Use States
      */
-    
+
     const [parsedCsvData, setParsedCsvData] = useState([]);
     const [error, setError] = useState(false);
     const [errorDetails, setErrorDetails] = useState({
@@ -155,7 +155,7 @@ const AddBatchEmployees = () => {
 
     // Fetch departments of the logged-in company
     useEffect(() => {
-        
+
         onValue(ref(database, 'Department'), (snapshot) => {
             const data = snapshot.val();
             var departments = [];
@@ -207,7 +207,7 @@ const AddBatchEmployees = () => {
      * Close snack bar function
      */
 
-     const closeSnackbar = () => {
+    const closeSnackbar = () => {
         setOpenSnackbar(false);
     };
 
@@ -216,7 +216,7 @@ const AddBatchEmployees = () => {
      */
 
     const employeeExists = (employee) => {
-        for (let i in parsedCsvData){
+        for (let i in parsedCsvData) {
             for (let j in companyEmployees) {
                 if (parsedCsvData[i].national_id === companyEmployees[j].national_id) {
                     setErrorDetails({
@@ -239,7 +239,7 @@ const AddBatchEmployees = () => {
                     });
                     return true;
                 }
-                if (parsedCsvData[i].email === companyEmployees[j].email){
+                if (parsedCsvData[i].email === companyEmployees[j].email) {
                     setErrorDetails({
                         title: 'Employee Exists',
                         description: 'Some of the added employees have the same email of another employee'
@@ -250,17 +250,17 @@ const AddBatchEmployees = () => {
         }
         return false;
     };
-    
+
     const parseEmployeesDepartments = () => {
-        
+
         // Loop through each employee and check if the department exists
         let departmentExists = parsedCsvData.every(emp => {
-            if (checkEmployeeDepartment(emp)){
+            if (checkEmployeeDepartment(emp)) {
                 return true;
             }
-             return false;
+            return false;
         })
-        if (departmentExists === false){
+        if (departmentExists === false) {
             setErrorDetails({
                 title: 'Invalid Department',
                 description: 'Some of the added employees have a department the does not exist'
@@ -273,22 +273,22 @@ const AddBatchEmployees = () => {
     // check if the employee department exists
     const checkEmployeeDepartment = (employee) => {
         for (let i in companyDepartments) {
-            if (companyDepartments[i].name.toLowerCase() === employee.department.toLowerCase()){
+            if (companyDepartments[i].name.toLowerCase() === employee.department.toLowerCase()) {
                 return true;
             }
         }
         return false;
     }
-    
+
     /**
     *  This function transforms the department name 
     *  to the department key for each employee
     *  Ex: 'Human Resources' -> 'dep1'
     */
     const transformEmployeeDepartment = () => {
-        for (let i in parsedCsvData){
+        for (let i in parsedCsvData) {
             for (let j in companyDepartments) {
-                if (companyDepartments[j].name.toLowerCase() === parsedCsvData[i].department.toLowerCase()){
+                if (companyDepartments[j].name.toLowerCase() === parsedCsvData[i].department.toLowerCase()) {
                     parsedCsvData[i].department = companyDepartments[j].department;
                 }
             }
@@ -298,11 +298,11 @@ const AddBatchEmployees = () => {
     // check if the uploaded file columns matches the example
     const misMatchedColumnHeaders = () => {
         let isHeaderPresent = parsedCsvData.every(el => {
-            if(el.hasOwnProperty('employee_id') && el.hasOwnProperty('name') && el.hasOwnProperty('email') 
-            && el.hasOwnProperty('national_id') && el.hasOwnProperty('phone_number') && el.hasOwnProperty('birthdate')
-            && el.hasOwnProperty('address') && el.hasOwnProperty('gender') && el.hasOwnProperty('department') && el.hasOwnProperty('position') )
+            if (el.hasOwnProperty('employee_id') && el.hasOwnProperty('name') && el.hasOwnProperty('email')
+                && el.hasOwnProperty('national_id') && el.hasOwnProperty('phone_number') && el.hasOwnProperty('birthdate')
+                && el.hasOwnProperty('address') && el.hasOwnProperty('gender') && el.hasOwnProperty('department') && el.hasOwnProperty('position'))
                 return false;
-            else 
+            else
                 return true;
         })
         if (isHeaderPresent === true) {
@@ -321,9 +321,9 @@ const AddBatchEmployees = () => {
         let phoneRegex = /^[0]{1}[5]{1}([0-9])*$/;
         let birthdateRegex = /^(0?[1-9]|[12][0-9]|3[01])[/](0?[1-9]|1[012])[/]\d{4}$/;
 
-        for (let i in parsedCsvData){
-            
-            if (!emailRegex.test(parsedCsvData[i].email)){
+        for (let i in parsedCsvData) {
+
+            if (!emailRegex.test(parsedCsvData[i].email)) {
                 setErrorDetails({
                     title: 'Invalid Email',
                     description: 'Some of the added employees have invalid emails'
@@ -331,7 +331,7 @@ const AddBatchEmployees = () => {
                 return true;
             }
 
-            if(!nationalIDRegex.test(parsedCsvData[i].national_id) || parsedCsvData[i].national_id.length !== 10 ){
+            if (!nationalIDRegex.test(parsedCsvData[i].national_id) || parsedCsvData[i].national_id.length !== 10) {
                 setErrorDetails({
                     title: 'Invalid National ID',
                     description: 'Some of the added employees have invalid National IDs'
@@ -339,7 +339,7 @@ const AddBatchEmployees = () => {
                 return true;
             }
 
-            if(!phoneRegex.test(parsedCsvData[i].phone_number) || parsedCsvData[i].phone_number.length !== 10 ){
+            if (!phoneRegex.test(parsedCsvData[i].phone_number) || parsedCsvData[i].phone_number.length !== 10) {
                 setErrorDetails({
                     title: 'Invalid Phone Number',
                     description: 'Some of the added employees have invalid phone numbers'
@@ -347,7 +347,7 @@ const AddBatchEmployees = () => {
                 return true;
             }
 
-            if(!birthdateRegex.test(parsedCsvData[i].birthdate)){
+            if (!birthdateRegex.test(parsedCsvData[i].birthdate)) {
                 setErrorDetails({
                     title: 'Invalid Birthdate',
                     description: 'Some of the added employees have invalid birthdates'
@@ -365,7 +365,7 @@ const AddBatchEmployees = () => {
     const onDrop = useCallback(acceptedFiles => {
         if (acceptedFiles.length) {
             parseFile(acceptedFiles[0]);
-          }
+        }
     }, []);
 
     const {
@@ -375,16 +375,16 @@ const AddBatchEmployees = () => {
         isDragActive,
         isDragAccept,
         isDragReject,
-      } = useDropzone({
+    } = useDropzone({
         onDrop,
         accept: 'text/csv',
-        maxFiles:1,
-      });
+        maxFiles: 1,
+    });
 
     // Display file name and size
     const files = acceptedFiles.map(file => (
         <li key={file.path}>
-          {file.path} - {file.size} bytes
+            {file.path} - {file.size} bytes
         </li>
     ));
 
@@ -395,24 +395,24 @@ const AddBatchEmployees = () => {
     *  'complete' function is executed when the parsing is complete
     */
     const parseFile = file => {
-        Papa.parse(file,{
-         header: true,
-         complete: results => {
-            setParsedCsvData(results.data)
-            // console.log(results.data)
-          },
+        Papa.parse(file, {
+            header: true,
+            complete: results => {
+                setParsedCsvData(results.data)
+                // console.log(results.data)
+            },
         });
     };
 
     /**
      * Add employees function - triggered when the file is submitted
      */
-     const addEmployees = () => {
-        
+    const addEmployees = () => {
+
         setIsLoading(true);
 
         // CASE: No file was submitted
-        if (!parsedCsvData.length){
+        if (!parsedCsvData.length) {
             setErrorDetails({
                 title: 'No file was submitted',
                 description: 'You did not upload any file'
@@ -425,7 +425,7 @@ const AddBatchEmployees = () => {
         }
 
         // CASE: Column names does not match the example
-        if (misMatchedColumnHeaders()){
+        if (misMatchedColumnHeaders()) {
             setError(true);
             setIsLoading(false);
             setOpenSnackbar(true);
@@ -434,7 +434,7 @@ const AddBatchEmployees = () => {
         }
 
         // CASE: One of departments does not exist, or has not been added yet
-        if (!parseEmployeesDepartments()){
+        if (!parseEmployeesDepartments()) {
             setError(true);
             setIsLoading(false);
             setOpenSnackbar(true);
@@ -443,7 +443,7 @@ const AddBatchEmployees = () => {
         }
 
         transformEmployeeDepartment()
-        
+
         // CASE: One of the added employees have a the same Employee ID or National ID or Phone Number or Email
         if (employeeExists()) {
             setError(true);
@@ -454,7 +454,7 @@ const AddBatchEmployees = () => {
         }
 
         // CASE: One of the added employees have invalid email or National ID or Phone Number or Birthdate
-        if (checkFormatting()){
+        if (checkFormatting()) {
             setError(true);
             setIsLoading(false);
             setOpenSnackbar(true);
@@ -502,7 +502,7 @@ const AddBatchEmployees = () => {
                     return;
                 });
             }).catch((error) => {
-                if (error.code === "auth/email-already-in-use"){
+                if (error.code === "auth/email-already-in-use") {
                     setErrorDetails({
                         title: 'An Error Occured',
                         description: 'The email exists within Checkly'
@@ -513,72 +513,72 @@ const AddBatchEmployees = () => {
                 setIsLoading(false);
                 console.log(error);
                 return;
-            });   
+            });
         })
         setParsedCsvData([]);
     }
 
-    return(
+    return (
         <SetionsWrapper>
-                <MainWrapper>
-                    <MainTitle>Add Employee</MainTitle>
-                    <Subtitle>Start by adding an individual employee or a batch of employees</Subtitle>
-                </MainWrapper>
-                <ButtonsContainer>
-                    <FilterButton1 onClick={()=> navigate("/admin/employees/")} >Add Individual</FilterButton1>
-                    <FilterButton2 disabled={true}>Add Batch</FilterButton2>  
-                </ButtonsContainer>
-                <Section>
-                    <SectionTitle>Upload Employees CSV File</SectionTitle>
-                    <Note>In order to ensure successful addition, please follow the example below in the way column headers are written as well as the cells data types.</Note>
-                    <Table></Table>
-                        <div
-                            {...getRootProps({
-                            className: `dropzone 
+            <MainWrapper>
+                <MainTitle>Add Employee</MainTitle>
+                <Subtitle>Start by adding an individual employee or a batch of employees</Subtitle>
+            </MainWrapper>
+            <ButtonsContainer>
+                <FilterButton1 onClick={() => navigate("/admin/employees/")} >Add Individual</FilterButton1>
+                <FilterButton2 disabled={true}>Add Batch</FilterButton2>
+            </ButtonsContainer>
+            <Section>
+                <SectionTitle>Upload Employees CSV File</SectionTitle>
+                <Note>In order to ensure successful addition, please follow the example below in the way column headers are written as well as the cells data types.</Note>
+                <Table></Table>
+                <div
+                    {...getRootProps({
+                        className: `dropzone 
                             ${isDragAccept && 'dropzoneAccept'} 
                             ${isDragReject && 'dropzoneReject'}`,
-                            })}
-                        >
-                            <input {...getInputProps()} />
-                            {isDragActive ? (
-                            <p>Drop the files here ...</p>
-                            ) : (
-                            <p style={{textAlign: 'center'}}>Drag 'n' drop a file here, or click to select a file <br/>
-                                <em>(Only 1 file can be dropped or selected)</em>
-                            </p>
-                            )}
-                        </div>
-                        {parsedCsvData.length ? 
-                            ( <div>
-                                <h1 className='file'>Uploaded File</h1>
-                                <ul>{files}</ul>
-                            </div> ) :
-                            <div></div>
-                            }
-                        
-                </Section>
-                {isLoading ? <Progress /> : <CustomButton onClick={addEmployees}> Submit </CustomButton>}
-                {error ?
-                    (<Snackbar
-                        autoHideDuration={8000}
-                        open={openSnackbar}
-                        onClose={closeSnackbar}
-                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                        <Alert onClose={closeSnackbar} severity='error' variant='filled'>
-                            <AlertTitle>{errorDetails.title}</AlertTitle>
-                            {errorDetails.description}
-                        </Alert>
-                    </Snackbar>) :
-                    (<Snackbar
-                        open={openSnackbar}
-                        autoHideDuration={6000}
-                        onClose={closeSnackbar}
-                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
-                        <Alert severity='success' variant='filled'>
-                            <AlertTitle>Success!</AlertTitle>
-                            An Email message was sent to each employee with their credentials!
-                        </Alert>
-                    </Snackbar>)}
+                    })}
+                >
+                    <input {...getInputProps()} />
+                    {isDragActive ? (
+                        <p>Drop the files here ...</p>
+                    ) : (
+                        <p style={{ textAlign: 'center' }}>Drag 'n' drop a file here, or click to select a file <br />
+                            <em>(Only 1 file can be dropped or selected)</em>
+                        </p>
+                    )}
+                </div>
+                {parsedCsvData.length ?
+                    (<div>
+                        <h1 className='file'>Uploaded File</h1>
+                        <ul>{files}</ul>
+                    </div>) :
+                    <div></div>
+                }
+
+            </Section>
+            {isLoading ? <Progress /> : <CustomButton onClick={addEmployees}> Submit </CustomButton>}
+            {error ?
+                (<Snackbar
+                    autoHideDuration={8000}
+                    open={openSnackbar}
+                    onClose={closeSnackbar}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                    <Alert onClose={closeSnackbar} severity='error' variant='filled'>
+                        <AlertTitle>{errorDetails.title}</AlertTitle>
+                        {errorDetails.description}
+                    </Alert>
+                </Snackbar>) :
+                (<Snackbar
+                    open={openSnackbar}
+                    autoHideDuration={6000}
+                    onClose={closeSnackbar}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
+                    <Alert severity='success' variant='filled'>
+                        <AlertTitle>Success!</AlertTitle>
+                        An Email message was sent to each employee with their credentials!
+                    </Alert>
+                </Snackbar>)}
         </SetionsWrapper>
     );
 };
