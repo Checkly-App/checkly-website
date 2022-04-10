@@ -1,30 +1,25 @@
 import { React, useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom"
-import { signOut } from "firebase/auth";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth ,updateEmail,updateUser} from "firebase/auth";
 import {useLocation} from 'react-router-dom';
-
+import { format } from 'date-fns';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import InputField from '../../components/Forms/InputField';
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import SelectField from '../../components/Forms/SelectField';
 import RadioButtons from '../../components/Forms/RadioButtons';
-import { set, ref, onValue } from 'firebase/database';
-import { database, auth, functions, authSignup } from '../../utilities/firebase';
+import {  ref, onValue ,update } from 'firebase/database';
+import { database, auth} from '../../utilities/firebase';
+
 import DateField from '../../components/Forms/DateField';
-import { format } from 'date-fns';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
 import styled from 'styled-components';
-import { httpsCallable } from 'firebase/functions';
 import { Alert, AlertTitle, CircularProgress, Snackbar } from '@mui/material';
-import { v4 as uuidv4 } from 'uuid';
+
 
 
 /**
  * Send Email Cloud Function 
  */
-const sendEmail = httpsCallable(functions, 'sendEmail');
 
 /**
  * Styled Components 
@@ -95,12 +90,13 @@ const MainWrapper = styled.div`
     margin: 2em 0;
 `
 const EditEmployessInformaton = () => {
+
     const location = useLocation();
     const [error, setError] = useState(false);
     const date =  location.state.birthdate
     const date1= date.substring(3,5)+'/'+date.substring(0,2)+'/'+date.substring(6)
 
-    const [datebirth, setdatebirth] = useState(date1);
+    const [datebirth] = useState(date1);
 
     const [errorDetails, setErrorDetails] = useState({
         title: 'error',
@@ -172,8 +168,23 @@ const EditEmployessInformaton = () => {
     }, [departments])
 
     const employeeExists = (employee) => {
+        var emp = {}
+        onValue(ref(database, 'Employee'), (snapshot) => {
+            const data = snapshot.val();
+            
+            for (let id in data) {
+                if (location.state.id === id) {  //Fetch employees of a given company
+                    const employee = {
+                        nationalID: data[id]['national_id'],
+                        phoneNumber: data[id]['phone_number'],
+                        employeeID: data[id]['employee_id'],
+                        department: data[id]['department'],
+                    }
+                    emp = employee
+                    ;}}});
+                    console.log(emp.nationalID)
         for (let i in employees) {
-            if (location.state.nationalID === employees[i].nationalID) {
+            if (emp.nationalID === employees[i].nationalID) {
                   console.log("d")
             }
 
@@ -184,7 +195,7 @@ const EditEmployessInformaton = () => {
                 });
                 return true;
             }
-            if (location.state.phoneNumber === employees[i].phoneNumber) {
+            if (emp.phoneNumber === employees[i].phoneNumber) {
                 console.log("d")
           }
            else if (employee.phoneNumber === employees[i].phoneNumber) {
@@ -194,7 +205,7 @@ const EditEmployessInformaton = () => {
                 });
                 return true;
             }
-            if (location.state.employeeID === employees[i].employeeID) {
+            if (emp.employeeID === employees[i].employeeID) {
                 console.log("d")
           }
           else  if (employee.employeeID === employees[i].employeeID) {
@@ -221,7 +232,7 @@ const EditEmployessInformaton = () => {
         gender: location.state.gender,
         email: location.state.email,
         employeeID: location.state.employeeID,
-        department: location.state.department,
+        department: location.state.departmentID,
         position: location.state.position
         
     };
@@ -247,11 +258,8 @@ const EditEmployessInformaton = () => {
     const closeSnackbar = () => {
         setOpenSnackbar(false);
     };
-    /**
-     * Add employee function - triggered when the form is submitted
-     * @params employee - JSON Object containing employee's information
-     */
-    const addEmployee = (employee) => {
+    
+    const EditEmployee = (employee) => {
         setIsLoading(true);
 
         if (employeeExists(employee)) {
@@ -260,53 +268,102 @@ const EditEmployessInformaton = () => {
             setOpenSnackbar(true);
             return;
         }
-
-        const password = uuidv4().slice(0, 8);
-
-        createUserWithEmailAndPassword(authSignup, employee.email, password).then((result) => {
-            signOut(authSignup);
-            sendEmail({
-                email: employee.email,
-                name: employee.fullName,
-                password: password,
-            }).then(() => {
-                set(ref(database, 'Employee/' + result.user.uid), {
+//         const auth = getAuth();
+//         console.log(auth)
+//         getAuth()
+//   .updateUser(location.state.id, {
+//     email: 'modifiedUser@example.com',
+   
+//   })
+//   .then((userRecord) => {
+//     // See the UserRecord reference doc for the contents of userRecord.
+//     console.log('Successfully updated user', userRecord.toJSON());
+//   })
+//   .catch((error) => {
+//     console.log('Error updating user:', error);
+//   });
+        // if (location.state.email !== employee.email){
+        //     console.log(location.state.id)
+        // updateEmail(location.state.id, employee.email).then(() => {
+        //     console.log('Email updated!!')
+           
+        //   }).catch((error) => {
+        //     console.log(error)
+        //     // setErrorDetails({
+        //     //                 title: 'An Error Occured',
+        //     //                 description: { error }
+        //     //             });
+        //     //             setError(true);
+        //     //             setIsLoading(false);
+        //     //             setOpenSnackbar(true);
+        //                 return;
+        //   });}
+        if (datebirth !== employee.birthdate){
+            update(ref(database, 'Employee/' + location.state.id), {
+                               
+                birthdate:  format(employee.birthdate, 'dd/MM/yyyy')});
+        }
+    update(ref(database, 'Employee/' + location.state.id), {
                     name: employee.fullName,
                     national_id: employee.nationalID,
-                    phone_number: employee.phoneNumber,
-                    birthdate: format(employee.birthdate, 'dd/MM/yyyy'),
-                    address: employee.address,
-                    gender: employee.gender,
-                    email: employee.email,
-                    employee_id: employee.employeeID,
-                    department: employee.department,
-                    position: employee.position,
-                    change_image: 0,
-                    image_token: "null"
+                    phone_number: employee.phoneNumber,                  
+               
+                     address: employee.address,
+                      gender: employee.gender,        
+                      employee_id: employee.employeeID,
+                 department: employee.department,
+                   position: employee.position,
                 });
-                setError(false);
-                setIsLoading(false);
-                setOpenSnackbar(true);
-            }).catch((error) => {
-                setErrorDetails({
-                    title: 'An Error Occured',
-                    description: { error }
-                });
-                setError(true);
-                setIsLoading(false);
-                setOpenSnackbar(true);
-                return;
-            });
-        }).catch(() => {
-            setErrorDetails({
-                title: 'An Error Occured',
-                description: 'The email exists within Checkly'
-            });
-            setError(true);
-            setIsLoading(false);
+                     setError(false);
+             setIsLoading(false);
             setOpenSnackbar(true);
             return;
-        });
+        // createUserWithEmailAndPassword(authSignup, employee.email, password).then((result) => {
+        //     signOut(authSignup);
+        //     sendEmail({
+        //         email: employee.email,
+        //         name: employee.fullName,
+        //         password: password,
+        //     }).then(() => {
+        //         set(ref(database, 'Employee/' + result.user.uid), {
+        //             name: employee.fullName,
+        //             national_id: employee.nationalID,
+        //             phone_number: employee.phoneNumber,
+        //             birthdate: format(employee.birthdate, 'dd/MM/yyyy'),
+        //             address: employee.address,
+        //             gender: employee.gender,
+        //             email: employee.email,
+        //             employee_id: employee.employeeID,
+        //             department: employee.department,
+        //             position: employee.position,
+        //             change_image: 0,
+        //             image_token: "null"
+        //         });
+        //         setError(false);
+        //         setIsLoading(false);
+        //         setOpenSnackbar(true);
+        //     }).catch((error) => {
+        //         setErrorDetails({
+        //             title: 'An Error Occured',
+        //             description: { error }
+        //         });
+        //         setError(true);
+        //         setIsLoading(false);
+        //         setOpenSnackbar(true);
+        //         return;
+        //     });
+        // }).catch(() => {
+        //     setErrorDetails({
+        //         title: 'An Error Occured',
+        //         description: 'The email exists within Checkly'
+        //     });
+        //     setError(true);
+        //     setIsLoading(false);
+        //     setOpenSnackbar(true);
+        //     return;
+        // });
+       
+
     }
 
     return (
@@ -314,14 +371,14 @@ const EditEmployessInformaton = () => {
             initialValues={{ ...initialValues }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
-               // addEmployee(values);
+                EditEmployee(values);
                console.log(values)
             }}>
             <Form>
                 <SetionsWrapper>
                     <MainWrapper>
                         <MainTitle>Edit Employee information</MainTitle>
-                        <Subtitle>Edit the information of {location.state.name}{location.state.birthdate} </Subtitle>
+                        <Subtitle>Edit the information of {location.state.name}</Subtitle>
                     </MainWrapper>
                     <Section>
                         <SectionTitle>Personal Information</SectionTitle>
@@ -366,11 +423,12 @@ const EditEmployessInformaton = () => {
                             id='employeeID'
                             label='Employee ID' />
                         <SelectField
-                            name={location.state.department}
+                            name='department'
                             id='department'
                             label='Department'
                             options={departments}
-                         //   value = {departments[0]} 
+                            nameID={location.state.departmentID}
+                          // value = "dep2" 
                          />
                         <InputField
                             name='position'
@@ -406,14 +464,3 @@ const EditEmployessInformaton = () => {
 };
 
 export default EditEmployessInformaton;
-{/* <h1 style={{ color: "green" }}>{location.state.id}</h1>
-<h1 style={{ color: "green" }}>{location.state.name}</h1>
-<h1 style={{ color: "green" }}>{location.state.position}</h1>
-<h1 style={{ color: "green" }}>{location.state.department}</h1>
-<h1 style={{ color: "green" }}>{location.state.nationalID}</h1>
-<h1 style={{ color: "green" }}>{location.state.phoneNumber}</h1>
-<h1 style={{ color: "green" }}>{location.state.birthdate}</h1>
-<h1 style={{ color: "green" }}>{location.state.address}</h1>
-<h1 style={{ color: "green" }}>{location.state.gender}</h1>
-<h1 style={{ color: "green" }}>{location.state.email}</h1>
-<h1 style={{ color: "green" }}>{location.state.employeeID}</h1> */}

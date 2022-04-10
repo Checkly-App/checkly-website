@@ -76,20 +76,7 @@ const ViewEmployees = () => {
   
   
   
-    const [employees, setEmployees] = useState([{
-        id :'',
-        tokens:'',
-        name:'',
-        position: '',
-        department: '',
-        nationalID: '',
-        phoneNumber: '',
-        birthdate: null,
-        address: '',
-        gender: '',
-        email: '',
-        employeeID: '',
-    }]);
+    const [employees, setEmployees] = useState([]);
     const [searchterm, setsearchterm] = useState("");
     const [load, setload] = useState(true);
     const [open, setOpen] = React.useState(false);
@@ -98,6 +85,7 @@ const ViewEmployees = () => {
     name:'',
     position: '',
     department: '',
+    departmentID: '',
     nationalID: '',
     phoneNumber: '',
     birthdate: null,
@@ -152,6 +140,7 @@ const Buttonc = {
                         name:data[id]['name'],
                         position: data[id]['position'],
                         department:data[id]['department'],
+                        departmentID:data[id]['department'],
                         nationalID: data[id]['national_id'],
                         phoneNumber: data[id]['phone_number'],
                         birthdate: data[id]['birthdate'],
@@ -181,6 +170,7 @@ const Buttonc = {
                                 if (namedeb.comid === auth.currentUser.uid){
                                 employee.department = namedeb.namedep
                                 employsarray.push(employee)
+                               setEmployees(employees => [...employees,employee])
                            
                             }
                             }
@@ -195,15 +185,13 @@ const Buttonc = {
                 
                 }
               
-                setEmployees(employsarray)
+                //setEmployees(employsarray)
+                console.log(employees)
                 setload(false)
         }
         
         );
      
-        return () => {   
-           setEmployees([]);
-        }
     }, []);
 
    
@@ -219,6 +207,7 @@ const Buttonc = {
             name:index.name,
             position: index.position,
             department: index.department,
+            departmentID: index.departmentID,
             nationalID:index.nationalID,
             phoneNumber: index.phoneNumber,
             birthdate: index.birthdate,
@@ -285,8 +274,8 @@ const Buttonc = {
   
 
 <div className="input-group" style={input}>
-<i className="fa fa-envelope icon"><MdSearch size="18px"  style={{ marginBottom:"0.1em",marginRight:"0.1em"}}/></i>
-  <input  className="inputsearch"  type="text" placeholder="Search for names ,departments,position.." onChange={(event)=>{setsearchterm(event.target.value)}}  />
+<i className="fa fa-envelope icon"><MdSearch size="20px"  style={{ marginBottom:"0.1em",marginRight:"0.1em"}}/></i>
+  <input  className="inputsearch"  type="text" placeholder="Search for names or departments or position.." onChange={(event)=>{setsearchterm(event.target.value)}}  />
   
 </div>
 

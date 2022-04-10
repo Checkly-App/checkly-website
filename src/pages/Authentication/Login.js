@@ -159,7 +159,7 @@ marginTop:"5em",
       <div className="row"  >
       <nav className="navbar navbar-expand-lg navbar-light" style={{ position: "absolute" }}>
           <div className="container-fluid ">
-          <div style={{paddingTop:"1%"}}> <img src={Logo} alt="logo" style={{ width: "35px", height: "35px" }} /> <a style={{ fontWeight: "500",fontSize:"20px"}}>  Checkly</a></div> 
+          <div style={{paddingTop:"1%"}}> <img src={Logo} alt="logo" style={{ width: "35px", height: "35px" }} /> <span style={{ fontWeight: "500",fontSize:"20px"}}>  Checkly</span></div> 
             {/* <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>
             </button> */}
