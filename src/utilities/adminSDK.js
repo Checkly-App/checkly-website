@@ -9,10 +9,8 @@
 // });
 
 const admin = require('firebase-admin');
-// const serviceAccount = require('path/to/serviceAccountKey.json');
+ const serviceAccount = require('path/to/serviceAccountKey.json');
 
-// User IDs to be deleted
-const UIDs = [];
 
 // initialize the app
 admin.initializeApp({

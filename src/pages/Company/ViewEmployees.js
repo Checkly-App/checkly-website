@@ -275,7 +275,7 @@ const Buttonc = {
 
 <div className="input-group" style={input}>
 <i className="fa fa-envelope icon"><MdSearch size="20px"  style={{ marginBottom:"0.1em",marginRight:"0.1em"}}/></i>
-  <input  className="inputsearch"  type="text" placeholder="Search for names or departments or position.." onChange={(event)=>{setsearchterm(event.target.value)}}  />
+  <input  className="inputsearch"  type="text" placeholder="Search for names or departments or position" onChange={(event)=>{setsearchterm(event.target.value)}}  />
   
 </div>
 

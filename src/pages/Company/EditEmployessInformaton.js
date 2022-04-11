@@ -14,6 +14,16 @@ import { database, auth} from '../../utilities/firebase';
 import DateField from '../../components/Forms/DateField';
 import styled from 'styled-components';
 import { Alert, AlertTitle, CircularProgress, Snackbar } from '@mui/material';
+import { functions } from '../../utilities/firebase';
+
+import { httpsCallable } from 'firebase/functions';
+
+
+
+/**
+ * Send Email Cloud Function 
+ */
+const UpdateUserEmail = httpsCallable(functions, 'UpdateUserEmail');
 
 
 
@@ -298,6 +308,15 @@ const EditEmployessInformaton = () => {
         //     //             setOpenSnackbar(true);
         //                 return;
         //   });}
+        if (location.state.email !== employee.email){
+            UpdateUserEmail({
+            email: employee.email,
+            uid: location.state.id,
+           
+        }).then(() => {
+            update(ref(database, 'Employee/' + location.state.id), {
+                email: employee.email,}
+         ) });}
         if (datebirth !== employee.birthdate){
             update(ref(database, 'Employee/' + location.state.id), {
                                

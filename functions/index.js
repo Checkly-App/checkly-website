@@ -1,6 +1,7 @@
 const functions = require('firebase-functions');
 const sgMail = require('@sendgrid/mail');
-const cors = require('cors')({ origin: 'https://checkly-292d2--gp-demo-test-8diufwpu.web.app' });
+const admin = require('firebase-admin');
+const cors = require('cors')({ origin:'http://localhost:3000' });
 require('dotenv').config()
 
 sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
@@ -41,3 +42,62 @@ exports.sendEmail = functions.https.onRequest((req, res) => {
         });
     });
 });
+
+// export const UpdateUser = functions.database.ref('Employee/' + UID+'email')
+//   .onUpdate((snap, context) => {        
+       
+//  const serviceAccount = require('./AccountKey.json');
+// // initialize the app
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL:"https://checkly-292d2-default-rtdb.firebaseio.com"
+
+// });
+
+
+//         // return admin.auth().deleteUser(context.params.uid);
+      
+//         return admin.auth()
+//   .updateUser(uid, {
+//     email: 'modifiedUser@example.com',
+  
+//   })
+//   .then((userRecord) => {
+//     // See the UserRecord reference doc for the contents of userRecord.
+//     console.log('Successfully updated user', userRecord.toJSON());
+//   })
+//   .catch((error) => {
+//     console.log('Error updating user:', error);
+//   });
+
+//     });
+
+
+    exports.UpdateUserEmail = functions.https.onRequest((req, res) => {
+        cors(req, res, () => {
+            const email = req.body.data.email;
+            const uid = req.body.data.uid;
+           
+const serviceAccount = require('./AccountKey.json');
+// initialize the app
+admin.initializeApp({
+credential: admin.credential.cert(serviceAccount),
+databaseURL:"https://checkly-292d2-default-rtdb.firebaseio.com"
+
+});
+      // return admin.auth().deleteUser(context.params.uid);
+    
+      return admin.auth()
+.updateUser(uid, {
+  email: email
+
+})
+.then((userRecord) => {
+  // See the UserRecord reference doc for the contents of userRecord.
+  console.log('Successfully updated user', userRecord.toJSON());
+})
+.catch((error) => {
+  console.log('Error updating user:', error);
+});
+        });
+    })
