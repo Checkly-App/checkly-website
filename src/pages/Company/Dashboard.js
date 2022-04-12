@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import moment from 'moment';
 import { BsPeople, BsCalendar4Event } from 'react-icons/bs';
 import { VscTypeHierarchy } from 'react-icons/vsc';
-import { CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Line, Area } from 'recharts';
-import { ref, onValue, get, child } from 'firebase/database';
+import { XAxis, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
+import { ref, onValue, get } from 'firebase/database';
 import { database, auth } from '../../utilities/firebase';
 import ChecklyLogo from '../ChecklyLogo';
 

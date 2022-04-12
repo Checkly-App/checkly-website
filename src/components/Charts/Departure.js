@@ -19,7 +19,6 @@ const ChartContainer = styled.div`
 `
 const Details = styled.div`
     display: flex;
-    flex: 1.5;
     height: 100%;
     margin-left: 1.25em;
     flex-direction: column;

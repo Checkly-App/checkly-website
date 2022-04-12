@@ -9,7 +9,7 @@ const Container = styled.div`
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: 1fr 5fr;
+    grid-template-columns: 15% 85%;
     grid-template-areas: 'bar main';
     justify-items: stretch;
     justify-content: center;

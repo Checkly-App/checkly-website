@@ -12,7 +12,6 @@ import { HiOutlineMenuAlt2, HiX } from "react-icons/hi";
 
 const SideBarWrapper = styled.div`
     grid-area: bar;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -52,10 +51,12 @@ const Wrapper = styled.div`
 `
 const NavItem = styled.li`
     width: 100%;
-    height: 2.5em;
-    margin: 0.65em 0;
+    height: 2em;
+    margin-bottom: 1.5em;
     list-style: none;
     display: flex;
+    justify-content: center;
+    align-items: center;
 `
 const Link = styled(NavLink)`
     width: 100%;
@@ -86,12 +87,13 @@ const LogoutWrapper = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     text-decoration: none;
     cursor: pointer;
 `
 const Icon = styled.div`
-    padding: 0 0 0 1.5em;
+    font-size: 1.25em;
+    padding: 0 0 0 1em;
 `
 const NavTitle = styled.span`
     font-size: 1.25em;
@@ -99,20 +101,8 @@ const NavTitle = styled.span`
     flex: 2;
 `
 const Logo = styled.img`
-    width: 6em;
+    width: 5em;
 `
-const LogoCaption = styled.h1`
-    font-weight: 500;
-    font-size: 1.75em;
-    margin-top: 0.25em;
-`
-const Divider = styled.div`
-    background-color:  #A3A1A1;
-    height: 0.5px;
-    width: 80%;
-    margin: 0 2em;
-`;
-
 
 const Sidebar = () => {
     const navigate = useNavigate();
@@ -134,10 +124,8 @@ const Sidebar = () => {
                 {open ? <HiX onClick={() => { setOpen(!open) }} /> : <HiOutlineMenuAlt2 onClick={() => { setOpen(!open) }} />}
             </MenuIcon> */}
             <SideBarWrapper open={open}>
-
                 <Wrapper>
                     <Logo src={logo} />
-                    <LogoCaption></LogoCaption>
                 </Wrapper>
                 <Wrapper nav>
                     {sideBarData.map((item, index) => {
@@ -152,7 +140,6 @@ const Sidebar = () => {
                     })}
                 </Wrapper>
                 <Wrapper>
-                    <Divider />
                     <NavItem onClick={logout}>
                         <LogoutWrapper>
                             <Icon>
