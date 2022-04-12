@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from 'react';
-import { getAuth ,updateEmail,updateUser} from "firebase/auth";
-import {useLocation} from 'react-router-dom';
+import { getAuth, updateEmail, updateUser } from "firebase/auth";
+import { useLocation } from 'react-router-dom';
 import { format } from 'date-fns';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -8,8 +8,8 @@ import InputField from '../../components/Forms/InputField';
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import SelectField from '../../components/Forms/SelectField';
 import RadioButtons from '../../components/Forms/RadioButtons';
-import {  ref, onValue ,update } from 'firebase/database';
-import { database, auth} from '../../utilities/firebase';
+import { ref, onValue, update } from 'firebase/database';
+import { database, auth } from '../../utilities/firebase';
 
 import DateField from '../../components/Forms/DateField';
 import styled from 'styled-components';
@@ -23,7 +23,7 @@ import { httpsCallable } from 'firebase/functions';
 /**
  * Send Email Cloud Function 
  */
-const UpdateUserEmail = httpsCallable(functions, 'UpdateUserEmail');
+const updateUserEmail = httpsCallable(functions, 'updateUserEmail');
 
 
 
@@ -103,8 +103,8 @@ const EditEmployessInformaton = () => {
 
     const location = useLocation();
     const [error, setError] = useState(false);
-    const date =  location.state.birthdate
-    const date1= date.substring(3,5)+'/'+date.substring(0,2)+'/'+date.substring(6)
+    const date = location.state.birthdate
+    const date1 = date.substring(3, 5) + '/' + date.substring(0, 2) + '/' + date.substring(6)
 
     const [datebirth] = useState(date1);
 
@@ -129,8 +129,8 @@ const EditEmployessInformaton = () => {
      * Use Effect to fecth all of the company's departments
      */
     useEffect(() => {
-      
-        
+
+
         console.log(auth.currentUser.uid)
         onValue(ref(database, 'Department'), (snapshot) => {
             const data = snapshot.val();
@@ -181,7 +181,7 @@ const EditEmployessInformaton = () => {
         var emp = {}
         onValue(ref(database, 'Employee'), (snapshot) => {
             const data = snapshot.val();
-            
+
             for (let id in data) {
                 if (location.state.id === id) {  //Fetch employees of a given company
                     const employee = {
@@ -191,14 +191,17 @@ const EditEmployessInformaton = () => {
                         department: data[id]['department'],
                     }
                     emp = employee
-                    ;}}});
-                    console.log(emp.nationalID)
+                        ;
+                }
+            }
+        });
+        console.log(emp.nationalID)
         for (let i in employees) {
             if (emp.nationalID === employees[i].nationalID) {
-                  console.log("d")
+                console.log("d")
             }
 
-           else  if (employee.nationalID === employees[i].nationalID) {
+            else if (employee.nationalID === employees[i].nationalID) {
                 setErrorDetails({
                     title: 'Employee Exists',
                     description: 'Another employee with the same national id exists'
@@ -207,8 +210,8 @@ const EditEmployessInformaton = () => {
             }
             if (emp.phoneNumber === employees[i].phoneNumber) {
                 console.log("d")
-          }
-           else if (employee.phoneNumber === employees[i].phoneNumber) {
+            }
+            else if (employee.phoneNumber === employees[i].phoneNumber) {
                 setErrorDetails({
                     title: 'Employee Exists',
                     description: 'Another employee with the same phone number exists'
@@ -217,8 +220,8 @@ const EditEmployessInformaton = () => {
             }
             if (emp.employeeID === employees[i].employeeID) {
                 console.log("d")
-          }
-          else  if (employee.employeeID === employees[i].employeeID) {
+            }
+            else if (employee.employeeID === employees[i].employeeID) {
                 setErrorDetails({
                     title: 'Employee Exists',
                     description: 'Another employee with the same employee id exists'
@@ -236,15 +239,15 @@ const EditEmployessInformaton = () => {
     const initialValues = {
         fullName: location.state.name,
         nationalID: location.state.nationalID,
-        phoneNumber:location.state.phoneNumber,
+        phoneNumber: location.state.phoneNumber,
         birthdate: datebirth,
-        address: location.state.address, 
+        address: location.state.address,
         gender: location.state.gender,
         email: location.state.email,
         employeeID: location.state.employeeID,
         department: location.state.departmentID,
         position: location.state.position
-        
+
     };
     /**
      * Form's validation patterns
@@ -268,7 +271,7 @@ const EditEmployessInformaton = () => {
     const closeSnackbar = () => {
         setOpenSnackbar(false);
     };
-    
+
     const EditEmployee = (employee) => {
         setIsLoading(true);
 
@@ -278,25 +281,25 @@ const EditEmployessInformaton = () => {
             setOpenSnackbar(true);
             return;
         }
-//         const auth = getAuth();
-//         console.log(auth)
-//         getAuth()
-//   .updateUser(location.state.id, {
-//     email: 'modifiedUser@example.com',
-   
-//   })
-//   .then((userRecord) => {
-//     // See the UserRecord reference doc for the contents of userRecord.
-//     console.log('Successfully updated user', userRecord.toJSON());
-//   })
-//   .catch((error) => {
-//     console.log('Error updating user:', error);
-//   });
+        //         const auth = getAuth();
+        //         console.log(auth)
+        //         getAuth()
+        //   .updateUser(location.state.id, {
+        //     email: 'modifiedUser@example.com',
+
+        //   })
+        //   .then((userRecord) => {
+        //     // See the UserRecord reference doc for the contents of userRecord.
+        //     console.log('Successfully updated user', userRecord.toJSON());
+        //   })
+        //   .catch((error) => {
+        //     console.log('Error updating user:', error);
+        //   });
         // if (location.state.email !== employee.email){
         //     console.log(location.state.id)
         // updateEmail(location.state.id, employee.email).then(() => {
         //     console.log('Email updated!!')
-           
+
         //   }).catch((error) => {
         //     console.log(error)
         //     // setErrorDetails({
@@ -308,35 +311,39 @@ const EditEmployessInformaton = () => {
         //     //             setOpenSnackbar(true);
         //                 return;
         //   });}
-        if (location.state.email !== employee.email){
-            UpdateUserEmail({
-            email: employee.email,
-            uid: location.state.id,
-           
-        }).then(() => {
-            update(ref(database, 'Employee/' + location.state.id), {
-                email: employee.email,}
-         ) });}
-        if (datebirth !== employee.birthdate){
-            update(ref(database, 'Employee/' + location.state.id), {
-                               
-                birthdate:  format(employee.birthdate, 'dd/MM/yyyy')});
+        if (location.state.email !== employee.email) {
+            updateUserEmail({
+                email: employee.email,
+                uid: location.state.id,
+
+            }).then(() => {
+                update(ref(database, 'Employee/' + location.state.id), {
+                    email: employee.email,
+                }
+                )
+            });
         }
-    update(ref(database, 'Employee/' + location.state.id), {
-                    name: employee.fullName,
-                    national_id: employee.nationalID,
-                    phone_number: employee.phoneNumber,                  
-               
-                     address: employee.address,
-                      gender: employee.gender,        
-                      employee_id: employee.employeeID,
-                 department: employee.department,
-                   position: employee.position,
-                });
-                     setError(false);
-             setIsLoading(false);
-            setOpenSnackbar(true);
-            return;
+        if (datebirth !== employee.birthdate) {
+            update(ref(database, 'Employee/' + location.state.id), {
+
+                birthdate: format(employee.birthdate, 'dd/MM/yyyy')
+            });
+        }
+        update(ref(database, 'Employee/' + location.state.id), {
+            name: employee.fullName,
+            national_id: employee.nationalID,
+            phone_number: employee.phoneNumber,
+
+            address: employee.address,
+            gender: employee.gender,
+            employee_id: employee.employeeID,
+            department: employee.department,
+            position: employee.position,
+        });
+        setError(false);
+        setIsLoading(false);
+        setOpenSnackbar(true);
+        return;
         // createUserWithEmailAndPassword(authSignup, employee.email, password).then((result) => {
         //     signOut(authSignup);
         //     sendEmail({
@@ -381,7 +388,7 @@ const EditEmployessInformaton = () => {
         //     setOpenSnackbar(true);
         //     return;
         // });
-       
+
 
     }
 
@@ -391,7 +398,7 @@ const EditEmployessInformaton = () => {
             validationSchema={validationSchema}
             onSubmit={(values) => {
                 EditEmployee(values);
-               console.log(values)
+                console.log(values)
             }}>
             <Form>
                 <SetionsWrapper>
@@ -417,16 +424,16 @@ const EditEmployessInformaton = () => {
                             name='birthdate'
                             id='birthdate'
                             label='Birthdate'
-                          
-                            />
+
+                        />
                         <InputField
                             name='address'
                             id='address'
                             label='Address'
-/>
+                        />
                         <RadioButtons
                             name='gender'
-                           nameg={location.state.gender}
+                            nameg={location.state.gender}
                             id='gender'
                             label='Gender' />
                     </Section>
@@ -447,8 +454,8 @@ const EditEmployessInformaton = () => {
                             label='Department'
                             options={departments}
                             nameID={location.state.departmentID}
-                          // value = "dep2" 
-                         />
+                        // value = "dep2" 
+                        />
                         <InputField
                             name='position'
                             id='position'
@@ -474,7 +481,7 @@ const EditEmployessInformaton = () => {
                         anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
                         <Alert severity='success' variant='filled'>
                             <AlertTitle>Success!</AlertTitle>
-                           Update information successfully !
+                            Update information successfully !
                         </Alert>
                     </Snackbar>)}
             </Form>
