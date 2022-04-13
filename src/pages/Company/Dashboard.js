@@ -17,6 +17,17 @@ import moment from 'moment';
 import { ref, onValue, get } from 'firebase/database';
 import { database, auth } from '../../utilities/firebase';
 
+// Function that parses string to date 
+export const toDate = (string) => {
+    const firstDash = string.indexOf("-");
+    const secondDash = string.indexOf("-", firstDash + 1);
+    const day = parseInt(string.slice(0, firstDash));
+    const month = parseInt(string.slice(firstDash + 1, secondDash)) - 1;
+    const year = parseInt(string.slice(secondDash + 1));
+
+    return new Date(year, month, day, 0, 0, 0, 0, 0);
+}
+
 export const Construction = styled.div`
     min-height: 100vh;
     display: flex;
@@ -302,17 +313,6 @@ const Dashboard = () => {
 
         setWeeklyData(weekly)
     }, [companyAttendance, companyAbscences, companyLate]);
-
-    // Function that parses string to date 
-    const toDate = (string) => {
-        const firstDash = string.indexOf("-");
-        const secondDash = string.indexOf("-", firstDash + 1);
-        const day = parseInt(string.slice(0, firstDash));
-        const month = parseInt(string.slice(firstDash + 1, secondDash)) - 1;
-        const year = parseInt(string.slice(secondDash + 1));
-
-        return new Date(year, month, day, 0, 0, 0, 0, 0);
-    }
 
     // Function that gets the missing dates 
     const getDates = (startDate, endDate) => {
