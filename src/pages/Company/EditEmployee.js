@@ -1,5 +1,4 @@
 import { React, useState, useEffect } from 'react';
-import { getAuth, updateEmail, updateUser } from "firebase/auth";
 import { useLocation } from 'react-router-dom';
 import { format } from 'date-fns';
 import { Formik, Form } from 'formik';
@@ -27,9 +26,6 @@ const updateUserEmail = httpsCallable(functions, 'updateUserEmail');
 
 
 
-/**
- * Send Email Cloud Function 
- */
 
 /**
  * Styled Components 
@@ -169,6 +165,8 @@ const EditEmployessInformaton = () => {
                         phoneNumber: data[id]['phone_number'],
                         employeeID: data[id]['employee_id'],
                         department: data[id]['department'],
+                        email: data[id]['email'],
+
                     };
                     employees.push(employee)
                 }
@@ -189,6 +187,8 @@ const EditEmployessInformaton = () => {
                         phoneNumber: data[id]['phone_number'],
                         employeeID: data[id]['employee_id'],
                         department: data[id]['department'],
+                        email: data[id]['email'],
+
                     }
                     emp = employee
                         ;
@@ -198,7 +198,7 @@ const EditEmployessInformaton = () => {
         console.log(emp.nationalID)
         for (let i in employees) {
             if (emp.nationalID === employees[i].nationalID) {
-                console.log("d")
+                console.log("")
             }
 
             else if (employee.nationalID === employees[i].nationalID) {
@@ -209,7 +209,7 @@ const EditEmployessInformaton = () => {
                 return true;
             }
             if (emp.phoneNumber === employees[i].phoneNumber) {
-                console.log("d")
+                console.log("")
             }
             else if (employee.phoneNumber === employees[i].phoneNumber) {
                 setErrorDetails({
@@ -219,12 +219,22 @@ const EditEmployessInformaton = () => {
                 return true;
             }
             if (emp.employeeID === employees[i].employeeID) {
-                console.log("d")
+                console.log("")
             }
             else if (employee.employeeID === employees[i].employeeID) {
                 setErrorDetails({
                     title: 'Employee Exists',
                     description: 'Another employee with the same employee id exists'
+                });
+                return true;
+            }
+            if (emp.email === employees[i].email) {
+                console.log("")
+            }
+            else if (employee.email === employees[i].email) {
+                setErrorDetails({
+                    title: 'Employee Exists',
+                    description: 'The email exists within Checkly'
                 });
                 return true;
             }
@@ -281,47 +291,22 @@ const EditEmployessInformaton = () => {
             setOpenSnackbar(true);
             return;
         }
-        //         const auth = getAuth();
-        //         console.log(auth)
-        //         getAuth()
-        //   .updateUser(location.state.id, {
-        //     email: 'modifiedUser@example.com',
-
-        //   })
-        //   .then((userRecord) => {
-        //     // See the UserRecord reference doc for the contents of userRecord.
-        //     console.log('Successfully updated user', userRecord.toJSON());
-        //   })
-        //   .catch((error) => {
-        //     console.log('Error updating user:', error);
-        //   });
-        // if (location.state.email !== employee.email){
-        //     console.log(location.state.id)
-        // updateEmail(location.state.id, employee.email).then(() => {
-        //     console.log('Email updated!!')
-
-        //   }).catch((error) => {
-        //     console.log(error)
-        //     // setErrorDetails({
-        //     //                 title: 'An Error Occured',
-        //     //                 description: { error }
-        //     //             });
-        //     //             setError(true);
-        //     //             setIsLoading(false);
-        //     //             setOpenSnackbar(true);
-        //                 return;
-        //   });}
+       
         if (location.state.email !== employee.email) {
             updateUserEmail({
                 email: employee.email,
                 uid: location.state.id,
 
             }).then(() => {
+               
                 update(ref(database, 'Employee/' + location.state.id), {
                     email: employee.email,
                 }
                 )
             });
+            update(ref(database, 'Employee/' + location.state.id), {
+                email: employee.email,
+            })
         }
         if (datebirth !== employee.birthdate) {
             update(ref(database, 'Employee/' + location.state.id), {
@@ -344,51 +329,8 @@ const EditEmployessInformaton = () => {
         setIsLoading(false);
         setOpenSnackbar(true);
         return;
-        // createUserWithEmailAndPassword(authSignup, employee.email, password).then((result) => {
-        //     signOut(authSignup);
-        //     sendEmail({
-        //         email: employee.email,
-        //         name: employee.fullName,
-        //         password: password,
-        //     }).then(() => {
-        //         set(ref(database, 'Employee/' + result.user.uid), {
-        //             name: employee.fullName,
-        //             national_id: employee.nationalID,
-        //             phone_number: employee.phoneNumber,
-        //             birthdate: format(employee.birthdate, 'dd/MM/yyyy'),
-        //             address: employee.address,
-        //             gender: employee.gender,
-        //             email: employee.email,
-        //             employee_id: employee.employeeID,
-        //             department: employee.department,
-        //             position: employee.position,
-        //             change_image: 0,
-        //             image_token: "null"
-        //         });
-        //         setError(false);
-        //         setIsLoading(false);
-        //         setOpenSnackbar(true);
-        //     }).catch((error) => {
-        //         setErrorDetails({
-        //             title: 'An Error Occured',
-        //             description: { error }
-        //         });
-        //         setError(true);
-        //         setIsLoading(false);
-        //         setOpenSnackbar(true);
-        //         return;
-        //     });
-        // }).catch(() => {
-        //     setErrorDetails({
-        //         title: 'An Error Occured',
-        //         description: 'The email exists within Checkly'
-        //     });
-        //     setError(true);
-        //     setIsLoading(false);
-        //     setOpenSnackbar(true);
-        //     return;
-        // });
-
+       
+      
 
     }
 
@@ -398,7 +340,7 @@ const EditEmployessInformaton = () => {
             validationSchema={validationSchema}
             onSubmit={(values) => {
                 EditEmployee(values);
-                console.log(values)
+              
             }}>
             <Form>
                 <SetionsWrapper>
