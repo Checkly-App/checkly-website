@@ -7,9 +7,9 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Container = styled.div`
     grid-area: ${props => props.cell ? props.cell : 'cell1'};
-    background: linear-gradient(160deg, #FFFFFF 70%, #F6F6F6 100%);
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 1em;
+    background: white;   
+    box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
+    border-radius: 1.5rem;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -41,8 +41,8 @@ const Unit = styled.h6`
 `
 const ChartTitle = styled.h1`
     color: ${props => props.color ? props.color : 'white'};
+    font-weight: 400;
     font-size: 1em;
-    font-weight: 350;
     padding: 0;
     margin: 0;
 `

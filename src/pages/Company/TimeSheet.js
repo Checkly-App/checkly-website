@@ -3,7 +3,6 @@ import MaterialTable from '@material-table/core'; import styled from 'styled-com
 import { ref, onValue } from 'firebase/database';
 import { database, auth } from '../../utilities/firebase';
 import ChecklyLogo from '../ChecklyLogo';
-import { Paper } from '@mui/material';
 import { ExportCsv, ExportPdf } from '@material-table/exporters';
 
 const Container = styled.div`
@@ -11,6 +10,12 @@ const Container = styled.div`
     flex-direction: column;
     align-items: stretch;
     margin: 1em 4em;
+`
+const Backdrop = styled.div`
+    background-color: white;
+    border-radius: 1em;
+    padding: 2em;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
 `
 const Wrapper = styled.div`
     display: flex;
@@ -99,9 +104,9 @@ const TimeSheet = () => {
                 <Container>
                     <MaterialTable
                         components={{
-                            Container: props => <Paper {...props} elevation={0} p={2} />
+                            Container: props => <Backdrop {...props} elevation={0} />
                         }}
-                        title='Employee Timesheet'
+                        title=''
                         columns={columns}
                         data={data}
                         localization={{
@@ -115,12 +120,11 @@ const TimeSheet = () => {
                             pageSize: 10,
                             pageSizeOptions: [10, 20, 50],
                             paginationType: 'stepped',
-                            searchFieldAlignment: 'left',
-                            searchFieldStyle: { minWidth: '100%', margin: '1em' },
+                            // searchFieldStyle: { minWidth: '100%', margin: '10em' },
                             searchFieldVariant: 'standard',
                             exportButton: true,
                             exportAllData: true,
-                            showTitle: false,
+                            // showTitle: false,
                             exportMenu: [{
                                 label: 'Export to PDF',
                                 exportFunc: (cols, datas) => ExportPdf(cols, datas, 'attendance_time_sheet')

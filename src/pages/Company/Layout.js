@@ -9,10 +9,12 @@ const Container = styled.div`
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: 15% 85%;
+    grid-template-columns: 1.5fr 10.5fr;
     grid-template-areas: 'bar main';
     justify-items: stretch;
     justify-content: center;
+    background-color: #F5F5F5;
+
     @media  (max-width: 768px) {
         grid-template-columns: 1fr ;
         grid-template-areas: 'main';

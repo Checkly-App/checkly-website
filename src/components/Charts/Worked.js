@@ -12,9 +12,9 @@ const ChartTitle = styled.h1`
 const ChartContainer = styled.div`
     padding: 2em 1em 1em 1em;
     grid-area: cell7;
-    background: linear-gradient(165deg, #FFFFFF 70%, #F6F6F6 100%);
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 1em;
+    background: white;   
+    box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
+    border-radius: 1.5rem;
     display: flex;
     flex-direction: column;
     justify-content: space-around;

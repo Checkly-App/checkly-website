@@ -8,9 +8,9 @@ import moment from 'moment';
 const ChartContainer = styled.div`
     padding: 1.5em;
     grid-area: cell9;
-    background: linear-gradient(165deg, #FFFFFF 70%, #F6F6F6 100%);
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 1em;
+    background: white;   
+    box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
+    border-radius: 1.5rem;
     display: flex;
     flex-direction: row;
     align-items: center;

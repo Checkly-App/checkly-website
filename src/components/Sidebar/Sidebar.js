@@ -2,7 +2,7 @@ import { React, useState } from 'react';
 import styled from 'styled-components';
 import logo from '../../assets/images/logo.svg';
 import side from '../../assets/images/sidePiece.svg';
-import { MdLogout } from 'react-icons/md'
+import { RiLogoutCircleLine } from 'react-icons/ri'
 import { NavLink } from 'react-router-dom';
 import { sideBarData } from './Data';
 import { useNavigate } from "react-router-dom"
@@ -17,6 +17,12 @@ const SideBarWrapper = styled.div`
     align-items: center;
     justify-content: space-around;
     background-color: white;
+    border-top-right-radius:45px 40px;
+    border-bottom-right-radius: 45px 40px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    margin: 0 1em 0 0;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+
     @media  (max-width: 768px) {
         display: none;
         /* grid-area: main;
@@ -47,25 +53,24 @@ const Wrapper = styled.div`
     justify-items: center;
     align-items: ${props => props.nav ? 'center' : 'center'};
     flex-direction: column;
-    background-color: white;
 `
 const NavItem = styled.li`
     width: 100%;
-    height: 2em;
     margin-bottom: 1.5em;
     list-style: none;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
 `
 const Link = styled(NavLink)`
     width: 100%;
     height: 100%;
+    padding: 0.25em;
     color: #A3A1A1;
-    font-size: 1em;
+    font-size: 0.85em;
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     text-decoration: none;
 
@@ -83,16 +88,19 @@ const Link = styled(NavLink)`
 `
 const LogoutWrapper = styled.div`
     width: 100%;
+    height: 100%;
+    padding: 0.25em;
     color: #A3A1A1;
+    font-size: 0.85em;
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     text-decoration: none;
+  
     cursor: pointer;
 `
 const Icon = styled.div`
-    font-size: 1.25em;
     padding: 0 0 0 1em;
 `
 const NavTitle = styled.span`
@@ -107,7 +115,6 @@ const Logo = styled.img`
 const Sidebar = () => {
     const navigate = useNavigate();
     const [open, setOpen] = useState(true);
-
 
     const logout = () => {
         const auth = getAuth();
@@ -143,7 +150,7 @@ const Sidebar = () => {
                     <NavItem onClick={logout}>
                         <LogoutWrapper>
                             <Icon>
-                                <MdLogout size={22} />
+                                <RiLogoutCircleLine size={18} />
                             </Icon>
                             <NavTitle>Logout</NavTitle>
                         </LogoutWrapper>

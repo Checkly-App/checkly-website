@@ -5,8 +5,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Departments from './pages/Company/Departments';
 import Dashboard from './pages/Company/Dashboard';
-import Analytics from './pages/Company/Analytics';
-import Services from './pages/Company/Services';
 import AddEmployee from './pages/Company/AddEmployee';
 import Login from './pages/Authentication/Login';
 import ChecklyProfile from './pages/Checkly Admin/ChecklyProfile';
@@ -63,9 +61,7 @@ function App() {
             <Route exact path="/admin/dashboard" element={<Layout user={userinfo} children={<Dashboard />} />} />
             <Route exact path="/admin/departments" element={<Layout user={userinfo} children={<Departments />} />} />
             <Route exact path="/admin/employees" element={<Layout user={userinfo} children={<AddEmployee />} />} />
-            <Route exact path="/admin/analytics" element={<Layout user={userinfo} children={<Analytics />} />} />
-            <Route exact path="/admin/services" element={<Layout user={userinfo} children={<Services />} />} />
-            <Route exact path="/admin/services/timesheets" element={<Layout user={userinfo} children={<TimeSheet />} />} />
+            <Route exact path="/admin/timesheets" element={<Layout user={userinfo} children={<TimeSheet />} />} />
             <Route exact path="*" element={<ChecklyLogo />} />
           </Routes>
         </Router>

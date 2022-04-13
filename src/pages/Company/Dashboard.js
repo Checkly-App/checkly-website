@@ -1,12 +1,21 @@
+import { format } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import CheckIn from '../../components/Charts/CheckIn';
+import Overtime from '../../components/Charts/Overtime';
+import Timeline from '../../components/Charts/Timeline';
+import Total from '../../components/Charts/Total';
+import Weekly from '../../components/Charts/Weekly';
+import Worked from '../../components/Charts/Worked';
+import LateMinutes from '../../components/Charts/LateMinutes';
+import Arrival from '../../components/Charts/Arrival';
+import Departure from '../../components/Charts/Departure';
+import General from '../../components/Charts/General';
+import ChecklyLogo from '../ChecklyLogo';
+import { groupBy } from 'lodash';
 import moment from 'moment';
-import { BsPeople, BsCalendar4Event } from 'react-icons/bs';
-import { VscTypeHierarchy } from 'react-icons/vsc';
-import { XAxis, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { ref, onValue, get } from 'firebase/database';
 import { database, auth } from '../../utilities/firebase';
-import ChecklyLogo from '../ChecklyLogo';
 
 export const Construction = styled.div`
     min-height: 100vh;
@@ -38,157 +47,52 @@ const Subtitle = styled.h1`
 const Container = styled.div`
     overflow-y: hidden;
     overflow-x: hidden;
-    padding: 3em 3rem 3em 3rem;
+    min-height: 100vh;
+    padding: 3em 3rem;
     grid-template-columns: 30% 30% 30%;
-    grid-template-rows: 10em 20em;
+    grid-template-rows: 10em 10em 20em 20em 10em 10em;
     display: grid;
-    grid-template-areas:'cell1 cell2 cell3' 'cell4 cell4 cell4';
+    grid-template-areas:'cell0 cell01 cell02' 
+                        'cell1 cell2 cell3' 
+                        'cell4 cell4 cell3' 
+                        'cell5 cell6 cell7' 
+                        'cell8 cell8 cell9'
+                        'cell8 cell8 cell10';
     grid-gap: 2em;
     justify-content: center;
     @media (max-width: 768px) {
-        height: 100vh;
             padding: 1rem;
-            grid-gap: 2em;
+            grid-gap: 1em;
             grid-template-columns: 100%; 
-            grid-template-rows: 20% 20% 20% 40%;
-            grid-template-areas:'cell1' 'cell2' 'cell3' 'cell4';
+            grid-template-rows: repeat(3, 5%) repeat(2, 5%) 15% repeat(5, 10%) repeat(2, 5%);
+            grid-template-areas:'cell0' 'cell01' 'cell02' 
+                                'cell1' 'cell2' 'cell3' 
+                                'cell4' 'cell5' 'cell6' 
+                                'cell7' 'cell8' 'cell9' 
+                                'cell10';
     }
 `
-const Employees = styled.div`
-    grid-area: cell1;
-    background: linear-gradient(160deg, #47CEFF 70%, #2CB1EF 100%);
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 1em;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    justify-items: stretch;
-    padding: 2em;
-`;
-const Departments = styled.div`
-    grid-area: cell2;
-    background: linear-gradient(160deg, #D980FF 70%, #B86AD9 100%);
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 1em;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    justify-items: stretch;
-    padding: 2em;
-`;
-const Meetings = styled.div`
-   grid-area: cell3;
-    background: linear-gradient(160deg, #3DD2BB 70%, #26BEA7 100%);
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 1em;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    justify-items: stretch;
-    padding: 2em;
-`;
-const ChartContainer = styled.div`
-    padding: 2em 1em 1em 1em;
-    grid-area: cell4;
-    background: linear-gradient(165deg, #FFFFFF 70%, #F6F6F6 100%);
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 1em;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-`
-const Value = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    color: white;
-`
-const Number = styled.h6`
-    font-weight: bold;
-    font-size: 2.5em;
-    margin: 0;
-`
-const Unit = styled.h6`
-    font-weight: 400;
-    font-size: 1em;
-    margin-left: 0.25em;
-`
-const Circle = styled.div`
-    width: 3em;
-    height: 3em;
-    background-color: rgba(255,255,255, 0.3);
-    color: white;
-    fill: white;
-    border-radius: 3em;
-    display: flex;
-    align-self: start;
-    justify-content: center;
-    align-items: center;
-`;
+
 const Dashboard = () => {
+    const today = format(new Date(), 'MMMM dd, yyyy');
     const [greeting, setGreeting] = useState('Good Evening');
+    const [company, setCompany] = useState({});
+    const [data, setData] = useState([[]]);
+    const [attendance, setAttendance] = useState(0);
+    const [abscence, setAbscence] = useState(0);
+    const [companyAbscences, setCompanyAbscences] = useState([]);
+    const [companyAttendance, setcompanyAttendance] = useState([]);
+    const [companyLate, setcompanyLate] = useState();
+    const [refrenceHours, setRefrenceHours] = useState(6); // TODO
+    const [refrenceCheckIn, setRefrenceCheckIn] = useState(new Date(1776, 6, 4, 8, 30, 0, 0));// TODO
+    const [weeklyData, setWeeklyData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [departments, setDepartments] = useState([]);
     const [employees, setEmployees] = useState([]);
     const [meetings, setMeetings] = useState([]);
-    const [company, setCompany] = useState({});
-
-    const data = [
-        {
-            'name': 'Jan',
-            'Late': 103
-        },
-        {
-            'name': 'Feb',
-            'Late': 283
-        },
-        {
-            'name': 'Mar',
-            'Late': 402
-        },
-        {
-            'name': 'Apr',
-            'Late': 103
-        },
-        {
-            'name': 'May',
-            'Late': 293
-        },
-        {
-            'name': 'Jun',
-            'Late': 203
-        },
-        {
-            'name': 'Jul',
-            'Late': 283
-        },
-        {
-            'name': 'Aug',
-            'Late': 103
-        },
-        {
-            'name': 'Sep',
-            'Late': 302
-        },
-        {
-            'name': 'Oct',
-            'Late': 836
-        },
-        {
-            'name': 'Nov',
-            'Late': 320
-        },
-        {
-            'name': 'Dec',
-            'Late': 100
-        }
-    ]
 
     useEffect(() => {
+
         const hour = moment().hour();
 
         if (hour > 16)
@@ -199,6 +103,7 @@ const Dashboard = () => {
             setGreeting('Good Morning');
 
 
+        // Get the company's general information
         get(ref(database, `Company/${auth.currentUser.uid}`)).then((snapshot) => {
             const data = snapshot.val();
             const company = {
@@ -208,12 +113,14 @@ const Dashboard = () => {
                 location: data['location'],
                 working_hours: data['working_hours'],
             };
+            setRefrenceHours(parseInt(company['working_hours']));
             setCompany(company);
         }).catch((error) => {
             console.log(error);
         });
 
-        const remove = onValue(ref(database, 'Department'), (snapshot) => {
+        // Fetch the departments and listen for any changes
+        const departmentsListener = onValue(ref(database, 'Department'), (snapshot) => {
             const data = snapshot.val();
             var departments = [];
             for (let id in data) {
@@ -227,7 +134,38 @@ const Dashboard = () => {
             }
             setDepartments(departments);
         });
-        return () => { remove(); }
+
+        // Fetch the attendance based on the company's employees
+        const attendanceListener = onValue(ref(database, 'LocationAttendance'), (snapshot) => {
+            const dataArray = snapshot.val();
+            var dataStructured = [];
+            for (let k in dataArray) {
+                if (k.slice(k.indexOf('-') + 1) !== auth.currentUser.uid)
+                    continue;
+
+                const userArray = [];
+                for (let i in dataArray[k]) {
+                    const attendance = {
+                        "date": i,
+                        "check-in": dataArray[k][i]["check-in"],
+                        "check-out": dataArray[k][i]["check-out"],
+                        "status": dataArray[k][i]["status"],
+                        "working-hours": dataArray[k][i]["working-hours"],
+                    }
+                    userArray.push(attendance);
+                }
+                dataStructured.push(userArray)
+            }
+            setData(dataStructured);
+            setLoading(false);
+        });
+
+
+        return () => {
+            departmentsListener();
+            attendanceListener();
+        }
+
     }, []);
 
     useEffect(() => {
@@ -236,7 +174,8 @@ const Dashboard = () => {
         for (let i in departments)
             departmentsKeys.push(departments[i]['department'])
 
-        const remove = onValue(ref(database, 'Employee'), (snapshot) => {
+        // Fetch the company's employees    
+        const employeesListener = onValue(ref(database, 'Employee'), (snapshot) => {
             const data = snapshot.val();
             var employees = [];
             for (let id in data) {
@@ -253,7 +192,8 @@ const Dashboard = () => {
             }
             setEmployees(employees);
 
-            return () => { remove() }
+            return () => { employeesListener(); }
+
         });
     }, [departments])
 
@@ -263,7 +203,8 @@ const Dashboard = () => {
         for (let i in employees)
             employeesKeys.push(employees[i]['uid'])
 
-        const remove = onValue(ref(database, 'Meetings'), (snapshot) => {
+        // Fetch the company's meetings    
+        const meetingsListener = onValue(ref(database, 'Meetings'), (snapshot) => {
             const data = snapshot.val();
             var meetings = [];
             for (let id in data) {
@@ -278,56 +219,170 @@ const Dashboard = () => {
                 }
             }
             setMeetings(meetings);
-            setLoading(false);
 
-            return () => { remove() }
+            return () => { meetingsListener(); }
+
         });
     }, [employees])
 
+    useEffect(() => {
+        let abscenceArray = [];
+        let attendanceArray = [];
+        let lateArray = [];
+
+
+        for (var k = 0; k < data.length; k++) {
+
+            data[k].sort((a, b) => {
+                var start = toDate(a['date']),
+                    end = toDate(b['date']);
+
+                if (start !== end) {
+                    if (start > end) { return 1; }
+                    if (start < end) { return -1; }
+                }
+                return start - end;
+            });
+
+            for (var i = 0; i < data[k].length; i++) {
+                let start = data[k][i]['date'];
+                let end = (i + 1 === data[k].length) ? moment().format("DD-MM-YYYY") : data[k][i + 1]['date'];
+
+                let missingDates = getDates(toDate(start), toDate(end));
+
+                missingDates.forEach(function (date) {
+                    abscenceArray.push(date);
+                })
+
+                const check_out = moment(data[k][i]["check-out"].toLowerCase(), "hh:mm A");
+                const check_in = moment(data[k][i]["check-in"].toLowerCase(), "hh:mm A");
+                const wrokedHours = check_out.diff(check_in, 'hours');
+                const overtimeHours = refrenceHours - wrokedHours;
+
+                let attendance = {
+                    "date": toDate(start),
+                    "check-in": new Date(1776, 6, 4, check_in.hours(), check_in.minutes(), 0, 0),
+                    "check-out": new Date(1776, 6, 4, check_out.hours(), check_out.minutes(), 0, 0),
+                    "working-hours": parseInt(data[k][i]["working-hours"].slice(0, data[k][i]["working-hours"].indexOf(' '))),
+                    "overtime": overtimeHours < 0 ? overtimeHours * -1 : 0,
+                }
+
+                if (data[k][i]['status'] === "Late")
+                    lateArray.push(attendance);
+
+                attendanceArray.push(attendance);
+            }
+        }
+
+        setCompanyAbscences(abscenceArray);
+        setcompanyAttendance(attendanceArray);
+        setcompanyLate(lateArray);
+        setAbscence(abscenceArray.length);
+        setAttendance(attendanceArray.length);
+    }, [data, refrenceHours]);
+
+    useEffect(() => {
+        let abscences = groupBy(companyAbscences, (dt) => moment(dt).format('ddd'));
+        let attendance = groupBy(companyAttendance, (dt) => moment(dt['date']).format('ddd'));
+        let late = groupBy(companyLate, (dt) => moment(dt['date']).format('ddd'));
+
+        let daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu'];
+        let weekly = [];
+
+        for (let i = 0; i < daysOfWeek.length; i++) {
+            const day = daysOfWeek[i];
+            const week = {
+                name: `${day}`,
+                Abscence: day in abscences ? abscences[day].length : 0,
+                Attendance: day in attendance ? attendance[day].length : 0,
+                Late: day in late ? late[day].length : 0,
+            }
+            weekly.push(week);
+        }
+
+        setWeeklyData(weekly)
+    }, [companyAttendance, companyAbscences, companyLate]);
+
+    // Function that parses string to date 
+    const toDate = (string) => {
+        const firstDash = string.indexOf("-");
+        const secondDash = string.indexOf("-", firstDash + 1);
+        const day = parseInt(string.slice(0, firstDash));
+        const month = parseInt(string.slice(firstDash + 1, secondDash)) - 1;
+        const year = parseInt(string.slice(secondDash + 1));
+
+        return new Date(year, month, day, 0, 0, 0, 0, 0);
+    }
+
+    // Function that gets the missing dates 
+    const getDates = (startDate, endDate) => {
+        const dates = []
+        let currentDate = startDate
+        currentDate.setDate(currentDate.getDate() + 1)
+
+        const addDays = function (days) {
+            const date = new Date(this.valueOf())
+            date.setDate(date.getDate() + days)
+            return date
+        }
+
+        while (currentDate < endDate) {
+            dates.push(currentDate)
+            currentDate = addDays.call(currentDate, 1)
+        }
+
+        return dates
+    }
+
     return (
-        loading ? <ChecklyLogo />
-            : <Wrapper>
+        loading ? <ChecklyLogo /> :
+            <Wrapper>
                 <Title>{greeting}</Title>
-                <Subtitle>{`${company['name']} - ${company['abbreviation']}`}</Subtitle>
-                <Container>
-                    <Employees>
-                        <Value>
-                            <Number>{employees.length}</Number>
-                            <Unit> Total employees</Unit>
-                        </Value>
-                        <Circle>
-                            <BsPeople size={22} />
-                        </Circle>
-                    </Employees>
-                    <Departments>
-                        <Value>
-                            <Number>{departments.length}</Number>
-                            <Unit> Total departments</Unit>
-                        </Value>
-                        <Circle>
-                            <VscTypeHierarchy size={22} />
-                        </Circle>
-                    </Departments>
-                    <Meetings>
-                        <Value>
-                            <Number>{meetings.length}</Number>
-                            <Unit> Conducted meetings</Unit>
-                        </Value>
-                        <Circle>
-                            <BsCalendar4Event size={22} />
-                        </Circle>
-                    </Meetings>
-                    <ChartContainer>
-                        <ResponsiveContainer width='100%' height='100%'>
-                            <AreaChart data={data}
-                                margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-                                <XAxis dataKey='name' tick={{ fontSize: 12 }} />
-                                <Tooltip />
-                                <Area type="monotone" dataKey='Late' stroke='#F65786' fill='#F65786' />
-                            </AreaChart>
-                        </ResponsiveContainer>
-                    </ChartContainer>
-                </Container>
+                <Subtitle>{today}</Subtitle>
+                {data.length <= 0 ?
+                    <Construction>Not enough data </Construction> :
+                    <Container>
+                        <General
+                            cell='cell0'
+                            title='Total employees'
+                            val={employees.length}
+                            background='linear-gradient(160deg, #47CEFF 70%, #2CB1EF 100%)' />
+                        <General
+                            cell='cell01'
+                            title='Total departments'
+                            val={departments.length}
+                            background='linear-gradient(160deg, #D980FF 70%, #B86AD9 100%)' />
+                        <General
+                            cell='cell02'
+                            title='Conducted meetings'
+                            val={meetings.length}
+                            background='linear-gradient(160deg, #3DD2BB 70%, #26BEA7 100%)' />
+                        <Total
+                            cell='cell1'
+                            title='Total attendance'
+                            labels={['Attendance', 'Abscence']}
+                            data={[attendance, abscence]}
+                            background={['#2CB1EF', '#C4C4C4']} />
+                        <Total
+                            cell='cell2'
+                            title='Total abscence'
+                            labels={['Abscence', 'Attendance']}
+                            data={[abscence, attendance]}
+                            background={['#F65786', '#C4C4C4']} />
+                        <Weekly data={weeklyData} />
+                        <Timeline
+                            attendanceData={companyAttendance}
+                            abscenceData={companyAbscences} />
+                        <Worked attendanceData={companyAttendance} />
+                        <CheckIn attendanceData={companyAttendance} />
+                        <Overtime attendanceData={companyAttendance} />
+                        <LateMinutes
+                            checkInRefrence={refrenceCheckIn}
+                            lateData={companyLate} />
+                        <Arrival attendanceData={companyAttendance} />
+                        <Departure attendanceData={companyAttendance} />
+                    </Container>
+                }
             </Wrapper>
     );
 }
