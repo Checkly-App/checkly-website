@@ -11,7 +11,7 @@ const ChartContainer = styled.div`
     grid-area: cell3;
     background: white;   
     box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
-    border-radius: 1.5rem;
+    border-radius: 1.25rem;
 `
 const Weekly = (props) => {
     return (
@@ -25,6 +25,41 @@ const Weekly = (props) => {
                     barGap={2}
                     layout='vertical'
                     data={props.data}>
+                    <defs>
+                        <linearGradient
+                            id="firstGradient"
+                            x1="0"
+                            y1="0"
+                            x2="0%"
+                            y2="100%"
+                            spreadMethod="reflect">
+                            <stop offset="25%" stopColor="#3CB4FF" />
+                            <stop offset="75%" stopColor="#3DA3F0" />
+                            <stop offset="125%" stopColor="#5A82F9" />
+                        </linearGradient>
+                        <linearGradient
+                            id="secondGradient"
+                            x1="0"
+                            y1="0"
+                            x2="0%"
+                            y2="100%"
+                            spreadMethod="reflect">
+                            <stop offset="25%" stopColor="#F7AC68" />
+                            <stop offset="75%" stopColor="#FFA338" />
+                            <stop offset="125%" stopColor="#ED8103" />
+                        </linearGradient>
+                        <linearGradient
+                            id="thirdGradient"
+                            x1="0"
+                            y1="0"
+                            x2="0%"
+                            y2="100%"
+                            spreadMethod="reflect">
+                            <stop offset="25%" stopColor="#FC6E98" />
+                            <stop offset="125%" stopColor="#F65786" />
+                            <stop offset="125%" stopColor="#FC2D6A" />
+                        </linearGradient>
+                    </defs>
                     <CartesianGrid
                         horizontal={false}
                         strokeDasharray='3 3' />
@@ -42,10 +77,18 @@ const Weekly = (props) => {
                         dataKey='name'
                         type='category'
                         angle={330} />
-                    <Tooltip wrapperStyle={{ borderRadius: '10px' }} />
-                    <Bar dataKey='Attendance' fill='#28B7EB' />
-                    <Bar dataKey='Late' fill='#F7AC68' />
-                    <Bar dataKey='Abscence' fill='#F65786' />
+                    <Tooltip cursor={{ fill: 'rgba(206, 206, 206, 0.2)' }} />
+                    <Bar
+                        dataKey='Attendance'
+                        fill='url(#firstGradient)'
+                        radius={[0, 5, 5, 0]} />
+                    <Bar dataKey='Late'
+                        fill='url(#secondGradient)'
+                        radius={[0, 5, 5, 0]} />
+                    <Bar
+                        dataKey='Abscence'
+                        fill='url(#thirdGradient)'
+                        radius={[0, 5, 5, 0]} />
                 </BarChart>
             </ResponsiveContainer>
         </ChartContainer>

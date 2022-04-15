@@ -70,7 +70,6 @@ const Button = styled.button`
     border: none;
     background: linear-gradient(90deg, #56BBEB 0%, #58AAF3 100%);
     margin-left: auto;
-
 `
 const Progress = styled(CircularProgress)`
     margin-left: auto;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Filter from '../../components/Charts/Filter';
-import { CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, AreaChart, Area } from 'recharts';
 import { groupBy } from 'lodash';
 import moment from 'moment';
 
@@ -10,7 +10,7 @@ const ChartContainer = styled.div`
     grid-area: cell8;
     background: white;   
     box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
-    border-radius: 1.5rem;
+    border-radius: 1.25rem;
 `
 const ChartTitle = styled.h1`
     font-size: 1em;
@@ -117,19 +117,34 @@ const LateMinutes = (props) => {
                     handleChange={(event) => { setLateMinutesFilter(event.target.value) }} />
             </FilterWrapper>
             <ResponsiveContainer width='100%' height='100%'>
-                <LineChart data={data}
+                <AreaChart
+                    data={data}
                     margin={{ top: 15, right: 5, left: 15, bottom: 5 }}>
+                    <defs>
+                        <linearGradient
+                            id="linearGradient"
+                            x1="0"
+                            y1="0"
+                            x2="0%"
+                            y2="100%"
+                            spreadMethod="reflect">
+                            <stop offset="25%" stopColor="#F7AC68" />
+                            <stop offset="100%" stopColor="#F7AC6800" opacity={0} />
+                        </linearGradient>
+                    </defs>
                     <CartesianGrid
                         vertical={false}
                         strokeDasharray='3 3' />
                     <XAxis dataKey='name' tick={{ fontSize: 12 }} />
                     <YAxis tick={{ fontSize: 12 }} width={20} />
                     <Tooltip />
-                    <Line
+                    <Area
                         type="monotone"
                         dataKey='Average Late Minutes'
-                        stroke='#F7AC68' />
-                </LineChart>
+                        stroke='#F7AC68'
+                        fill='#F7AC6865'
+                        strokeWidth={2} />
+                </AreaChart>
             </ResponsiveContainer>
         </ChartContainer>
     );

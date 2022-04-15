@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CheckIn from '../../components/Charts/CheckIn';
@@ -16,7 +15,57 @@ import { groupBy } from 'lodash';
 import moment from 'moment';
 import { ref, onValue, get } from 'firebase/database';
 import { database, auth } from '../../utilities/firebase';
+import { MdCalendarToday } from 'react-icons/md';
+import { HiOutlineDownload } from 'react-icons/hi'
 
+
+export const Construction = styled.div`
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
+export const Title = styled.h1`
+    font-size: 2em;
+    font-weight: 500;
+    color: #35435E;
+`
+export const Subtitle = styled.h1`
+    font-size: 1em;
+    font-weight: 350;
+    color: #A3A3A1;
+`
+export const Wrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: stretch;
+
+    margin: 1em 4em;
+    padding: 1em 3rem;
+
+    @media (max-width: 768px) {
+            margin: 0;
+            padding: 0;
+    }
+`
+
+const DateWrapper = styled.div`
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    justify-items: center;
+    align-self: center;
+    margin-top: 1rem;
+    color: #35435E;
+`
+const Today = styled.h1`
+    font-size: 1em;
+    padding: 0;
+    margin: 0 0.3em;
+    font-weight: 400;
+    color: #A3A3A1;
+`
 // Function that parses string to date 
 export const toDate = (string) => {
     const firstDash = string.indexOf("-");
@@ -28,40 +77,14 @@ export const toDate = (string) => {
     return new Date(year, month, day, 0, 0, 0, 0, 0);
 }
 
-export const Construction = styled.div`
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`
-const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    margin: 1em 4em;
-    @media (max-width: 768px) {
-            margin: 0;
-            padding: 0;
-    }
-`
-const Title = styled.h1`
-    font-size: 2em;
-    font-weight: 500;
-    color: #2CB1EF;
-    margin: 2em 0 0.25em 4rem;
-`
-const Subtitle = styled.h1`
-    font-size: 1em;
-    font-weight: 300;
-    margin: 0 0 0 4rem;
-`
 const Container = styled.div`
+    padding: 0;
+    margin: 0;
     overflow-y: hidden;
     overflow-x: hidden;
     min-height: 100vh;
-    padding: 3em 3rem;
     grid-template-columns: 30% 30% 30%;
-    grid-template-rows: 10em 10em 20em 20em 10em 10em;
+    grid-template-rows: 9em 10em 20em 20em 10em 10em;
     display: grid;
     grid-template-areas:'cell0 cell01 cell02' 
                         'cell1 cell2 cell3' 
@@ -71,6 +94,7 @@ const Container = styled.div`
                         'cell8 cell8 cell10';
     grid-gap: 2em;
     justify-content: center;
+
     @media (max-width: 768px) {
             padding: 1rem;
             grid-gap: 1em;
@@ -83,10 +107,40 @@ const Container = styled.div`
                                 'cell10';
     }
 `
+const Header = styled.div`
+    margin: 0 2em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2em;
+`
+const HeaderMain = styled.div`
+    display: flex;
+    flex-direction: column;
+`
+const PDFButton = styled.button`
+    background-color: rgba(60,180,255,0.25);
+    color: #3CB4FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    padding: 0.75em 1em;
+    border-radius: 0.5em;
+`
+const ButtonTitle = styled.p`
+    padding: 0;
+    margin: 0;
+    color: #3CB4FF;
+    font-weight: 500;
+    font-size: 1em;
+    margin-right: 0.5em;
+`
 
 const Dashboard = () => {
-    const today = format(new Date(), 'MMMM dd, yyyy');
-    const [greeting, setGreeting] = useState('Good Evening');
+    const today = moment().format('ddd, MMMM Do')
+    const [greeting, setGreeting] = useState('Good evening');
     const [company, setCompany] = useState({});
     const [data, setData] = useState([[]]);
     const [attendance, setAttendance] = useState(0);
@@ -94,7 +148,7 @@ const Dashboard = () => {
     const [companyAbscences, setCompanyAbscences] = useState([]);
     const [companyAttendance, setcompanyAttendance] = useState([]);
     const [companyLate, setcompanyLate] = useState();
-    const [refrenceHours, setRefrenceHours] = useState(6); // TODO
+    const [refrenceHours, setRefrenceHours] = useState(6);
     const [refrenceCheckIn, setRefrenceCheckIn] = useState(new Date(1776, 6, 4, 8, 30, 0, 0));// TODO
     const [weeklyData, setWeeklyData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -107,11 +161,11 @@ const Dashboard = () => {
         const hour = moment().hour();
 
         if (hour > 16)
-            setGreeting("Good Evening");
+            setGreeting("Good evening");
         else if (hour > 11)
-            setGreeting("Good Afternoon");
+            setGreeting("Good afternoon");
         else
-            setGreeting('Good Morning');
+            setGreeting('Good morning');
 
 
         // Get the company's general information
@@ -336,54 +390,72 @@ const Dashboard = () => {
 
     return (
         loading ? <ChecklyLogo /> :
-            <Wrapper>
-                <Title>{greeting}</Title>
-                <Subtitle>{today}</Subtitle>
-                {data.length <= 0 ?
-                    <Construction>Not enough data </Construction> :
-                    <Container>
-                        <General
-                            cell='cell0'
-                            title='Total employees'
-                            val={employees.length}
-                            background='linear-gradient(160deg, #47CEFF 70%, #2CB1EF 100%)' />
-                        <General
-                            cell='cell01'
-                            title='Total departments'
-                            val={departments.length}
-                            background='linear-gradient(160deg, #D980FF 70%, #B86AD9 100%)' />
-                        <General
-                            cell='cell02'
-                            title='Conducted meetings'
-                            val={meetings.length}
-                            background='linear-gradient(160deg, #3DD2BB 70%, #26BEA7 100%)' />
-                        <Total
-                            cell='cell1'
-                            title='Total attendance'
-                            labels={['Attendance', 'Abscence']}
-                            data={[attendance, abscence]}
-                            background={['#2CB1EF', '#C4C4C4']} />
-                        <Total
-                            cell='cell2'
-                            title='Total abscence'
-                            labels={['Abscence', 'Attendance']}
-                            data={[abscence, attendance]}
-                            background={['#F65786', '#C4C4C4']} />
-                        <Weekly data={weeklyData} />
-                        <Timeline
-                            attendanceData={companyAttendance}
-                            abscenceData={companyAbscences} />
-                        <Worked attendanceData={companyAttendance} />
-                        <CheckIn attendanceData={companyAttendance} />
-                        <Overtime attendanceData={companyAttendance} />
-                        <LateMinutes
-                            checkInRefrence={refrenceCheckIn}
-                            lateData={companyLate} />
-                        <Arrival attendanceData={companyAttendance} />
-                        <Departure attendanceData={companyAttendance} />
-                    </Container>
-                }
-            </Wrapper>
+            <>
+                <DateWrapper>
+                    <MdCalendarToday color='#A3A3A1' />
+                    <Today>Today is</Today>
+                    {today}
+                </DateWrapper>
+                <Wrapper>
+                    <Header>
+                        <HeaderMain>
+                            <Title>{greeting}</Title>
+                            <Subtitle>{company['name']} — {company['abbreviation']}</Subtitle>
+                        </HeaderMain>
+                        <PDFButton>
+                            <ButtonTitle>
+                                Export
+                            </ButtonTitle>
+                            <HiOutlineDownload size={24} />
+                        </PDFButton>
+                    </Header>
+                    {data.length <= 0 ?
+                        <Construction>Not enough data </Construction> :
+                        <Container>
+                            <General
+                                cell='cell0'
+                                title='Total employees'
+                                val={employees.length}
+                                background='linear-gradient(176.93deg, #3CB4FF 5%, #4F8FF7 115%)' />
+                            <General
+                                cell='cell01'
+                                title='Total departments'
+                                val={departments.length}
+                                background='linear-gradient(170deg, #7B5EFF 50%, #4D21E6 180%)' />
+                            <General
+                                cell='cell02'
+                                title='Conducted meetings'
+                                val={meetings.length}
+                                background='linear-gradient(160deg, #5FD1C6 5%, #01BDB2 90%)' />
+                            <Total
+                                cell='cell1'
+                                title='Total attendance'
+                                labels={['Attendance', 'Abscence']}
+                                data={[attendance, abscence]}
+                                background={['#3CB4FF', '#EEE']} />
+                            <Total
+                                cell='cell2'
+                                title='Total abscence'
+                                labels={['Abscence', 'Attendance']}
+                                data={[abscence, attendance]}
+                                background={['#F65786', '#EEE']} />
+                            <Weekly data={weeklyData} />
+                            <Timeline
+                                attendanceData={companyAttendance}
+                                abscenceData={companyAbscences} />
+                            <Worked attendanceData={companyAttendance} />
+                            <CheckIn attendanceData={companyAttendance} />
+                            <Overtime attendanceData={companyAttendance} />
+                            <LateMinutes
+                                checkInRefrence={refrenceCheckIn}
+                                lateData={companyLate} />
+                            <Arrival attendanceData={companyAttendance} />
+                            <Departure attendanceData={companyAttendance} />
+                        </Container>
+                    }
+                </Wrapper>
+            </>
+
     );
 }
 

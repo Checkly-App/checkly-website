@@ -20,25 +20,25 @@ const Container = styled.div`
         grid-template-areas: 'main';
     }
 `
-
 const Content = styled.div`
     overflow-y: scroll;
     grid-area: main;
-    display: subgrid;
-    align-items: center;
+    display: flex;
+    flex-direction:column;
+    align-items: stretch;
     background-color: #F5F5F5;
 `
 
 const Layout = ({ children, user }) => {
     return (
         user ?
-            (<Container>
+            <Container>
                 <Sidebar />
                 <Content>
                     {children}
                 </Content>
-            </Container >)
-            : <ChecklyLogo />
+            </Container > :
+            <ChecklyLogo />
     );
 };
 

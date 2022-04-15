@@ -7,7 +7,7 @@ const Container = styled.div`
     grid-area: ${props => props.cell ? props.cell : 'cell0'};
     background: ${props => props.background ? props.background : 'linear-gradient(160deg, #D980FF 70%, #B86AD9 100%)'};
     box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
-    border-radius: 1.5rem;
+    border-radius: 1.25rem;
     display: flex;
     flex-direction: row;
     align-items: center;

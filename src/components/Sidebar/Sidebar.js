@@ -64,16 +64,15 @@ const NavItem = styled.li`
 `
 const Link = styled(NavLink)`
     width: 100%;
-    height: 100%;
     padding: 0.25em;
     color: #A3A1A1;
     font-size: 0.85em;
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
     text-decoration: none;
-
+    
     ${NavItem}:hover &{
     color: #2CB1EF;
     }

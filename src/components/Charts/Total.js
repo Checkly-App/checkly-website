@@ -9,7 +9,7 @@ const Container = styled.div`
     grid-area: ${props => props.cell ? props.cell : 'cell1'};
     background: white;   
     box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
-    border-radius: 1.5rem;
+    border-radius: 1.25rem;
     display: flex;
     flex-direction: row;
     align-items: center;

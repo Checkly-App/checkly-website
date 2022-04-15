@@ -14,7 +14,7 @@ const ChartContainer = styled.div`
     grid-area: cell7;
     background: white;   
     box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
-    border-radius: 1.5rem;
+    border-radius: 1.25rem;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -116,17 +116,31 @@ const Worked = (props) => {
             </FilterWrapper>
             <ResponsiveContainer width="100%" height="90%">
                 <BarChart
-                    barSize={15}
-                    margin={{ top: 15, right: 5, left: 5, bottom: 0 }} data={data}>
-                    <CartesianGrid
-                        vertical={false}
-                        strokeDasharray="3 3" />
+                    barSize={20}
+                    margin={{ top: 15, right: 5, left: 5, bottom: 0 }}
+                    data={data}>
+                    <defs>
+                        <linearGradient
+                            id="workedHours"
+                            x1="0"
+                            y1="0"
+                            x2="0%"
+                            y2="100%"
+                            spreadMethod="reflect">
+                            <stop offset="25%" stopColor="#7B5EFF" />
+                            <stop offset="75%" stopColor="#664EF8" />
+                            <stop offset="125%" stopColor="#4D21E6" />
+                        </linearGradient>
+                    </defs>
                     <XAxis
                         tick={{ fontSize: 10 }}
                         dataKey='name'
                     />
-                    <Tooltip />
-                    <Bar dataKey="Average Worked" fill="#B86AD9" />
+                    <Tooltip cursor={{ fill: 'rgba(206, 206, 206, 0.2)' }} />
+                    <Bar
+                        dataKey="Average Worked"
+                        fill="url(#workedHours)"
+                        radius={[5, 5, 0, 0]} />
                 </BarChart>
             </ResponsiveContainer>
         </ChartContainer>

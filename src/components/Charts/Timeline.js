@@ -10,7 +10,7 @@ const ChartContainer = styled.div`
     grid-area: cell4;
     background: white;   
     box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
-    border-radius: 1.5rem;
+    border-radius: 1.25rem;
 `
 const ChartTitle = styled.h1`
     font-size: 1em;
@@ -112,15 +112,21 @@ const Timeline = (props) => {
                         strokeDasharray='3 3' />
                     <XAxis dataKey='name' tick={{ fontSize: 12 }} />
                     <YAxis tick={{ fontSize: 12 }} width={30} />
-                    <Tooltip />
+                    <Tooltip cursor={{ fill: 'rgba(206, 206, 206, 0.2)' }} />
                     <Legend
                         iconSize={12}
                         verticalAlign='top'
                         align='left'
                         wrapperStyle={{ fontSize: '12px', paddingBottom: '20px' }}
                         margin={{ top: 0, left: 0, right: 0, bottom: 10 }} />
-                    <Line dataKey='Attendance' stroke='#28B7EB' />
-                    <Line dataKey='Abscence' stroke='#F65786' />
+                    <Line
+                        dataKey='Attendance'
+                        stroke='#28B7EB'
+                        strokeWidth={2} />
+                    <Line
+                        dataKey='Abscence'
+                        stroke='#F65786'
+                        strokeWidth={2} />
                 </LineChart>
             </ResponsiveContainer>
 

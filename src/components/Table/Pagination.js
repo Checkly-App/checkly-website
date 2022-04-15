@@ -39,8 +39,9 @@ const Square = styled.div`
 const Pagination = (props) => {
     const { page, rowsPerPage, count, onPageChange } = props;
     let to = rowsPerPage * (page + 1);
-    let total = count / rowsPerPage;
+    let total = count === 0 ? 1 : Math.ceil(count / rowsPerPage);
     if (to > count) { to = count; }
+
     return (
         <Cell>
             <Grid container alignItems="center" justify="flex-end" style={{ paddingTop: 8 }} >

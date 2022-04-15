@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import MaterialTable from '@material-table/core';
+import MaterialTable, { MTableToolbar } from '@material-table/core';
 import styled from 'styled-components';
 import { ref, onValue } from 'firebase/database';
 import { database, auth } from '../../utilities/firebase';
 import ChecklyLogo from '../ChecklyLogo';
 import Pagination from '../../components/Table/Pagination';
 import { ExportCsv, ExportPdf } from '@material-table/exporters';
-import { toDate } from './Dashboard';
+import { Subtitle, Title, toDate, Wrapper } from './Dashboard';
 import moment from 'moment';
+import { Formik, Form } from 'formik';
+import DateRangeField from '../../components/Forms/DateRange';
+import { v4 as uuidv4 } from 'uuid';
+
 
 const Container = styled.div`
     display: flex;
@@ -21,29 +25,29 @@ const Backdrop = styled.div`
     padding: 2em;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
 `
-const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    margin: 1em 4em;
-    @media (max-width: 768px) {
-            margin: 0;
-            padding: 0;
-    }
-`
-const Title = styled.h1`
-    font-size: 2em;
-    font-weight: 500;
-    color: #2CB1EF;
-    margin: 2em 0 0.25em 4rem;
-`
-const Subtitle = styled.h1`
+const Button = styled.button`
+    width: fit-content;
+    height: 100%;
     font-size: 1em;
-    font-weight: 300;
-    margin: 0 0 0 4rem;
+    font-weight: 500;
+    text-align :center;
+    color: rgba(255,255,255,0.9);
+    border-radius: 0.5em;
+    border: none;
+    background: linear-gradient(90deg, #56BBEB 0%, #58AAF3 100%);
+    margin-left: auto;
+
+`
+const FormContainer = styled.div`
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr;
+    column-gap: 2.5em;
+    row-gap: 0.75em;
+
 `
 
 const TimeSheet = () => {
+    const [unfiltered, setUnfiltered] = useState([]);
     const [data, setData] = useState([]);
     const [departments, setDepartments] = useState([]);
     const [employees, setEmployees] = useState([]);
@@ -58,6 +62,11 @@ const TimeSheet = () => {
         { title: 'Check-out', field: 'checkout', type: 'time' },
         { title: 'Work hours', field: 'workhours', type: 'numeric', render: rowData => `${rowData.workhours}h` },
     ];
+
+    const initialValues = {
+        start: null,
+        end: null,
+    };
 
     useEffect(() => {
         // Fetch the departments and listen for any changes
@@ -145,7 +154,7 @@ const TimeSheet = () => {
                         });
 
                         const attendance = {
-                            id: i,
+                            id: uuidv4(),
                             date: toDate(i),
                             name: name,
                             employeeid: employee_id,
@@ -161,6 +170,7 @@ const TimeSheet = () => {
                 console.log(dataStructured)
             }
             setData(dataStructured);
+            setUnfiltered(dataStructured);
             setLoading(false);
         });
 
@@ -177,7 +187,32 @@ const TimeSheet = () => {
                     <MaterialTable
                         components={{
                             Container: props => <Backdrop {...props} elevation={0} />,
-                            Pagination: (props) => { return <Pagination {...props} />; }
+                            Pagination: (props) => <Pagination {...props} />,
+                            Toolbar: (props) => (
+                                <>
+                                    <MTableToolbar {...props} />
+                                    <Formik
+                                        initialValues={{ ...initialValues }}
+                                        onSubmit={(values) => {
+                                            const filtered = unfiltered.filter(attendance => values.start <= attendance.date && attendance.date <= values.end);
+                                            setData(filtered)
+                                        }}>
+                                        <Form>
+                                            <FormContainer>
+                                                <DateRangeField
+                                                    name='start'
+                                                    id='start'
+                                                    label='Start' />
+                                                <DateRangeField
+                                                    name='end'
+                                                    id='end'
+                                                    label='End' />
+                                                <Button type='submit'> Search </Button>
+                                            </FormContainer>
+                                        </Form>
+                                    </Formik>
+                                </>
+                            ),
                         }}
                         title=''
                         columns={columns}
@@ -189,11 +224,13 @@ const TimeSheet = () => {
                             }
                         }}
                         options={{
-                            headerStyle: { fontSize: '1em', },
+                            headerStyle: { fontSize: '0.8em', fontWeight: 'bold', color: '#35435E' },
+                            rowStyle: { fontSize: '0.9em' },
                             pageSize: 5,
                             pageSizeOptions: [10, 20, 50],
                             paginationType: 'stepped',
                             searchFieldVariant: 'standard',
+                            searchFieldAlignment: 'left',
                             exportButton: true,
                             exportAllData: true,
                             exportMenu: [{
