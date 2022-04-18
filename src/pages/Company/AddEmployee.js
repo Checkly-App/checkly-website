@@ -163,7 +163,7 @@ const AddEmployee = () => {
             for (let id in data) {
                 if (data[id]['company_id'] === auth.currentUser.uid) {
                     const department = {
-                        department: 'dep' + data[id]['dep_id'],
+                        department: id,
                         name: data[id]['name']
                     };
                     departments.push(department)

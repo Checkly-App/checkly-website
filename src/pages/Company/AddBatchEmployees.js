@@ -162,7 +162,7 @@ const AddBatchEmployees = () => {
             for (let id in data) {
                 if (data[id]['company_id'] === auth.currentUser.uid) {
                     const department = {
-                        department: 'dep' + data[id]['dep_id'],
+                        department: id,
                         name: data[id]['name']
                     };
                     departments.push(department)
@@ -466,12 +466,14 @@ const AddBatchEmployees = () => {
 
         parsedCsvData.forEach((employee) => {
             createUserWithEmailAndPassword(authSignup, employee.email, password).then((result) => {
-                signOut(authSignup);
-                sendEmail({
-                    email: employee.email,
-                    name: employee.fullName,
-                    password: password,
-                }).then(() => {
+                // signOut(authSignup);
+                signOut(authSignup)
+                // sendEmail({
+                //     email: employee.email,
+                //     name: employee.fullName,
+                //     password: password,
+                // })
+                .then(() => {
                     set(ref(database, 'Employee/' + result.user.uid), {
                         name: employee.name,
                         national_id: employee.national_id,
