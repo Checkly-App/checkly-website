@@ -12,6 +12,7 @@ import Login from './pages/Authentication/Login';
 import ChecklyProfile from './pages/Checkly Admin/ChecklyProfile';
 import ResetPassword from './pages/Authentication/ResetPassword';
 import AddBatchEmployees from './pages/Company/AddBatchEmployees';
+import AddDepartment from './pages/Company/AddDepartment';
 import Layout from './pages/Company/Layout';
 import Home from './pages/Home';
 import ChecklyLogo from './pages/ChecklyLogo';
@@ -62,6 +63,7 @@ function App() {
             <Route exact path="/checkly" element={<ChecklyProfile />} />
             <Route exact path="/admin/dashboard" element={<Layout user={userinfo} children={<Dashboard />} />} />
             <Route exact path="/admin/departments" element={<Layout user={userinfo} children={<Departments />} />} />
+            <Route exact path="/admin/departments/add-department" element={<Layout user={userinfo} children={<AddDepartment />} />} />
             <Route exact path="/admin/employees" element={<Layout user={userinfo} children={<AddEmployee />} />} />
             <Route exact path="/admin/employees/add-batch" element={<Layout user={userinfo} children={<AddBatchEmployees />} />} />
             <Route exact path="/admin/analytics" element={<Layout user={userinfo} children={<Analytics />} />} />
