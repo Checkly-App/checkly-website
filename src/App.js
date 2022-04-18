@@ -1,6 +1,6 @@
 // import logo from './assets/images/logo.svg';
 import './App.css';
-import AddEmployee from './pages/AddEmployee';
+import CreateAnnouncement from './pages/CreateAnnouncement';
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import styled from 'styled-components';
 
@@ -51,7 +51,7 @@ function App() {
       <AppContainer className="App">
         <SideBar> Sidebar Content</SideBar>
         <Content>
-          <AddEmployee />
+          <CreateAnnouncement />
         </Content>
       </AppContainer >
     </ThemeProvider>
