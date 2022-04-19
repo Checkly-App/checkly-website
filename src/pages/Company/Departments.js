@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom';
 // Firebase imports
 import { ref, onValue } from 'firebase/database';
 import { database, auth } from '../../utilities/firebase';
-// styles imports
+// styles & icons imports
 import styled from 'styled-components';
+import { MdPeopleOutline } from 'react-icons/md'
 
 
 /**
@@ -26,6 +27,7 @@ const BoxesContainer = styled.div `
 `
 
 const Box = styled.div`
+    position: relative;
     background-color: white;
     width: 270px;
     height: 200px;
@@ -80,6 +82,25 @@ margin-right: 4em;
     background: #2CB1EF;
   }
 `
+const SmallText = styled.p`
+    float: right;
+    display: inline;
+    font-size: 1.2em;
+    color: #A3A1A1;
+`
+
+const Container = styled.div `
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin-right: 1em;
+`
+const SmallIcon = styled.div`
+    color: #A3A1A1;
+    float: right;
+    display: absolute;
+    margin-right: 0.3em;
+`
 
 const Departments = () => {
 
@@ -103,7 +124,8 @@ const [updatedCompanyDepartments, setUpdatedCompanyDepartments] = useState([{
     department_id: '',
     name: '',
     manager_id: '',
-    manager_name: ''
+    manager_name: '',
+    employees_count: 0,
 }])
 
 // to navigate to 'Add Department'
@@ -146,7 +168,7 @@ const navigate = useNavigate();
             const data = snapshot.val();
             var employees = [];
             for (let id in data) {
-                if (departmentsKeys.includes(data[id]['department'])) {  //Fetch employees of a given company
+                if (departmentsKeys.includes(data[id]['department'])) {
                     const employee = {
                         uid: id,
                         department: data[id]['department'],
@@ -159,10 +181,9 @@ const navigate = useNavigate();
         });
     }, [companyDepartments])
 
-    // Update Departments Array to include managers names as well as their uids
+    // Update Departments Array to include managers names
     useEffect(() => {
         var updatedDepartments = [];
-        if(companyDepartments.length){
             for (let i in companyDepartments){
                 for (let j in companyEmployees) {
                     if (companyDepartments[i].manager_id === companyEmployees[j].uid){
@@ -171,13 +192,21 @@ const navigate = useNavigate();
                             name: companyDepartments[i].name,
                             manager_id: companyEmployees[j].uid,
                             manager_name: companyEmployees[j].name,
+                            employees_count: 0
                         };
-                        // console.log(department)
                         updatedDepartments.push(department)
                     }
                 }
             }
+        // count employees in each department
+        for(let i in updatedDepartments){
+            for(let j in companyEmployees){
+                if(updatedDepartments[i].department_id === companyEmployees[j].department){
+                    updatedDepartments[i].employees_count = updatedDepartments[i].employees_count + 1;
+                }
+            }
         }
+        console.log(updatedDepartments)
         setUpdatedCompanyDepartments(updatedDepartments);
     },[companyDepartments, companyEmployees])
 
@@ -199,6 +228,12 @@ const navigate = useNavigate();
                 <Subtitle>
                     Managed By: {department.manager_name}
                 </Subtitle>
+                <Container>
+                    <SmallText>{department.employees_count}</SmallText>
+                    <SmallIcon>
+                         <MdPeopleOutline size={22} />
+                    </SmallIcon>
+                </Container>
             </Box>
             ))}
             

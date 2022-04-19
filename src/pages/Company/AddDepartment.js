@@ -1,7 +1,7 @@
 
 import { React, useState, useEffect } from 'react';
 // Firebase imports
-import { ref, onValue, push, set } from 'firebase/database';
+import { ref, onValue, push, set, update } from 'firebase/database';
 import { database, auth } from '../../utilities/firebase';
 // styles imports
 import styled from 'styled-components';
@@ -59,14 +59,15 @@ const Section = styled.div`
 `
 
 const SectionTitle = styled.h1`
-font-size: 1.05em;
-font-weight: 600;
-margin: 0em 0em 2.5em;
-grid-column: 1 / 3;
-@media (max-width: 768px) {
-       grid-column: 1;
-}
+    font-size: 1.05em;
+    font-weight: 600;
+    margin: 0em 0em 2.5em;
+    grid-column: 1 / 3;
+    @media (max-width: 768px) {
+        grid-column: 1;
+    }
 `
+
 const CustomButton = styled.button`
     width: 10em;
     height: 3em;
@@ -106,7 +107,6 @@ const AddDepartment = () => {
      */
     
     useEffect(() => {
-        // console.log(auth.currentUser.uid)
         onValue(ref(database, 'Department'), (snapshot) => {
             const data = snapshot.val();
             var departments = [];
@@ -127,7 +127,6 @@ const AddDepartment = () => {
         }
     }, []);
 
-
     // Fetch employees of the logged-in company
     useEffect(() => {
         
@@ -140,12 +139,11 @@ const AddDepartment = () => {
             const data = snapshot.val();
             var employees = [];
             for (let id in data) {
-                if (departmentsKeys.includes(data[id]['department'])) {  //Fetch employees of a given company
+                if (departmentsKeys.includes(data[id]['department'])) {
                     const employee = {
                         value: id,
                         label: data[id]['name'],
                     };
-                    // console.log(employee)
                     employees.push(employee)
                 }
             }
@@ -171,12 +169,24 @@ const AddDepartment = () => {
     /**
      * Form's validation patterns
      */
-     const validationSchema =
+    const validationSchema =
      Yup.object({
         depName: Yup.string().required('Department Name is required'),
         manager: Yup.object().required('Department Manager is required')
-     });
+    });
 
+     // Check if department exists
+    const departmentExists = (department_name) => {
+        for(let i in departments){
+            if(departments[i].name.toLowerCase().trim() === department_name.toLowerCase().trim()){
+                setErrorDetails({
+                    title: 'Invalid Department',
+                    description: 'Department exists within the company'
+                });
+                return true;
+            }
+        }
+    }
     
      /**
      * Add employee function - triggered when the form is submitted
@@ -185,6 +195,11 @@ const AddDepartment = () => {
     const addDepartment = (department) => {
 
         // Check if department exists
+        if(departmentExists(department.depName)){
+            setError(true);
+            setOpenSnackbar(true);
+            return;
+        }
 
        var dep = push(ref(database));
        set(ref(database, 'Department/'+ dep.key),{
@@ -193,8 +208,14 @@ const AddDepartment = () => {
         name : department.depName,
         manager: department.manager.value, 
        })
+
+       // Update manager department
+       update(ref(database, 'Employee/'+ department.manager.value),{
+        department: dep.key, 
+        })
        setError(false);
        setOpenSnackbar(true);
+
     }
 
     return (
