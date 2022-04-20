@@ -90,12 +90,6 @@ const CreateAnnouncement = () => {
 
     const addAnnouncement = (announcement) => {
         
-            // set(ref(database, 'Announcement/' ), {
-            //     title: announcement.Title,
-            //     body: announcement.announcement,
-            //     department: announcement.department,
-            //     author: " " //user email
-            // });
             const db = getDatabase();
             const announcementRef = ref(db, 'Announcement');
             const newAnnouncementRef = push(announcementRef);
@@ -103,7 +97,8 @@ const CreateAnnouncement = () => {
                 title: announcement.Title,
                 body: announcement.announcement,
                 department: announcement.department,
-                author: " " //user email
+                author: " " ,//user email
+                date: `${new Date().toLocaleString()}`
             });
      
     }
