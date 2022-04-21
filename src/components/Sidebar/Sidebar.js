@@ -25,27 +25,27 @@ const SideBarWrapper = styled.div`
 
     @media  (max-width: 768px) {
         display: none;
-        /* grid-area: main;
+        grid-area: main;
         position: fixed;
         width: 100vw;
         min-height: 100vh;
         top: 0;
         left: ${(props) => props.open ? '0' : '-100vw'};
-        z-index: 1000; */
+        z-index: 1000;
     } 
 `
-// const MenuIcon = styled.div`
-//  @media  (max-width: 768px) {
-//         position: absolute;
-//         top: 0;
-//         left: 0;
-//         width: 20em;
-//         height: 20em;
-//         color: red;
-//         font-size: xx-large;
-//         z-index: 10000;
-//     }
-// `
+const MenuIcon = styled.div`
+ @media  (max-width: 768px) {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20em;
+        height: 20em;
+        color: red;
+        font-size: xx-large;
+        z-index: 10000;
+    }
+`
 const Wrapper = styled.div`
     width: 100%;
     display: flex;
@@ -85,6 +85,11 @@ const Link = styled(NavLink)`
     color: #2CB1EF;
     }   
 `
+const ImageLink = styled(Link)`
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+`
 const LogoutWrapper = styled.div`
     width: 100%;
     height: 100%;
@@ -108,12 +113,12 @@ const NavTitle = styled.span`
     flex: 2;
 `
 const Logo = styled.img`
-    width: 5em;
+    width: 6em;
 `
 
 const Sidebar = () => {
     const navigate = useNavigate();
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
 
     const logout = () => {
         const auth = getAuth();
@@ -126,12 +131,14 @@ const Sidebar = () => {
 
     return (
         <>
-            {/* <MenuIcon >
-                {open ? <HiX onClick={() => { setOpen(!open) }} /> : <HiOutlineMenuAlt2 onClick={() => { setOpen(!open) }} />}
+            {/* <MenuIcon onClick={() => setOpen(!open)}>
+                {open ? <HiX /> : <HiOutlineMenuAlt2 />}
             </MenuIcon> */}
             <SideBarWrapper open={open}>
                 <Wrapper>
-                    <Logo src={logo} />
+                    <ImageLink to='/'>
+                        <Logo src={logo} />
+                    </ImageLink>
                 </Wrapper>
                 <Wrapper nav>
                     {sideBarData.map((item, index) => {

@@ -11,18 +11,32 @@ import moment from 'moment';
 import { Formik, Form } from 'formik';
 import DateRangeField from '../../components/Forms/DateRange';
 import { v4 as uuidv4 } from 'uuid';
+import { MdCalendarToday } from 'react-icons/md';
+import { IoMdArrowDropdown } from 'react-icons/io';
 
 
-const Container = styled.div`
+const DateWrapper = styled.div`
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    margin: 1em 4em;
+    width: fit-content;
+    align-items: center;
+    justify-items: center;
+    align-self: center;
+    margin-top: 1rem;
+    color: #35435E;
 `
+const Today = styled.h1`
+    font-size: 1em;
+    padding: 0;
+    margin: 0 0.3em;
+    font-weight: 400;
+    color: #A3A3A1;
+`
+
 const Backdrop = styled.div`
+    margin-top: 1em;
     background-color: white;
     border-radius: 1em;
-    padding: 2em;
+    padding: 1em;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
 `
 const Button = styled.button`
@@ -43,9 +57,18 @@ const FormContainer = styled.div`
     grid-template-columns: 2fr 2fr 1fr;
     column-gap: 2.5em;
     row-gap: 0.75em;
-
 `
-
+const HeaderSubtitle = styled.p`
+    font-weight: 400;
+    font-size: 1em;
+    color: #3CB4FF;
+    padding: 0 1.5em;
+`
+const Toolbar = styled(MTableToolbar)`
+    padding: 0;
+    margin: 0;
+    align-items: flex-end;
+`
 const TimeSheet = () => {
     const [unfiltered, setUnfiltered] = useState([]);
     const [data, setData] = useState([]);
@@ -180,41 +203,55 @@ const TimeSheet = () => {
 
     return (
         loading ? <ChecklyLogo /> :
-            <Wrapper>
-                <Title>Timesheets</Title>
-                <Subtitle>Generate employee timesheets and export them</Subtitle>
-                <Container>
+            <>
+                <DateWrapper>
+                    <MdCalendarToday color='#A3A3A1' />
+                    <Today>from</Today>
+                    12 may 2022
+                    <Today>to</Today>
+                    10 may2022
+                    <IoMdArrowDropdown />
+                </DateWrapper>
+                <Wrapper>
+                    <Title>Timesheets</Title>
+                    <Subtitle>Generate employee timesheets and export them</Subtitle>
                     <MaterialTable
                         components={{
                             Container: props => <Backdrop {...props} elevation={0} />,
                             Pagination: (props) => <Pagination {...props} />,
                             Toolbar: (props) => (
                                 <>
-                                    <MTableToolbar {...props} />
-                                    <Formik
-                                        initialValues={{ ...initialValues }}
-                                        onSubmit={(values) => {
-                                            const filtered = unfiltered.filter(attendance => values.start <= attendance.date && attendance.date <= values.end);
-                                            setData(filtered)
-                                        }}>
-                                        <Form>
-                                            <FormContainer>
-                                                <DateRangeField
-                                                    name='start'
-                                                    id='start'
-                                                    label='Start' />
-                                                <DateRangeField
-                                                    name='end'
-                                                    id='end'
-                                                    label='End' />
-                                                <Button type='submit'> Search </Button>
-                                            </FormContainer>
-                                        </Form>
-                                    </Formik>
+                                    <Toolbar {...props} />
+                                    <HeaderSubtitle>20 May, 2020 to 13 Jun, 2020</HeaderSubtitle>
                                 </>
+
+                                // <>
+                                //     
+
+                                //     <Formik
+                                //         initialValues={{ ...initialValues }}
+                                //         onSubmit={(values) => {
+                                //             const filtered = unfiltered.filter(attendance => values.start <= attendance.date && attendance.date <= values.end);
+                                //             setData(filtered)
+                                //         }}>
+                                //         <Form>
+                                //             <FormContainer>
+                                //                 <DateRangeField
+                                //                     name='start'
+                                //                     id='start'
+                                //                     label='Start' />
+                                //                 <DateRangeField
+                                //                     name='end'
+                                //                     id='end'
+                                //                     label='End' />
+                                //                 <Button type='submit'> Search </Button>
+                                //             </FormContainer>
+                                //         </Form>
+                                //     </Formik>
+                                // </>
                             ),
                         }}
-                        title=''
+                        title='Employees sheets'
                         columns={columns}
                         data={data}
                         localization={{
@@ -226,11 +263,12 @@ const TimeSheet = () => {
                         options={{
                             headerStyle: { fontSize: '0.8em', fontWeight: 'bold', color: '#35435E' },
                             rowStyle: { fontSize: '0.9em' },
-                            pageSize: 5,
+                            searchFieldStyle: { marginRight: '1em' },
+                            pageSize: 7,
                             pageSizeOptions: [10, 20, 50],
                             paginationType: 'stepped',
                             searchFieldVariant: 'standard',
-                            searchFieldAlignment: 'left',
+                            searchFieldAlignment: 'right',
                             exportButton: true,
                             exportAllData: true,
                             exportMenu: [{
@@ -242,8 +280,8 @@ const TimeSheet = () => {
                             }]
                         }}
                     />
-                </Container>
-            </Wrapper>
+                </Wrapper>
+            </>
     );
 };
 

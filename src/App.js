@@ -54,7 +54,7 @@ function App() {
       <div className="App">
         <Router>
           <Routes>
-            {userinfo ? <Route component={() => (<ChecklyLogo />)} /> : <Route exact path="/login" element={<Login />} />}
+            <Route exact path="/login" element={<Login />} />
             <Route path="/" element={<Home />} />
             <Route exact path="/reset" element={<ResetPassword />} />
             <Route exact path="/checkly" element={<ChecklyProfile />} />

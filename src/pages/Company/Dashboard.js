@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import CheckIn from '../../components/Charts/CheckIn';
 import Overtime from '../../components/Charts/Overtime';
@@ -16,7 +16,9 @@ import moment from 'moment';
 import { ref, onValue, get } from 'firebase/database';
 import { database, auth } from '../../utilities/firebase';
 import { MdCalendarToday } from 'react-icons/md';
-import { HiOutlineDownload } from 'react-icons/hi'
+import { HiOutlineDownload } from 'react-icons/hi';
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 
 
 export const Construction = styled.div`
@@ -155,6 +157,7 @@ const Dashboard = () => {
     const [departments, setDepartments] = useState([]);
     const [employees, setEmployees] = useState([]);
     const [meetings, setMeetings] = useState([]);
+    const inputRef = useRef(null);
 
     useEffect(() => {
 
@@ -388,6 +391,15 @@ const Dashboard = () => {
         return dates
     }
 
+    const printDocument = () => {
+        html2canvas(inputRef.current).then((canvas) => {
+            const imgData = canvas.toDataURL("image/png");
+            const pdf = new jsPDF();
+            pdf.addImage(imgData, "JPEG", 0, 0, 200, 300);
+            pdf.save(`${company.abbreviation}_dashboard_${moment().format('DD_MM_yyyy')}.pdf`);
+        });
+    };
+
     return (
         loading ? <ChecklyLogo /> :
             <>
@@ -402,7 +414,7 @@ const Dashboard = () => {
                             <Title>{greeting}</Title>
                             <Subtitle>{company['name']} — {company['abbreviation']}</Subtitle>
                         </HeaderMain>
-                        <PDFButton>
+                        <PDFButton onClick={printDocument}>
                             <ButtonTitle>
                                 Export
                             </ButtonTitle>
@@ -411,7 +423,7 @@ const Dashboard = () => {
                     </Header>
                     {data.length <= 0 ?
                         <Construction>Not enough data </Construction> :
-                        <Container>
+                        <Container ref={inputRef}>
                             <General
                                 cell='cell0'
                                 title='Total employees'
