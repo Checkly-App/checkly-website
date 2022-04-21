@@ -89,7 +89,8 @@ const AddDepartment = () => {
 
     const [departments, setDepartments] = useState([{
         department: '',
-        name: ''
+        name: '',
+        manager_id: ''
     }]);
     const [companyEmployees, setCompanyEmployees] = useState([{
         value: '',
@@ -114,7 +115,8 @@ const AddDepartment = () => {
                 if (data[id]['company_id'] === auth.currentUser.uid) {
                     const department = {
                         department: id,
-                        name: data[id]['name']
+                        name: data[id]['name'],
+                        manager_id: data[id]['manager']
                     };
                     departments.push(department)
                 }
@@ -187,6 +189,21 @@ const AddDepartment = () => {
             }
         }
     }
+
+    // Check if selected employee already manages another department
+    const managerExists = (manager_uid) => {
+        console.log(manager_uid)
+        for(let i in departments){
+            console.log(departments[i].manager)
+            if(departments[i].manager_id === manager_uid){
+                setErrorDetails({
+                    title: 'Manager Exists',
+                    description: 'The selected employee already manages another department'
+                });
+                return true;
+            }
+        }
+    }
     
      /**
      * Add employee function - triggered when the form is submitted
@@ -196,6 +213,11 @@ const AddDepartment = () => {
 
         // Check if department exists
         if(departmentExists(department.depName)){
+            setError(true);
+            setOpenSnackbar(true);
+            return;
+        }
+        if(managerExists(department.manager.value)){
             setError(true);
             setOpenSnackbar(true);
             return;

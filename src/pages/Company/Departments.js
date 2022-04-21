@@ -82,6 +82,7 @@ margin-right: 4em;
     background: #2CB1EF;
   }
 `
+
 const SmallText = styled.p`
     float: right;
     display: inline;
@@ -95,11 +96,19 @@ const Container = styled.div `
     right: 0;
     margin-right: 1em;
 `
+
 const SmallIcon = styled.div`
     color: #A3A1A1;
     float: right;
     display: absolute;
     margin-right: 0.3em;
+`
+
+const LoadingNote = styled.div`
+    margin-top: 5em;
+    font-size: 1.5em;
+    color: #A3A1A1;
+    text-align: center;
 `
 
 const Departments = () => {
@@ -217,27 +226,32 @@ const navigate = useNavigate();
                 <MainTitle>Departments</MainTitle>
                 <Subtitle>List of the Company's Departments</Subtitle>
             </MainWrapper>
-            <AddButton onClick={()=> navigate("/admin/departments/add-department")} >Add Department</AddButton>
-            <BoxesContainer>
-
-            {updatedCompanyDepartments.map((department) => (
-            <Box key={department.department_id}>
-                <DepartmentName>
-                    {department.name} Department
-                </DepartmentName>
-                <Subtitle>
-                    Managed By: {department.manager_name}
-                </Subtitle>
-                <Container>
-                    <SmallText>{department.employees_count}</SmallText>
-                    <SmallIcon>
-                         <MdPeopleOutline size={22} />
-                    </SmallIcon>
-                </Container>
-            </Box>
-            ))}
             
-            </BoxesContainer>
+            <AddButton onClick={()=> navigate("/admin/departments/add-department")} >Add Department</AddButton>
+            
+            {updatedCompanyDepartments.length ? 
+                <BoxesContainer>
+
+                {updatedCompanyDepartments.map((department) => (
+                <Box key={department.department_id}>
+                    <DepartmentName>
+                        {department.name} Department
+                    </DepartmentName>
+                    <Subtitle>
+                        Managed By: {department.manager_name}
+                    </Subtitle>
+                    <Container>
+                        <SmallText>{department.employees_count}</SmallText>
+                        <SmallIcon>
+                            <MdPeopleOutline size={22} />
+                        </SmallIcon>
+                    </Container>
+                </Box>
+                ))}
+                
+                </BoxesContainer>
+                : <LoadingNote>No Departments..Start By adding one!</LoadingNote>
+            }
         
         </SetionWrapper>
         
