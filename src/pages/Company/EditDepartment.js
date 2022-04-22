@@ -1,8 +1,7 @@
-
 import { React, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 // Firebase imports
-import { ref, onValue, push, set, update } from 'firebase/database';
+import { ref, onValue, update } from 'firebase/database';
 import { database, auth } from '../../utilities/firebase';
 // styles imports
 import styled from 'styled-components';
@@ -20,9 +19,9 @@ import TextField from '@mui/material/TextField';
  */
 
  const SetionWrapper = styled.div`
- display: flex;
- flex-direction: column;
- margin: 2em 8em;
+    display: flex;
+    flex-direction: column;
+    margin: 2em 8em;
 `
 
 const MainWrapper = styled.div`
@@ -58,7 +57,6 @@ const Section = styled.div`
         gap: 0.5em
     }
 `
-
 const SectionTitle = styled.h1`
     font-size: 1.05em;
     font-weight: 600;
@@ -68,7 +66,6 @@ const SectionTitle = styled.h1`
         grid-column: 1;
     }
 `
-
 const CustomButton = styled.button`
     width: 10em;
     height: 3em;
@@ -82,13 +79,13 @@ const CustomButton = styled.button`
     margin-left: auto;
 `
 
-const AddDepartment = () => {
-
+const EditDepartment = () => {
+    
     /**
      * Use States
      */
 
-    const [departments, setDepartments] = useState([{
+     const [departments, setDepartments] = useState([{
         department: '',
         name: '',
         manager_id: ''
@@ -102,8 +99,12 @@ const AddDepartment = () => {
         title: 'error',
         description: 'Oops! Something went wrong, try again later.',
     });
+    // get passed info
+    const location = useLocation();
+    console.log(location.state);
+
     const [openSnackbar, setOpenSnackbar] = useState(false);
-    
+
     // to navigate to 'Departments View'
     const navigate = useNavigate();
 
@@ -122,6 +123,7 @@ const AddDepartment = () => {
                         name: data[id]['name'],
                         manager_id: data[id]['manager']
                     };
+                    // console.log(department)
                     departments.push(department)
                 }
             }
@@ -132,6 +134,7 @@ const AddDepartment = () => {
             setCompanyEmployees([]);
         }
     }, []);
+
 
     // Fetch employees of the logged-in company
     useEffect(() => {
@@ -145,7 +148,7 @@ const AddDepartment = () => {
             const data = snapshot.val();
             var employees = [];
             for (let id in data) {
-                if (departmentsKeys.includes(data[id]['department'])) {
+                if (departmentsKeys.includes(data[id]['department'])) { 
                     const employee = {
                         value: id,
                         label: data[id]['name'],
@@ -168,23 +171,24 @@ const AddDepartment = () => {
      * Form's Initial Values
      */
      const initialValues = {
-        depName: '',
-        manager: ''
+        depName: location.state.department_name,
+        manager: location.state.manager,
     };
 
     /**
      * Form's validation patterns
      */
-    const validationSchema =
+     const validationSchema =
      Yup.object({
         depName: Yup.string().required('Department Name is required'),
         manager: Yup.object().required('Department Manager is required')
-    });
+     });
 
-     // Check if department exists
+    // Check if department exists
     const departmentExists = (department_name) => {
         for(let i in departments){
-            if(departments[i].name.toLowerCase().trim() === department_name.toLowerCase().trim()){
+            if(departments[i].name.toLowerCase().trim() === department_name.toLowerCase().trim() 
+            && departments[i].name.toLowerCase().trim() !== location.state.department_name.toLowerCase().trim()){
                 setErrorDetails({
                     title: 'Invalid Department',
                     description: 'Department exists within the company'
@@ -196,10 +200,8 @@ const AddDepartment = () => {
 
     // Check if selected employee already manages another department
     const managerExists = (manager_uid) => {
-        console.log(manager_uid)
         for(let i in departments){
-            console.log(departments[i].manager)
-            if(departments[i].manager_id === manager_uid){
+            if(departments[i].manager_id === manager_uid && departments[i].manager_id !== location.state.manager.value){
                 setErrorDetails({
                     title: 'Manager Exists',
                     description: 'The selected employee already manages another department'
@@ -208,37 +210,36 @@ const AddDepartment = () => {
             }
         }
     }
-    
-     /**
-     * Add department function - triggered when the form is submitted
+
+    /**
+     * Edit department function - triggered when the form is submitted
      * @params department
      */
-    const addDepartment = (department) => {
+     const editDepartment = (department) => {
 
         if(departmentExists(department.depName)){
             setError(true);
             setOpenSnackbar(true);
             return;
         }
+
         if(managerExists(department.manager.value)){
             setError(true);
             setOpenSnackbar(true);
             return;
         }
 
-       // push department to DB 
-       var dep = push(ref(database));
-       set(ref(database, 'Department/'+ dep.key),{
+       // Update department to DB 
+       update(ref(database, 'Department/'+ location.state.department_id),{
         company_id: auth.currentUser.uid,
-        dep_id: dep.key,
+        dep_id: location.state.department_id, 
         name : department.depName,
-        manager: department.manager.value, 
-       })
-
+        manager: department.manager.value,
+        })
        // Update manager department
        update(ref(database, 'Employee/'+ department.manager.value),{
-        department: dep.key, 
-        })
+            department: location.state.department_id, 
+       })
        setError(false);
        setOpenSnackbar(true);
        // navigate to departments view
@@ -247,12 +248,12 @@ const AddDepartment = () => {
        }, 3000);
     }
 
-    return (
+    return(
         <Formik
         initialValues={{ ...initialValues }}
         validationSchema={validationSchema}
         onSubmit={(values) => {
-            addDepartment(values);
+            editDepartment(values);
         }}
         >
        
@@ -260,8 +261,8 @@ const AddDepartment = () => {
                 <Form>
                 <SetionWrapper>
                 <MainWrapper>
-                    <MainTitle>Add Department</MainTitle>
-                    <Subtitle>Add Department Information</Subtitle>
+                    <MainTitle>Edit Department</MainTitle>
+                    <Subtitle>Edit Department Information</Subtitle>
                 </MainWrapper>
                 <Section>
                     <SectionTitle> Department Information </SectionTitle>
@@ -274,8 +275,8 @@ const AddDepartment = () => {
                     <Autocomplete
                     name= "manager"
                     id="manager"
+                    defaultValue={ location.state.manager }
                     onChange={(e, value) => {
-                        console.log(value)
                         setFieldValue("manager", value !== null ? value : initialValues.manager)}
                     }
                     options={companyEmployees}
@@ -292,7 +293,7 @@ const AddDepartment = () => {
                           />}
                     />
                 </Section>
-                <CustomButton type='submit' >Submit</CustomButton>
+                <CustomButton type='submit' >Save</CustomButton>
             </SetionWrapper>
             {error ?
                     (<Snackbar
@@ -312,7 +313,7 @@ const AddDepartment = () => {
                         anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
                         <Alert severity='success' variant='filled'>
                             <AlertTitle>Success!</AlertTitle>
-                            Department has been added successfully
+                            Department has been updated successfully
                         </Alert>
                     </Snackbar>)}
             </Form>
@@ -321,4 +322,5 @@ const AddDepartment = () => {
         </Formik>
     );
 }
-export default AddDepartment;
+
+export default EditDepartment;

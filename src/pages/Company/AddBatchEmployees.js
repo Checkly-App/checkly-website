@@ -188,7 +188,7 @@ const AddBatchEmployees = () => {
             const data = snapshot.val();
             var employees = [];
             for (let id in data) {
-                if (departmentsKeys.includes(data[id]['department'])) {  //Fetch employees of a given company
+                if (departmentsKeys.includes(data[id]['department'])) {  
                     const employee = {
                         national_id: data[id]['national_id'],
                         phone_number: data[id]['phone_number'],
@@ -466,13 +466,12 @@ const AddBatchEmployees = () => {
 
         parsedCsvData.forEach((employee) => {
             createUserWithEmailAndPassword(authSignup, employee.email, password).then((result) => {
-                // signOut(authSignup);
-                signOut(authSignup)
-                // sendEmail({
-                //     email: employee.email,
-                //     name: employee.fullName,
-                //     password: password,
-                // })
+                signOut(authSignup);
+                sendEmail({
+                    email: employee.email,
+                    name: employee.fullName,
+                    password: password,
+                })
                 .then(() => {
                     set(ref(database, 'Employee/' + result.user.uid), {
                         name: employee.name,

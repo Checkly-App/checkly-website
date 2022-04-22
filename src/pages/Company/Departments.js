@@ -137,7 +137,7 @@ const [updatedCompanyDepartments, setUpdatedCompanyDepartments] = useState([{
     employees_count: 0,
 }])
 
-// to navigate to 'Add Department'
+// to navigate to 'Add Department' & 'Edit Department'
 const navigate = useNavigate();
 
 /**
@@ -219,6 +219,16 @@ const navigate = useNavigate();
         setUpdatedCompanyDepartments(updatedDepartments);
     },[companyDepartments, companyEmployees])
 
+    // Navigate to Edit Department and pass dep info
+    const toEditDepartment=(department)=>{
+        navigate('/admin/departments/edit-department', {
+            state:{ department_id: department.department_id,
+                    department_name: department.name,
+                    manager: {value: department.manager_id, label: department.manager_name}
+                }
+        });
+    }
+
     return (
         <SetionWrapper>
             
@@ -233,7 +243,7 @@ const navigate = useNavigate();
                 <BoxesContainer>
 
                 {updatedCompanyDepartments.map((department) => (
-                <Box key={department.department_id}>
+                <Box onClick={()=> toEditDepartment(department)} key={department.department_id}>
                     <DepartmentName>
                         {department.name} Department
                     </DepartmentName>
