@@ -148,7 +148,7 @@ const EditDepartment = () => {
             const data = snapshot.val();
             var employees = [];
             for (let id in data) {
-                if (departmentsKeys.includes(data[id]['department'])) { 
+                if (departmentsKeys.includes(data[id]['department']) && data[id]['deleted'] === 'false' ) { 
                     const employee = {
                         value: id,
                         label: data[id]['name'],

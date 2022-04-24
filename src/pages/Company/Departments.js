@@ -177,7 +177,7 @@ const navigate = useNavigate();
             const data = snapshot.val();
             var employees = [];
             for (let id in data) {
-                if (departmentsKeys.includes(data[id]['department'])) {
+                if (departmentsKeys.includes(data[id]['department']) && data[id]['deleted'] === 'false' ) {
                     const employee = {
                         uid: id,
                         department: data[id]['department'],
