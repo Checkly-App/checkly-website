@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import MaterialTable, { MTableToolbar } from '@material-table/core';
+import MaterialTable from '@material-table/core';
 import styled from 'styled-components';
 import { ref, onValue } from 'firebase/database';
 import { database, auth } from '../../utilities/firebase';
@@ -8,30 +8,21 @@ import Pagination from '../../components/Table/Pagination';
 import { ExportCsv, ExportPdf } from '@material-table/exporters';
 import { Subtitle, Title, toDate, Wrapper } from './Dashboard';
 import moment from 'moment';
-import { Formik, Form } from 'formik';
-import DateRangeField from '../../components/Forms/DateRange';
 import { v4 as uuidv4 } from 'uuid';
-import { MdCalendarToday } from 'react-icons/md';
-import { IoMdArrowDropdown } from 'react-icons/io';
-
+import { MdCalendarToday, MdOutlineClear } from 'react-icons/md';
+import DateRangePicker from '@wojtekmaj/react-daterange-picker/dist/entry.nostyle';
+import '../../Styles/DateRange.css'
 
 const DateWrapper = styled.div`
     display: flex;
-    width: fit-content;
+    width: 350px;
     align-items: center;
     justify-items: center;
     align-self: center;
+    justify-content: center;
     margin-top: 1rem;
     color: #35435E;
 `
-const Today = styled.h1`
-    font-size: 1em;
-    padding: 0;
-    margin: 0 0.3em;
-    font-weight: 400;
-    color: #A3A3A1;
-`
-
 const Backdrop = styled.div`
     margin-top: 1em;
     background-color: white;
@@ -39,42 +30,13 @@ const Backdrop = styled.div`
     padding: 1em;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
 `
-const Button = styled.button`
-    width: fit-content;
-    height: 100%;
-    font-size: 1em;
-    font-weight: 500;
-    text-align :center;
-    color: rgba(255,255,255,0.9);
-    border-radius: 0.5em;
-    border: none;
-    background: linear-gradient(90deg, #56BBEB 0%, #58AAF3 100%);
-    margin-left: auto;
-
-`
-const FormContainer = styled.div`
-    display: grid;
-    grid-template-columns: 2fr 2fr 1fr;
-    column-gap: 2.5em;
-    row-gap: 0.75em;
-`
-const HeaderSubtitle = styled.p`
-    font-weight: 400;
-    font-size: 1em;
-    color: #3CB4FF;
-    padding: 0 1.5em;
-`
-const Toolbar = styled(MTableToolbar)`
-    padding: 0;
-    margin: 0;
-    align-items: flex-end;
-`
 const TimeSheet = () => {
     const [unfiltered, setUnfiltered] = useState([]);
     const [data, setData] = useState([]);
     const [departments, setDepartments] = useState([]);
     const [employees, setEmployees] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [value, setValue] = useState([null, null]);
 
     const columns = [
         { title: 'Date', field: 'date', type: 'date' },
@@ -85,11 +47,6 @@ const TimeSheet = () => {
         { title: 'Check-out', field: 'checkout', type: 'time' },
         { title: 'Work hours', field: 'workhours', type: 'numeric', render: rowData => `${rowData.workhours}h` },
     ];
-
-    const initialValues = {
-        start: null,
-        end: null,
-    };
 
     useEffect(() => {
         // Fetch the departments and listen for any changes
@@ -136,7 +93,6 @@ const TimeSheet = () => {
                 }
             }
             setEmployees(employees);
-            console.log(employees)
 
             return () => { employeesListener(); }
 
@@ -190,7 +146,6 @@ const TimeSheet = () => {
                     }
                 }
                 dataStructured.push(...userArray);
-                console.log(dataStructured)
             }
             setData(dataStructured);
             setUnfiltered(dataStructured);
@@ -199,18 +154,34 @@ const TimeSheet = () => {
 
         return () => { attendanceListener(); }
 
-    }, [employees])
+    }, [employees, departments])
+
+    const filterEmployees = (value) => {
+        if (value) {
+            const filtered = unfiltered.filter(attendance => value[0] <= attendance.date && attendance.date <= value[1]);
+            setData(filtered);
+        }
+        else
+            setData(unfiltered);
+
+        setValue(value);
+    }
 
     return (
         loading ? <ChecklyLogo /> :
             <>
                 <DateWrapper>
-                    <MdCalendarToday color='#A3A3A1' />
-                    <Today>from</Today>
-                    12 may 2022
-                    <Today>to</Today>
-                    10 may2022
-                    <IoMdArrowDropdown />
+                    <DateRangePicker
+                        onChange={(value) => filterEmployees(value)}
+                        value={value}
+                        rangeDivider='to'
+                        maxDate={new Date()}
+                        format='dd/MM/yyyy'
+                        clearIcon={<MdOutlineClear color='#35435E' />}
+                        calendarIcon={<MdCalendarToday color='#35435E' />}
+                        monthPlaceholder='- - -'
+                        yearPlaceholder='- - - -'
+                        dayPlaceholder='- -' />
                 </DateWrapper>
                 <Wrapper>
                     <Title>Timesheets</Title>
@@ -219,37 +190,6 @@ const TimeSheet = () => {
                         components={{
                             Container: props => <Backdrop {...props} elevation={0} />,
                             Pagination: (props) => <Pagination {...props} />,
-                            Toolbar: (props) => (
-                                <>
-                                    <Toolbar {...props} />
-                                    <HeaderSubtitle>20 May, 2020 to 13 Jun, 2020</HeaderSubtitle>
-                                </>
-
-                                // <>
-                                //     
-
-                                //     <Formik
-                                //         initialValues={{ ...initialValues }}
-                                //         onSubmit={(values) => {
-                                //             const filtered = unfiltered.filter(attendance => values.start <= attendance.date && attendance.date <= values.end);
-                                //             setData(filtered)
-                                //         }}>
-                                //         <Form>
-                                //             <FormContainer>
-                                //                 <DateRangeField
-                                //                     name='start'
-                                //                     id='start'
-                                //                     label='Start' />
-                                //                 <DateRangeField
-                                //                     name='end'
-                                //                     id='end'
-                                //                     label='End' />
-                                //                 <Button type='submit'> Search </Button>
-                                //             </FormContainer>
-                                //         </Form>
-                                //     </Formik>
-                                // </>
-                            ),
                         }}
                         title='Employees sheets'
                         columns={columns}
@@ -264,7 +204,7 @@ const TimeSheet = () => {
                             headerStyle: { fontSize: '0.8em', fontWeight: 'bold', color: '#35435E' },
                             rowStyle: { fontSize: '0.9em' },
                             searchFieldStyle: { marginRight: '1em' },
-                            pageSize: 7,
+                            pageSize: 8,
                             pageSizeOptions: [10, 20, 50],
                             paginationType: 'stepped',
                             searchFieldVariant: 'standard',

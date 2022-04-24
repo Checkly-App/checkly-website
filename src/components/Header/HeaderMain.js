@@ -3,7 +3,6 @@ import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { Link } from 'react-scroll';
 import { ReactComponent as ChecklyLogo } from '../../assets/images/logo.svg';
-import { propsToClassKey } from '@mui/styles';
 
 const Wrapper = styled.div`
     display: flex;
@@ -120,7 +119,7 @@ const Actions = styled.div`
         justify-content: flex-start;
     }
 `
-const PrimaryButton = styled.button`
+const PrimaryButton = styled(NavLink)`
     background-color: white;
     border: none;
     border-radius: 5px;
@@ -129,7 +128,11 @@ const PrimaryButton = styled.button`
     font-weight: 450;
     box-shadow: 0px 40px 40px -2px rgba(10, 0, 125, 0.15);
     z-index: 10;
-    
+    text-decoration: none;
+
+    &:hover, &:focus {
+        color:#35435E;
+    }
     @media  (max-width: 768px) {
         border: 1px solid #35435E ;
         margin-top: 1em;
@@ -183,7 +186,6 @@ const SecondaryButton = styled(NavLink)`
 const HeaderMain = ({ open, updateOpen }) => {
     const [scroll, setScroll] = useState({}); // State to control scrolling
 
-
     // Function to listen for scrolling events and applies styles accordingly
     const listenScrollEvent = () => {
         if (window.scrollY > 5)
@@ -202,12 +204,12 @@ const HeaderMain = ({ open, updateOpen }) => {
             <Navigation color={scroll.color}>
                 <NavigationItem onClick={() => updateOpen(false)} color={scroll.color} to="home" spy={true} smooth={true} offset={0} duration={500}>Home</NavigationItem>
                 <NavigationItem onClick={() => updateOpen(false)} color={scroll.color} to="about" spy={true} smooth={true} offset={-100} duration={500}>About</NavigationItem>
-                <NavigationItem onClick={() => updateOpen(false)} color={scroll.color} to="services" spy={true} smooth={true} offset={100} duration={500}>Services</NavigationItem>
+                <NavigationItem onClick={() => updateOpen(false)} color={scroll.color} to="services" spy={true} smooth={true} offset={-100} duration={500}>Services</NavigationItem>
             </Navigation>
             {scroll.logo ? <Logo /> : <Checkly color={scroll.color}> Checkly </Checkly>}
             <Actions >
                 <SecondaryButton color={scroll.color} to='/login'> Login </SecondaryButton>
-                <PrimaryButton> Sign up</PrimaryButton>
+                <PrimaryButton to='/contact'> Sign up</PrimaryButton>
             </Actions>
         </Wrapper>
     );

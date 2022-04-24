@@ -254,6 +254,7 @@ const Dashboard = () => {
                         phoneNumber: data[id]['phone_number'],
                         employeeID: data[id]['employee_id'],
                         department: data[id]['department'],
+                        deleted: data[id]['deleted']
                     };
                     employees.push(employee)
                 }
@@ -427,7 +428,7 @@ const Dashboard = () => {
                             <General
                                 cell='cell0'
                                 title='Total employees'
-                                val={employees.length}
+                                val={employees.filter(function (x) { return (x.deleted === 'false') }).length}
                                 background='linear-gradient(176.93deg, #3CB4FF 5%, #4F8FF7 115%)' />
                             <General
                                 cell='cell01'

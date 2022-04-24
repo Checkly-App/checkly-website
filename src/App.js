@@ -13,6 +13,7 @@ import Layout from './pages/Company/Layout';
 import Home from './pages/Home';
 import ChecklyLogo from './pages/ChecklyLogo';
 import TimeSheet from './pages/Company/TimeSheet';
+import Contact from './pages/Contact';
 
 const theme = createTheme({
   palette: {
@@ -56,6 +57,7 @@ function App() {
           <Routes>
             <Route exact path="/login" element={<Login />} />
             <Route path="/" element={<Home />} />
+            <Route exact path="/contact" element={<Contact />} />
             <Route exact path="/reset" element={<ResetPassword />} />
             <Route exact path="/checkly" element={<ChecklyProfile />} />
             <Route exact path="/admin/dashboard" element={<Layout user={userinfo} children={<Dashboard />} />} />
