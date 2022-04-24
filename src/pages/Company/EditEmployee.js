@@ -127,14 +127,14 @@ const EditEmployessInformaton = () => {
     useEffect(() => {
 
 
-        console.log(auth.currentUser.uid)
+      //  console.log(auth.currentUser.uid)
         onValue(ref(database, 'Department'), (snapshot) => {
             const data = snapshot.val();
             var departments = [];
             for (let id in data) {
                 if (data[id]['company_id'] === auth.currentUser.uid) {
                     const department = {
-                        department: 'dep' + data[id]['dep_id'],
+                        department:  data[id]['dep_id'],
                         name: data[id]['name']
                     };
                     departments.push(department)
@@ -195,7 +195,7 @@ const EditEmployessInformaton = () => {
                 }
             }
         });
-        console.log(emp.nationalID)
+       
         for (let i in employees) {
             if (emp.nationalID === employees[i].nationalID) {
                 console.log("")
@@ -395,9 +395,11 @@ const EditEmployessInformaton = () => {
                             id='department'
                             label='Department'
                             options={departments}
+                            
                             nameID={location.state.departmentID}
                         // value = "dep2" 
                         />
+                        {console.log(departments)}
                         <InputField
                             name='position'
                             id='position'

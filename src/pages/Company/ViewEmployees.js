@@ -1,7 +1,7 @@
 import {  useState, useEffect } from 'react';
 
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import { ref, onValue,remove } from 'firebase/database';
+import { ref, onValue } from 'firebase/database';
 import { database, auth } from '../../utilities/firebase';
 import { MdAccountCircle ,MdSearch} from "react-icons/md";
 import '../../Styles/EmployeeCard.css'
@@ -14,6 +14,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import * as React from 'react';
+import { Alert, AlertTitle,Snackbar } from '@mui/material';
 
 
 import Card from '@mui/material/Card';
@@ -25,6 +26,10 @@ import { Grid  } from '@mui/material';
 import {  useNavigate } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { functions } from '../../utilities/firebase';
+
+import { httpsCallable } from 'firebase/functions';
+
 
 <link
   rel="stylesheet"
@@ -32,6 +37,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
   integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
   crossorigin="anonymous"
 />
+
+
+/**
+ * Send Email Cloud Function 
+ */
+const DeleteEmployee = httpsCallable(functions, 'DeleteEmployee');
 
 
 const SetionsWrapper = styled.div`
@@ -123,13 +134,24 @@ const Buttonc = {
     cursor: "pointer",
   };
 
-    
-     
+  const [errorDetails] = useState({
+    title: 'error',
+    description: 'Oops! This employee is manager for one of the departments .',
+});
+const [error, setError] = useState(false);
+
+const [openSnackbar, setOpenSnackbar] = useState(false);
+const [ setIsLoading] = useState(false); 
+const closeSnackbar = () => {
+  setOpenSnackbar(false);
+};
+
      const navigate = useNavigate()
     useEffect(() => {
      
       
         onValue(ref(database, 'Employee'), (snapshot) => {
+          setEmployees([])
             const data = snapshot.val();
             var employsarray = [];
             for (let id in data) {
@@ -148,7 +170,8 @@ const Buttonc = {
                         gender: data[id]['gender'],
                         email: data[id]['email'],
                         employeeID:data[id]['employee_id'],
-                       
+                        deleted:data[id]['deleted'],
+
                    
                    
                   
@@ -167,11 +190,13 @@ const Buttonc = {
                                     comid :data[id]['company_id']
                                     
                                 };
-                                if (namedeb.comid === auth.currentUser.uid){
+                               
+                                if (namedeb.comid === auth.currentUser.uid  ){
                                 employee.department = namedeb.namedep
                                 employsarray.push(employee)
+                                if (employee.deleted === 'false'){
                                setEmployees(employees => [...employees,employee])
-                           
+                                }
                             }
                             }
                                
@@ -192,7 +217,7 @@ const Buttonc = {
         
         );
      
-    }, []);
+    }, [employees]);
 
    
     
@@ -239,16 +264,56 @@ const Buttonc = {
    
     
       const handleClosedelete = () => {
-       remove (ref(database, 'Employee/'+index.id))
-          console.log(index.id)
+       
+     //  remove (ref(database, 'Employee/'+index.id))
+
         
         setOpen(false);
+        if (ManagerExists(index))
+        {
+          setError(true);
+          setIsLoading(false);
+          setOpenSnackbar(true);
+          return
+        }
+        else {
+          DeleteEmployee({
+           
+            uid: index.id
+
+        })
+          console.log('this to dele')
+
+          console.log(index.id)
+        }
       };
       const handleClosecancel = () => {
      
       setOpen(false);
     };
 
+    const ManagerExists = (index1) => {
+      
+     
+      var Ismanager = false
+      onValue(ref(database, 'Department'), (snapshot) => {
+          const data = snapshot.val();
+
+          for (let id in data) {
+               //Fetch employees of a given company
+                 if (data[id]['manager'] === index1.id){
+                  console.log("false")
+                  Ismanager = true
+                 }
+                
+                
+                 
+                      
+              
+          }
+      });
+      return Ismanager
+    }
     return (
        
                 <SetionsWrapper>
@@ -266,7 +331,17 @@ const Buttonc = {
                     </div>
                     
                     </div></div>
-
+                    {error ?
+                    <Snackbar
+                        autoHideDuration={6000}
+                        open={openSnackbar}
+                        onClose={closeSnackbar}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                        <Alert onClose={closeSnackbar} severity='error' variant='filled'>
+                            <AlertTitle>{errorDetails.title}</AlertTitle>
+                            {errorDetails.description}
+                        </Alert>
+                    </Snackbar>:null}
  
  <div className="container">
  

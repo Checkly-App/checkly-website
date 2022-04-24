@@ -67,4 +67,25 @@ exports.updateUserEmail = functions.https.onRequest((req, res) => {
     });
 });
 
-// Function: Delete an employee email 
+// Function: Delete an employee  
+exports. DeleteEmployee = functions.https.onRequest((req, res) => {
+    cors(req, res, () => {
+        const uid = req.body.data.uid;
+
+         admin.auth().deleteUser(uid)
+         let usersRef = admin.database().ref("Employee");
+         usersRef.child(uid).update({
+           deleted: 'true'
+         })
+    .then(function() {
+      res.send({ status: 'ok' });
+    })
+    .catch(function(error) {
+      console.log('Error deleting data:', error);
+      res.send({ status: 'error', error: error });
+    
+   
+});
+        });
+    
+});
