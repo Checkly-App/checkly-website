@@ -3,9 +3,10 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
     width: 100vw;
-    height: auto;  
+    height: 80vh;  
     display: flex;
     justify-content: center;
+    align-items: center;
     margin-top: 20%;
 `
 const Section = styled.div`
@@ -18,6 +19,7 @@ export const SectionTitle = styled.h1`
     letter-spacing: 0.465672px;
     color: #35435E;
     position: relative;
+    margin-bottom: 1em;
 
     &:before {
         content: '';

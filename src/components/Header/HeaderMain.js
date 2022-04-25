@@ -119,7 +119,7 @@ const Actions = styled.div`
         justify-content: flex-start;
     }
 `
-const PrimaryButton = styled(NavLink)`
+export const PrimaryButton = styled(NavLink)`
     background-color: white;
     border: none;
     border-radius: 5px;
@@ -138,7 +138,7 @@ const PrimaryButton = styled(NavLink)`
         margin-top: 1em;
     }
 `
-const SecondaryButton = styled(NavLink)`
+export const SecondaryButton = styled(NavLink)`
     background-color: transparent;
     color: ${props => props.color ? props.color : 'white'};
     font-weight: 400;
@@ -197,6 +197,7 @@ const HeaderMain = ({ open, updateOpen }) => {
     // Mount the event listener once the screen loads
     useEffect(() => {
         window.addEventListener('scroll', listenScrollEvent)
+        return () => window.removeEventListener('scroll', listenScrollEvent);
     }, []);
 
     return (

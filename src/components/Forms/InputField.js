@@ -12,7 +12,6 @@ const InputField = ({ name, icon, ...other }) => {
         variant: 'outlined',
         size: 'small',
         fullWidth: true,
-        margin: 'none',
         InputProps: {
             endAdornment: < InputAdornment position="end" > {icon} </InputAdornment>
         }
