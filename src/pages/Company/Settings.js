@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Title, Wrapper } from './Dashboard';
+import { ref, onValue, set } from 'firebase/database';
+import { database, auth } from '../../utilities/firebase';
+import ChecklyLogo from '../ChecklyLogo';
 
 const Header = styled.div`
     margin: 2em 2em 0 2em;
@@ -54,7 +57,7 @@ const Info = styled.p`
     padding: 0;
     margin: 0;
     color: #A3A3A1;
-    font-weight: normal;
+    font-weight: 350;
 `
 const SectionTitle = styled.h1`
     font-size: 1.05em;
@@ -87,41 +90,92 @@ const Subtitle = styled.h1`
 `
 
 const Settings = () => {
-    const arr = [{ title: 'Name', Name: 'Acme Corporations' }, { title: 'Age', Age: '+10years' }];
-    const att = [{ title: 'Name', Name: 'Acme Corporations', active: 'active' }, { title: 'Age', Age: '+10years' }];
+    const [company, setCompany] = useState([{}]);
+    const [settings, setSettings] = useState([{}]);
+    const [loading, setLoading] = useState(true);
 
+    useEffect(() => {
+        // Get the company's general information
+        const companyListener = onValue(ref(database, `Company/${auth.currentUser.uid}`), (snapshot) => {
+            const data = snapshot.val();
+            console.log(data)
+
+            const company = [
+                { title: 'Name', Name: data['name'] },
+                { title: 'Abbreviation', Abbreviation: data['abbreviation'] },
+                { title: 'Age', Age: data['age'] },
+                { title: 'Email', Email: data['email'] },
+                { title: 'Industry', Industry: data['industry'] },
+            ];
+
+            setCompany(company);
+        });
+
+        const settingsListener = onValue(ref(database, `Settings/${auth.currentUser.uid}`), (snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+
+                const settings = [
+                    { title: 'Check-in', 'Check-in': data['check_in'], active: 'active' },
+                    { title: 'Check-out', 'Check-out': data['check_out'], active: 'active' },
+                    { title: 'Working Hours', 'Working Hours': data['working_hours'] },
+                ];
+                console.log(settings);
+                setSettings(settings);
+                setLoading(false);
+            }
+            else {
+                set(ref(database, `Settings/${auth.currentUser.uid}`), {
+                    check_in: '8:00',
+                    check_out: '16:00',
+                    working_hours: '8'
+                });
+
+                setLoading(false);
+            }
+
+
+        });
+
+        return () => {
+            companyListener();
+            settingsListener();
+        }
+
+    }, []);
 
     return (
-        <Wrapper>
-            <Header>
-                <Title>Settings</Title>
-                <SaveButton>Save</SaveButton>
-            </Header>
-            <SectionWrapper>
-                <SectionTitle>Company Information</SectionTitle>
-                {arr.map((info, key) => (
-                    <Section id={key}>
-                        <Detail>{info.title}</Detail>
-                        <Info> {info[info.title]}</Info>
-                    </Section>
-                ))}
+        loading ? <ChecklyLogo /> :
+            <Wrapper>
+                <Header>
+                    <Title>Settings</Title>
+                    <SaveButton>Save</SaveButton>
+                </Header>
+                <SectionWrapper>
+                    <SectionTitle>Company Information</SectionTitle>
+                    {company.map((info, key) => (
+                        <Section id={key}>
+                            <Detail>{info.title}</Detail>
+                            <Info> {info[info.title]}</Info>
+                        </Section>
+                    ))}
 
-            </SectionWrapper>
+                </SectionWrapper>
 
-            <SectionWrapper>
-                <SectionTitle>Attendance Statistic</SectionTitle>
-                <Subtitle>Changing the following settings will result in updating the dashboard’s calculations and employees attendance marking protocols.
-                    Work hours are calculated by the system.</Subtitle>
-                {att.map((info, key) => (
-                    <Section id={key}>
-                        {info.active === 'active' ? <Detail active>{info.title}</Detail> : <Detail >{info.title}</Detail>}
-                        <Info> {info[info.title]}</Info>
-                    </Section>
-                ))}
+                <SectionWrapper>
+                    <SectionTitle>Attendance Settings</SectionTitle>
+                    <Subtitle>Changing the following settings will result in updating the dashboard’s calculations and employees attendance marking protocols.
+                        Work hours are calculated by the system.</Subtitle>
+                    {settings.map((info, key) => (
+                        <Section id={key}>
+                            {info.active === 'active' ? <Detail active>{info.title}</Detail> : <Detail >{info.title}</Detail>}
+                            <Info> {info[info.title]}</Info>
+                        </Section>
+                    ))}
 
-            </SectionWrapper>
+                </SectionWrapper>
 
-        </Wrapper>
+            </Wrapper>
     );
 };
 
