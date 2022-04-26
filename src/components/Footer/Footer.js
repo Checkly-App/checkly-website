@@ -55,7 +55,7 @@ const Footer = () => {
                 <Seperator> — </Seperator>
                 <Detail> Terms and Conditions </Detail>
                 <Seperator> — </Seperator>
-                <Detail> Github </Detail>
+                <Detail href='https://github.com/Checkly-App'> Github </Detail>
             </Details>
         </Container>
     );

@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import logo from '../../assets/images/logo.svg';
 import side from '../../assets/images/sidePiece.svg';
@@ -8,7 +8,6 @@ import { sideBarData } from './Data';
 import { useNavigate } from "react-router-dom"
 import { signOut } from "firebase/auth";
 import { getAuth } from "firebase/auth";
-import { HiOutlineMenuAlt2, HiX } from "react-icons/hi";
 
 const SideBarWrapper = styled.div`
     grid-area: bar;
@@ -23,28 +22,25 @@ const SideBarWrapper = styled.div`
     margin: 0 1em 0 0;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
 
+     /* @media  (max-width: 768px) {
+        padding: 1em 3em;
+        height: 100vh;
+        background-color: white;
+        flex-direction: column;
+        color: #35435E ;
+        display: ${props => props.open ? 'flex' : 'none'};
+    } */
     @media  (max-width: 768px) {
-        display: none;
+        display: flex;
+        border-radius: 0;
         grid-area: main;
         position: fixed;
         width: 100vw;
-        min-height: 100vh;
+        height: 100vh;
         top: 0;
         left: ${(props) => props.open ? '0' : '-100vw'};
-        z-index: 1000;
+        z-index: 10;
     } 
-`
-const MenuIcon = styled.div`
- @media  (max-width: 768px) {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 20em;
-        height: 20em;
-        color: red;
-        font-size: xx-large;
-        z-index: 10000;
-    }
 `
 const Wrapper = styled.div`
     width: 100%;
@@ -53,6 +49,10 @@ const Wrapper = styled.div`
     justify-items: center;
     align-items: ${props => props.nav ? 'center' : 'center'};
     flex-direction: column;
+
+    @media  (max-width: 768px) {
+       width: 70vw;
+    }
 `
 const NavItem = styled.li`
     width: 100%;
@@ -61,6 +61,10 @@ const NavItem = styled.li`
     display: flex;
     justify-content: center;
     align-items: flex-end;
+
+    @media  (max-width: 768px) {
+        align-items: center;
+    }
 `
 const Link = styled(NavLink)`
     width: 100%;
@@ -83,7 +87,13 @@ const Link = styled(NavLink)`
     background-position: right center;
     background-size: contain;
     color: #2CB1EF;
+
+        @media  (max-width: 768px) {
+            background-position: left center;
+        }
     }   
+
+
 `
 const ImageLink = styled(Link)`
     padding: 0;
@@ -111,14 +121,16 @@ const NavTitle = styled.span`
     font-size: 1.25em;
     margin-left: 0.5em;
     flex: 2;
+    @media  (max-width: 768px) {
+        flex: 1;
+    }
 `
 const Logo = styled.img`
     width: 6em;
 `
 
-const Sidebar = () => {
+const Sidebar = ({ open, updateOpen }) => {
     const navigate = useNavigate();
-    const [open, setOpen] = useState(false);
 
     const logout = () => {
         const auth = getAuth();
@@ -130,40 +142,36 @@ const Sidebar = () => {
     }
 
     return (
-        <>
-            {/* <MenuIcon onClick={() => setOpen(!open)}>
-                {open ? <HiX /> : <HiOutlineMenuAlt2 />}
-            </MenuIcon> */}
-            <SideBarWrapper open={open}>
-                <Wrapper>
-                    <ImageLink to='/'>
-                        <Logo src={logo} />
-                    </ImageLink>
-                </Wrapper>
-                <Wrapper nav>
-                    {sideBarData.map((item, index) => {
-                        return (
-                            <NavItem key={index}>
-                                <Link to={item.path}>
-                                    <Icon>{item.icon}</Icon>
-                                    <NavTitle>{item.title}</NavTitle>
-                                </Link>
-                            </NavItem>
-                        );
-                    })}
-                </Wrapper>
-                <Wrapper>
-                    <NavItem onClick={logout}>
-                        <LogoutWrapper>
-                            <Icon>
-                                <RiLogoutCircleLine size={18} />
-                            </Icon>
-                            <NavTitle>Logout</NavTitle>
-                        </LogoutWrapper>
-                    </NavItem>
-                </Wrapper>
-            </SideBarWrapper>
-        </>
+        <SideBarWrapper open={open}>
+            <Wrapper>
+                <ImageLink to='/'>
+                    <Logo src={logo} />
+                </ImageLink>
+            </Wrapper>
+            <Wrapper nav>
+                {sideBarData.map((item, index) => {
+                    return (
+                        <NavItem key={index}>
+                            <Link onClick={() => updateOpen(false)} to={item.path}>
+                                <Icon>{item.icon}</Icon>
+                                <NavTitle>{item.title}</NavTitle>
+                            </Link>
+                        </NavItem>
+                    );
+                })}
+            </Wrapper>
+            <Wrapper>
+                <NavItem onClick={logout}>
+                    <LogoutWrapper>
+                        <Icon>
+                            <RiLogoutCircleLine size={18} />
+                        </Icon>
+                        <NavTitle>Logout</NavTitle>
+                    </LogoutWrapper>
+                </NavItem>
+            </Wrapper>
+        </SideBarWrapper>
+
     );
 };
 

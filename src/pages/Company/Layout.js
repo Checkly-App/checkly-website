@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import ChecklyLogo from '../ChecklyLogo';
+import { HiOutlineMenuAlt2, HiX } from 'react-icons/hi';
+import { IconButton } from '@mui/material';
+import { Icon } from '../Home';
 
 const Container = styled.div`
     height: 100vh;
@@ -30,14 +33,25 @@ const Content = styled.div`
 `
 
 const Layout = ({ children, user }) => {
+    const [open, setOpen] = useState(false); // controls toggling the menu in mobiles
+
+    // Function to set open from child components
+    const updateOpen = (val) => setOpen(val);
+
     return (
         user ?
-            <Container>
-                <Sidebar />
-                <Content>
-                    {children}
-                </Content>
-            </Container > :
+            <>
+                <Icon onClick={() => setOpen(!open)}>
+                    {open ? <HiX /> : <HiOutlineMenuAlt2 />}
+                </Icon>
+                <Container>
+                    <Sidebar open={open} />
+                    <Content>
+                        {children}
+                    </Content>
+                </Container >
+            </>
+            :
             <ChecklyLogo />
     );
 };
