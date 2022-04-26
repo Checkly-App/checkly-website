@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Filter from '../../components/Charts/Filter';
-import { CartesianGrid, XAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { XAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { groupBy } from 'lodash';
 import moment from 'moment';
 

@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { StaticTimePicker, TimePicker } from '@mui/lab';
+import { StaticTimePicker } from '@mui/lab';
 
 export default function FormModal({ open, updateOpen, title, value, updateTime, max, min }) {
     const [time, setTime] = useState(new Date(value));
