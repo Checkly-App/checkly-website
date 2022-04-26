@@ -7,7 +7,7 @@ import ChecklyLogo from '../ChecklyLogo';
 import FormModal from '../../components/Forms/FormModal';
 import { format } from 'date-fns';
 import moment from 'moment';
-
+import { v4 } from 'uuid';
 
 const Header = styled.div`
     margin: 2em 2em 0 2em;
@@ -108,11 +108,11 @@ const Settings = () => {
             const data = snapshot.val();
 
             const company = [
-                { title: 'Name', Name: data['name'] },
-                { title: 'Abbreviation', Abbreviation: data['abbreviation'] },
-                { title: 'Age', Age: data['age'] },
-                { title: 'Email', Email: data['email'] },
-                { title: 'Industry', Industry: data['industry'] },
+                { title: 'Name', Name: data['name'], id: v4() },
+                { title: 'Abbreviation', Abbreviation: data['abbreviation'], id: v4() },
+                { title: 'Age', Age: data['age'], id: v4() },
+                { title: 'Email', Email: data['email'], id: v4() },
+                { title: 'Industry', Industry: data['industry'], id: v4() },
             ];
 
             setCompany(company);
@@ -186,37 +186,43 @@ const Settings = () => {
 
     }
 
+    const save = () => {
+        set(ref(database, `Settings/${auth.currentUser.uid}`), {
+            check_in: `${format(checkIn, 'HH:mm')}`,
+            check_out: `${format(checkOut, 'HH:mm')}`,
+            working_hours: `${settings[2]['Working Hours']}`
+        });
+    }
 
     return (
         loading ? <ChecklyLogo /> :
             <Wrapper>
                 <Header>
                     <Title>Settings</Title>
-                    <SaveButton>Save</SaveButton>
+                    <SaveButton onClick={save}>Save</SaveButton>
                 </Header>
                 <SectionWrapper>
                     <SectionTitle>Company Information</SectionTitle>
-                    {company.map((info, key) => (
-                        <Section id={key}>
+                    {company.map((info) => (
+                        <Section key={info.id}>
                             <Detail>{info.title}</Detail>
                             <Info> {info[info.title]}</Info>
                         </Section>
                     ))}
                 </SectionWrapper>
-
                 <SectionWrapper>
                     <SectionTitle>Attendance Settings</SectionTitle>
                     <Subtitle>Changing the following settings will result in updating the dashboard’s calculations and employees attendance marking protocols.
                         Work hours are calculated by the system.</Subtitle>
-                    <Section onClick={() => setOpenCheckIn(true)}>
+                    <Section id={v4()} onClick={() => setOpenCheckIn(true)}>
                         <Detail active>Check-in</Detail>
                         <Info> {settings[0]['Check-in']}</Info>
                     </Section>
-                    <Section onClick={() => setOpenCheckOut(true)}>
+                    <Section id={v4()} onClick={() => setOpenCheckOut(true)}>
                         <Detail active>Check-out</Detail>
                         <Info> {settings[1]['Check-out']}</Info>
                     </Section>
-                    <Section>
+                    <Section id={v4()}>
                         <Detail>Working Hours</Detail>
                         <Info> {settings[2]['Working Hours']}h</Info>
                     </Section>
