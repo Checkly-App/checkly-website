@@ -17,8 +17,8 @@ import { ref, onValue, get } from 'firebase/database';
 import { database, auth } from '../../utilities/firebase';
 import { MdCalendarToday } from 'react-icons/md';
 import { HiOutlineDownload } from 'react-icons/hi';
-import { jsPDF } from "jspdf";
-import html2canvas from "html2canvas";
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
 
 
 export const Construction = styled.div`
@@ -51,7 +51,6 @@ export const Wrapper = styled.div`
             padding: 0;
     }
 `
-
 const DateWrapper = styled.div`
     display: flex;
     width: fit-content;
@@ -68,6 +67,7 @@ const Today = styled.h1`
     font-weight: 400;
     color: #A3A3A1;
 `
+
 // Function that parses string to date 
 export const toDate = (string) => {
     const firstDash = string.indexOf("-");
@@ -171,6 +171,22 @@ const Dashboard = () => {
             setGreeting('Good morning');
 
 
+        // Get the company's settings
+        get(ref(database, `Settings/${auth.currentUser.uid}`)).then((snapshot) => {
+            const data = snapshot.val();
+
+            const settings = {
+                check_in: data['check_in'],
+                check_out: data['check_out'],
+                working_hours: data['working_hours'],
+            };
+
+            const times = settings['check_in'].split(':')
+            setRefrenceCheckIn(new Date(1776, 6, 4, parseInt(times[0], 10), parseInt(times[1])));
+            setRefrenceHours(parseInt(settings['working_hours']));
+
+        });
+
         // Get the company's general information
         get(ref(database, `Company/${auth.currentUser.uid}`)).then((snapshot) => {
             const data = snapshot.val();
@@ -181,10 +197,7 @@ const Dashboard = () => {
                 location: data['location'],
                 working_hours: data['working_hours'],
             };
-            setRefrenceHours(parseInt(company['working_hours']));
             setCompany(company);
-        }).catch((error) => {
-            console.log(error);
         });
 
         // Fetch the departments and listen for any changes

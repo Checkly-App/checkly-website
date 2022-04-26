@@ -4,6 +4,10 @@ import { Title, Wrapper } from './Dashboard';
 import { ref, onValue, set } from 'firebase/database';
 import { database, auth } from '../../utilities/firebase';
 import ChecklyLogo from '../ChecklyLogo';
+import FormModal from '../../components/Forms/FormModal';
+import { format } from 'date-fns';
+import moment from 'moment';
+
 
 const Header = styled.div`
     margin: 2em 2em 0 2em;
@@ -80,8 +84,6 @@ const SectionWrapper = styled.div`
 
      }
 `
-
-
 const Subtitle = styled.h1`
     width: 85%;
     font-size: 0.9em;
@@ -94,11 +96,16 @@ const Settings = () => {
     const [settings, setSettings] = useState([{}]);
     const [loading, setLoading] = useState(true);
 
+    const [openCheckIn, setOpenCheckIn] = useState(false);
+    const [openCheckOut, setOpenCheckOut] = useState(false);
+
+    const [checkIn, setCheckIn] = useState(new Date());
+    const [checkOut, setCheckOut] = useState(new Date());
+
     useEffect(() => {
         // Get the company's general information
         const companyListener = onValue(ref(database, `Company/${auth.currentUser.uid}`), (snapshot) => {
             const data = snapshot.val();
-            console.log(data)
 
             const company = [
                 { title: 'Name', Name: data['name'] },
@@ -115,26 +122,29 @@ const Settings = () => {
             if (snapshot.exists()) {
                 const data = snapshot.val();
 
+                const check_in = new Date(`1899-12-31T${data['check_in']}`);
+                const check_out = new Date(`1899-12-31T${data['check_out']}`);
+
                 const settings = [
-                    { title: 'Check-in', 'Check-in': data['check_in'], active: 'active' },
-                    { title: 'Check-out', 'Check-out': data['check_out'], active: 'active' },
+                    { title: 'Check-in', 'Check-in': format(check_in, 'hh:mm a'), active: 'active' },
+                    { title: 'Check-out', 'Check-out': format(check_out, 'hh:mm a'), active: 'active' },
                     { title: 'Working Hours', 'Working Hours': data['working_hours'] },
                 ];
-                console.log(settings);
+
+                setCheckIn(check_in);
+                setCheckOut(check_out);
                 setSettings(settings);
                 setLoading(false);
             }
             else {
                 set(ref(database, `Settings/${auth.currentUser.uid}`), {
-                    check_in: '8:00',
+                    check_in: '08:00',
                     check_out: '16:00',
                     working_hours: '8'
                 });
 
                 setLoading(false);
             }
-
-
         });
 
         return () => {
@@ -143,6 +153,39 @@ const Settings = () => {
         }
 
     }, []);
+
+    const updateCheckIn = (time) => {
+        setCheckIn(time)
+
+        const workingHours = moment(checkOut).diff(moment(time), 'minutes');
+        const hours = Math.floor(workingHours / 60);
+
+        const update = [
+            { title: 'Check-in', 'Check-in': format(time, 'hh:mm a'), active: 'active' },
+            { title: 'Check-out', 'Check-out': settings[1]['Check-out'], active: 'active' },
+            { title: 'Working Hours', 'Working Hours': hours },
+        ];
+
+        setSettings(update)
+    }
+
+    const updateCheckOut = (time) => {
+        setCheckOut(time)
+
+        const workingHours = moment(time).diff(moment(checkIn), 'minutes');
+        const hours = Math.floor(workingHours / 60);
+
+        const update = [
+            { title: 'Check-in', 'Check-in': settings[0]['Check-in'], active: 'active' },
+            { title: 'Check-out', 'Check-out': format(time, 'hh:mm a'), active: 'active' },
+            { title: 'Working Hours', 'Working Hours': hours },
+        ];
+
+        setSettings(update)
+        console.log(checkOut)
+
+    }
+
 
     return (
         loading ? <ChecklyLogo /> :
@@ -159,22 +202,39 @@ const Settings = () => {
                             <Info> {info[info.title]}</Info>
                         </Section>
                     ))}
-
                 </SectionWrapper>
 
                 <SectionWrapper>
                     <SectionTitle>Attendance Settings</SectionTitle>
                     <Subtitle>Changing the following settings will result in updating the dashboard’s calculations and employees attendance marking protocols.
                         Work hours are calculated by the system.</Subtitle>
-                    {settings.map((info, key) => (
-                        <Section id={key}>
-                            {info.active === 'active' ? <Detail active>{info.title}</Detail> : <Detail >{info.title}</Detail>}
-                            <Info> {info[info.title]}</Info>
-                        </Section>
-                    ))}
-
+                    <Section onClick={() => setOpenCheckIn(true)}>
+                        <Detail active>Check-in</Detail>
+                        <Info> {settings[0]['Check-in']}</Info>
+                    </Section>
+                    <Section onClick={() => setOpenCheckOut(true)}>
+                        <Detail active>Check-out</Detail>
+                        <Info> {settings[1]['Check-out']}</Info>
+                    </Section>
+                    <Section>
+                        <Detail>Working Hours</Detail>
+                        <Info> {settings[2]['Working Hours']}h</Info>
+                    </Section>
                 </SectionWrapper>
-
+                <FormModal
+                    title='Check-in time'
+                    open={openCheckIn}
+                    value={checkIn}
+                    updateOpen={setOpenCheckIn}
+                    updateTime={updateCheckIn}
+                    max={new Date(0, 0, 0, checkOut.getHours() - 1)} />
+                <FormModal
+                    title='Check-out time'
+                    open={openCheckOut}
+                    value={checkOut}
+                    updateOpen={setOpenCheckOut}
+                    updateTime={updateCheckOut}
+                    min={new Date(0, 0, 0, checkIn.getHours() + 1)} />
             </Wrapper>
     );
 };
