@@ -68,10 +68,20 @@ const Departure = (props) => {
 
         const date = new Date(1776, 6, 4, avgHours ? avgHours : 0, avgMinutes ? avgMinutes : 0, 0, 0);
 
-        setHour(avgHours);
-        setMinute(avgMinutes);
-        setAbbreviation(moment(date).format("a"));
-        setValue(date);
+        if (data.length <= 0) {
+            setHour(4);
+            setMinute('00');
+            setAbbreviation("pm");
+            setValue(new Date(1776, 6, 4, 16, 0, 0, 0));
+        }
+        else {
+            setHour(avgHours);
+            setMinute(avgMinutes);
+            setAbbreviation(moment(date).format("a"));
+            setValue(date);
+        }
+
+
     }, [props.attendanceData]);
 
     return (

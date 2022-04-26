@@ -43,8 +43,8 @@ const ChartTitle = styled.h1`
 
 const Arrival = (props) => {
     const [value, setValue] = useState(new Date(1776, 6, 4, 12, 30, 0, 0));
-    const [hour, setHour] = useState(9);
-    const [minute, setMinute] = useState(44);
+    const [hour, setHour] = useState(8);
+    const [minute, setMinute] = useState(0);
     const [abbreviation, setAbbreviation] = useState('am');
 
     useEffect(() => {
@@ -67,12 +67,21 @@ const Arrival = (props) => {
         totalSeconds %= 3600;
         const avgMinutes = Math.floor(totalSeconds / 60);
 
-        const date = new Date(1776, 6, 4, avgHours ? avgHours : 0, avgMinutes ? avgMinutes : 0, 0, 0);
+        const date = new Date(1776, 6, 4, avgHours ? avgHours : 8, avgMinutes ? avgMinutes : 0, 0, 0);
 
-        setHour(avgHours);
-        setMinute(avgMinutes);
-        setAbbreviation(moment(date).format("a"));
-        setValue(date);
+        if (data.length <= 0) {
+            setHour(8);
+            setMinute('00');
+            setAbbreviation("am");
+            setValue(new Date(1776, 6, 4, 8, 0, 0, 0));
+        }
+        else {
+            setHour(avgHours);
+            setMinute(avgMinutes);
+            setAbbreviation(moment(date).format("a"));
+            setValue(date);
+        }
+
     }, [props.attendanceData]);
 
 

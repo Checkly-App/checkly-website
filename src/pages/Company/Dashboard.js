@@ -13,7 +13,7 @@ import General from '../../components/Charts/General';
 import ChecklyLogo from '../ChecklyLogo';
 import { groupBy } from 'lodash';
 import moment from 'moment';
-import { ref, onValue, get } from 'firebase/database';
+import { ref, onValue, get, set } from 'firebase/database';
 import { database, auth } from '../../utilities/firebase';
 import { MdCalendarToday } from 'react-icons/md';
 import { HiOutlineDownload } from 'react-icons/hi';
@@ -172,19 +172,27 @@ const Dashboard = () => {
 
 
         // Get the company's settings
-        get(ref(database, `Settings/${auth.currentUser.uid}`)).then((snapshot) => {
-            const data = snapshot.val();
+        const settingsListener = onValue(ref(database, `Settings/${auth.currentUser.uid}`), (snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
 
-            const settings = {
-                check_in: data['check_in'],
-                check_out: data['check_out'],
-                working_hours: data['working_hours'],
-            };
+                const settings = {
+                    check_in: data['check_in'],
+                    check_out: data['check_out'],
+                    working_hours: data['working_hours'],
+                };
 
-            const times = settings['check_in'].split(':')
-            setRefrenceCheckIn(new Date(1776, 6, 4, parseInt(times[0], 10), parseInt(times[1])));
-            setRefrenceHours(parseInt(settings['working_hours']));
-
+                const times = settings['check_in'].split(':')
+                setRefrenceCheckIn(new Date(1776, 6, 4, parseInt(times[0], 10), parseInt(times[1])));
+                setRefrenceHours(parseInt(settings['working_hours']));
+            }
+            else {
+                set(ref(database, `Settings/${auth.currentUser.uid}`), {
+                    check_in: '08:00',
+                    check_out: '16:00',
+                    working_hours: '8'
+                });
+            }
         });
 
         // Get the company's general information
@@ -245,6 +253,7 @@ const Dashboard = () => {
         return () => {
             departmentsListener();
             attendanceListener();
+            settingsListener();
         }
 
     }, []);
@@ -435,53 +444,49 @@ const Dashboard = () => {
                             <HiOutlineDownload size={24} />
                         </PDFButton>
                     </Header>
-                    {data.length <= 0 ?
-                        <Construction>Not enough data </Construction> :
-                        <Container ref={inputRef}>
-                            <General
-                                cell='cell0'
-                                title='Total employees'
-                                val={employees.filter(function (x) { return (x.deleted === 'false') }).length}
-                                background='linear-gradient(176.93deg, #3CB4FF 5%, #4F8FF7 115%)' />
-                            <General
-                                cell='cell01'
-                                title='Total departments'
-                                val={departments.length}
-                                background='linear-gradient(170deg, #7B5EFF 50%, #4D21E6 180%)' />
-                            <General
-                                cell='cell02'
-                                title='Conducted meetings'
-                                val={meetings.length}
-                                background='linear-gradient(160deg, #5FD1C6 5%, #01BDB2 90%)' />
-                            <Total
-                                cell='cell1'
-                                title='Total attendance'
-                                labels={['Attendance', 'Abscence']}
-                                data={[attendance, abscence]}
-                                background={['#3CB4FF', '#EEE']} />
-                            <Total
-                                cell='cell2'
-                                title='Total abscence'
-                                labels={['Abscence', 'Attendance']}
-                                data={[abscence, attendance]}
-                                background={['#F65786', '#EEE']} />
-                            <Weekly data={weeklyData} />
-                            <Timeline
-                                attendanceData={companyAttendance}
-                                abscenceData={companyAbscences} />
-                            <Worked attendanceData={companyAttendance} />
-                            <CheckIn attendanceData={companyAttendance} />
-                            <Overtime attendanceData={companyAttendance} />
-                            <LateMinutes
-                                checkInRefrence={refrenceCheckIn}
-                                lateData={companyLate} />
-                            <Arrival attendanceData={companyAttendance} />
-                            <Departure attendanceData={companyAttendance} />
-                        </Container>
-                    }
+                    <Container ref={inputRef}>
+                        <General
+                            cell='cell0'
+                            title='Total employees'
+                            val={employees.filter(function (x) { return (x.deleted === 'false') }).length}
+                            background='linear-gradient(176.93deg, #3CB4FF 5%, #4F8FF7 115%)' />
+                        <General
+                            cell='cell01'
+                            title='Total departments'
+                            val={departments.length}
+                            background='linear-gradient(170deg, #7B5EFF 50%, #4D21E6 180%)' />
+                        <General
+                            cell='cell02'
+                            title='Conducted meetings'
+                            val={meetings.length}
+                            background='linear-gradient(160deg, #5FD1C6 5%, #01BDB2 90%)' />
+                        <Total
+                            cell='cell1'
+                            title='Total attendance'
+                            labels={['Attendance', 'Abscence']}
+                            data={[attendance, abscence]}
+                            background={['#3CB4FF', '#EEE']} />
+                        <Total
+                            cell='cell2'
+                            title='Total abscence'
+                            labels={['Abscence', 'Attendance']}
+                            data={[abscence, attendance]}
+                            background={['#F65786', '#EEE']} />
+                        <Weekly data={weeklyData} />
+                        <Timeline
+                            attendanceData={companyAttendance}
+                            abscenceData={companyAbscences} />
+                        <Worked attendanceData={companyAttendance} />
+                        <CheckIn attendanceData={companyAttendance} />
+                        <Overtime attendanceData={companyAttendance} />
+                        <LateMinutes
+                            checkInRefrence={refrenceCheckIn}
+                            lateData={companyLate} />
+                        <Arrival attendanceData={companyAttendance} />
+                        <Departure attendanceData={companyAttendance} />
+                    </Container>
                 </Wrapper>
             </>
-
     );
 }
 
