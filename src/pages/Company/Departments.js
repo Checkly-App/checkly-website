@@ -250,12 +250,19 @@ const navigate = useNavigate();
                     <Subtitle>
                         Managed By: {department.manager_name}
                     </Subtitle>
-                    <Container>
-                        <SmallText>{department.employees_count}</SmallText>
-                        <SmallIcon>
-                            <MdPeopleOutline size={22} />
-                        </SmallIcon>
-                    </Container>
+                        {department.employees_count === 0 ?
+                        <Container>
+                            <SmallText>1</SmallText>
+                            <SmallIcon>
+                                <MdPeopleOutline size={22} />
+                            </SmallIcon>
+                        </Container> :
+                        <Container>
+                            <SmallText>{department.employees_count}</SmallText>
+                            <SmallIcon>
+                                <MdPeopleOutline size={22} />
+                            </SmallIcon>
+                        </Container>}
                 </Box>
                 ))}
                 

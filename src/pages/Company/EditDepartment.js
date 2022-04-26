@@ -236,10 +236,6 @@ const EditDepartment = () => {
         name : department.depName,
         manager: department.manager.value,
         })
-       // Update manager department
-       update(ref(database, 'Employee/'+ department.manager.value),{
-            department: location.state.department_id, 
-       })
        setError(false);
        setOpenSnackbar(true);
        // navigate to departments view
