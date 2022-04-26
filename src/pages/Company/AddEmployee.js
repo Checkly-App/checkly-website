@@ -14,7 +14,7 @@ import styled from 'styled-components';
 import { httpsCallable } from 'firebase/functions';
 import { Alert, AlertTitle, CircularProgress, Snackbar } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
-
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Send Email Cloud Function 
@@ -88,6 +88,42 @@ const MainWrapper = styled.div`
     width: 100%;
     margin: 2em 0;
 `
+const FilterButton1 = styled.button`
+    width: 10em;
+    height: 3em;
+    font-size: 0.7em;
+    font-weight: 500;
+    text-align :center;
+    color: rgba(255,255,255,0.9);
+    border-radius: 5em;
+    border: none;
+    background: linear-gradient(90deg, #56BBEB 0%, #58AAF3 100%);
+    opacity: 0.5;
+    margin-left: auto;
+    margin-bottom: 2em;
+    margin-right: 0.5em;
+    
+`
+const FilterButton2 = styled.button`
+    width: 10em;
+    height: 3em;
+    font-size: 0.7em;
+    font-weight: 500;
+    text-align :center;
+    color: rgba(255,255,255,0.9);
+    border-radius: 5em;
+    border: none;
+    background: linear-gradient(90deg, #56BBEB 0%, #58AAF3 100%);
+    margin-left: auto;
+    margin-bottom: 2em;
+    &:hover {
+        background: #2CB1EF;
+      }
+`
+const ButtonsContainer = styled.div`
+    margin-left: auto;
+`
+
 
 const AddEmployee = () => {
     /**
@@ -110,6 +146,11 @@ const AddEmployee = () => {
         employeeID: '',
         department: '',
     }]);
+
+
+    // to navigate to 'Add Batch'
+    const navigate = useNavigate();
+
 
     /**
      * Use Effect to fecth all of the company's departments
@@ -302,6 +343,10 @@ const AddEmployee = () => {
                         <MainTitle>Add Employee</MainTitle>
                         <Subtitle>Start by adding an individual employee or a batch of employees</Subtitle>
                     </MainWrapper>
+                    <ButtonsContainer>
+                        <FilterButton1 disabled={true} >Add Individual</FilterButton1>
+                        <FilterButton2 onClick={() => navigate("/admin/employees/add-batch")}>Add Batch</FilterButton2>
+                    </ButtonsContainer>
                     <Section>
                         <SectionTitle>Personal Information</SectionTitle>
                         <InputField

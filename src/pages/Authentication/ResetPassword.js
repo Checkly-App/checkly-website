@@ -29,6 +29,7 @@ const ResetPaaword = () => {
   const [count, setCount] = useState(null);
   const [issend, setIssend] = useState(null);
   const [iserror, setiserror] = useState(null);
+    const navigate = useNavigate()
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -81,7 +82,7 @@ const ResetPaaword = () => {
     background: "linear-gradient(#56BBEB, #58AAF3)",
     height: "100vh",
     margin: "auto",
-    paddingTop: "8%",
+    paddingTop: "11%",
     paddingLeft: "5%",
     paddingRight: "5%"
 
@@ -142,19 +143,26 @@ const ResetPaaword = () => {
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>
             </button>
-            <div className="collapse navbar-collapse" id="navbarNavDropdown" style={{ marginLeft: "12em" }}>
+            <div className="collapse navbar-collapse" id="navbarNavDropdown" style={{ marginLeft: "23em" }}>
               <ul className="navbar-nav m-auto">
                 <li className="nav-item">
-                  <a className="nav-link active blue" aria-current="page" href="#" style={{ color: "#2CB1EF", padding: "1em 2em" }}>Home</a>
+                  <a onClick={navigate("")} className="nav-link active blue" aria-current="page" href="#" style={{ color: "Black", padding: "1em 2em" }}>Home</a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>About</a>
+                  <a  onClick={navigate("")} className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>Values</a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>Services</a>
+                  <a onClick={navigate("")} className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>About us</a>
+                </li>
+                
+                <li className="nav-item">
+                  <a onClick={navigate("")} className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>Services</a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>Contact</a>
+                  <a onClick={navigate("")} className="nav-link white" href="#" style={{ color: "white", padding: "1em 2em" }}>Contact</a>
+                </li>
+                <li className="nav-item" style={{paddingTop:'0.6em'}}>
+                  <a onClick={navigate("/login")} className="nav-link white" href="#" style={{ color: "white", padding: "0.3em 1.5em" ,borderRadius: '10px',border:'white 1px solid'}}>Login</a>
                 </li>
               </ul>
             </div>
