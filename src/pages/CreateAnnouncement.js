@@ -9,6 +9,7 @@ import { format } from 'date-fns';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import styled, { keyframes } from 'styled-components'
 import TitleIcon from '@mui/icons-material/Title';
+import { Alert, AlertTitle, Snackbar } from '@mui/material'; 
 
 
 const Section = styled.div`
@@ -49,12 +50,32 @@ const Button = styled.button`
     border: none;
     background: linear-gradient(90deg, #56BBEB 0%, #58AAF3 100%);
 `
+const MainTitle = styled.h1`
+    font-size: 2em;
+    font-weight: 500;
+    color: #2CB1EF;
+    margin: 0.25em 0;
+`
+const MainWrapper = styled.div`
+    width: 100%;
+    margin: 2em 0;
+`
+const Subtitle = styled.h1`
+    font-size: 1em;
+    font-weight: 300;
+`
 
 const CreateAnnouncement = () => {
     const [departments, setDepartments] = useState([{
         department: '',
         name: ''
     }]);
+
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+
+    const closeSnackbar = () => {
+      setOpenSnackbar(false);
+    };
 
     useEffect(() => {
         onValue(ref(database, 'Department'), (snapshot) => {
@@ -107,15 +128,29 @@ const CreateAnnouncement = () => {
         <Formik
             initialValues={{ ...initialValues }}
             validationSchema={validationSchema}
-            onSubmit={(values) => {
-                console.log(values);
+            onSubmit={(values, { resetForm }) => {
+                // console.log(values);
                 addAnnouncement(values);
-                alert(JSON.stringify(values, null, 2));
+                resetForm();
+                setOpenSnackbar(true);
+                // alert(JSON.stringify(values, null, 2));
             }}>
             <Form>
+            <Snackbar
+                autoHideDuration={6000}
+                open={openSnackbar}
+                onClose={closeSnackbar}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                <Alert onClose={closeSnackbar} severity='info' variant='filled'>
+                  <AlertTitle>Announcement has been posted successfully!</AlertTitle>
+                </Alert>
+              </Snackbar>
                 <SetionsWrapper>
+                <MainWrapper>
+                <MainTitle>Create Announcement</MainTitle>
+                <Subtitle>Publish an announcement to selected department emplooyes</Subtitle>
+                </MainWrapper>
                     <Section>
-                        <SectionTitle>Create Announcement</SectionTitle>
                         <InputField
                             name='Title'
                             icon={<TitleIcon color='#D7D7D7' size={24} />}
