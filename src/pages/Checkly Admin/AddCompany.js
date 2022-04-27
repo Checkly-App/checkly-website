@@ -16,6 +16,7 @@ import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
 import InsertPhotoOutlinedIcon from "@mui/icons-material/InsertPhotoOutlined";
 import { ref, uploadBytesResumable } from "firebase/storage";
 import { Alert, AlertTitle, Snackbar } from '@mui/material'; 
+import { useNavigate } from 'react-router-dom';
 
 // Main COntainer
 const SectionsWrapper = styled.div`
@@ -316,6 +317,8 @@ const ages = [
 ];
 
 const AddCompany = () => {
+
+const navigate = useNavigate();
 
   var random_id = Math.ceil(Math.random() * (9999 - 1000) + 100);
 
