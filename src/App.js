@@ -71,6 +71,7 @@ function App() {
             <Route exact path="/admin/employees" element={<Layout user={userinfo} children={<AddEmployee />} />} />
             <Route exact path="/admin/timesheets" element={<Layout user={userinfo} children={<TimeSheet />} />} />
             <Route exact path="/admin/settings" element={<Layout user={userinfo} children={<Settings />} />} />
+            <Route exact path="/admin/announcement" element={<Layout user={userinfo} children={<CreateAnnouncement />} />} />
             <Route exact path="/admin/employees/add-batch" element={<Layout user={userinfo} children={<AddBatchEmployees />} />} />
             <Route exact path="/admin/departments/add-department" element={<Layout user={userinfo} children={<AddDepartment />} />} />
             <Route exact path="/admin/departments/edit-department" element={<Layout user={userinfo} children={<EditDepartment />} />} />

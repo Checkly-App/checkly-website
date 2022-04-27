@@ -1,4 +1,4 @@
-import { RiDashboard3Line, RiParentLine, RiBuildingLine, RiTimeLine } from 'react-icons/ri';
+import { RiDashboard3Line, RiParentLine, RiBuildingLine, RiTimeLine, RiMailLine} from 'react-icons/ri';
 import { FiSettings } from 'react-icons/fi';
 
 export const sideBarData = [
@@ -26,6 +26,11 @@ export const sideBarData = [
         title: 'Settings',
         path: '/admin/settings',
         icon: <FiSettings size={20} />,
+    },
+    {
+        title: 'Announcements',
+        path: '/admin/announcement',
+        icon: <RiMailLine size={20} />,
     },
 
 ];

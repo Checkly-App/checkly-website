@@ -10,7 +10,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import styled, { keyframes } from 'styled-components'
 import TitleIcon from '@mui/icons-material/Title';
 import { Alert, AlertTitle, Snackbar } from '@mui/material'; 
-
+import { useNavigate } from 'react-router-dom';
 
 const Section = styled.div`
     background-color: white;
@@ -66,6 +66,9 @@ const Subtitle = styled.h1`
 `
 
 const CreateAnnouncement = () => {
+
+    const navigate = useNavigate();
+
     const [departments, setDepartments] = useState([{
         department: '',
         name: ''
