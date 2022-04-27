@@ -14,7 +14,6 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
 import InsertPhotoOutlinedIcon from "@mui/icons-material/InsertPhotoOutlined";
-import logo from "../assets/images/logo.svg";
 import { ref, uploadBytesResumable } from "firebase/storage";
 import { Alert, AlertTitle, Snackbar } from '@mui/material'; 
 
@@ -422,16 +421,6 @@ const AddCompany = () => {
               {/* header */}
 
               <Section2>
-                <ButtonCircle2
-                  style={{ zIndex: 1, marginTop: -90, marginLeft: 320 }} 
-                ></ButtonCircle2>
-                <Avatar
-                  style={{ zIndex: 1, marginTop: -108, marginLeft: 337 }}
-                  background-color="white"
-                  alt="R"
-                  src={logo}
-                  sx={{ width: 50, height: 135 }}
-                />
                 <FormTitle>Register Company To Checkly</FormTitle>
               </Section2>
 
@@ -536,98 +525,7 @@ const AddCompany = () => {
           </SidebarSection1>
 
           {/* end of Upload Logo  */}
-
-          {/* the Sidebar Section (uploads) */}
-
-          <SidebarSection2>
-            <Stack direction="column" justify="center" spacing={5}>
-              <Box textAlign="center">
-                <label htmlFor="contained-button-file">
-                  <Input
-                    accept="image/*"
-                    id="contained-button-file"
-                    multiple
-                    type="file"
-                  />
-                  <Button
-                    variant="contained"
-                    component="span"
-                    variant="outlined"
-                    style={{
-                      maxWidth: "170px",
-                      maxHeight: "80px",
-                      minWidth: "170px",
-                      minHeight: "80px",
-                      border: "dashed",
-                      fontSize: "11px",
-                    }}
-                  >
-                    <Stack direction="column" spacing={5} alignItems="center">
-                      <UploadFileRoundedIcon /> Select departments{" "}
-                    </Stack>
-                  </Button>
-                </label>
-              </Box>
-
-              <Box textAlign="center">
-                <label htmlFor="contained-button-file">
-                  <Input
-                    accept="image/*"
-                    id="contained-button-file"
-                    multiple
-                    type="file"
-                  />
-                  <Button
-                    variant="contained"
-                    component="span"
-                    variant="outlined"
-                    style={{
-                      maxWidth: "170px",
-                      maxHeight: "80px",
-                      minWidth: "170px",
-                      minHeight: "80px",
-                      border: "dashed",
-                      fontSize: "11px",
-                    }}
-                  >
-                    <Stack direction="column" spacing={5} alignItems="center">
-                      <UploadFileRoundedIcon /> Select Employees{" "}
-                    </Stack>
-                  </Button>
-                </label>
-              </Box>
-              <Box textAlign="center">
-                <label htmlFor="contained-button-file">
-                  <Input
-                    accept="image/*"
-                    id="contained-button-file"
-                    multiple
-                    type="file"
-                  />
-                  <Button
-                    variant="contained"
-                    component="span"
-                    variant="outlined"
-                    style={{
-                      maxWidth: "170px",
-                      maxHeight: "80px",
-                      minWidth: "170px",
-                      minHeight: "80px",
-                      border: "dashed",
-                      fontSize: "11px",
-                    }}
-                  >
-                    <Stack direction="column" spacing={5} alignItems="center">
-                      <UploadFileRoundedIcon /> Select Geofence Info{" "}
-                    </Stack>
-                  </Button>
-                </label>
-              </Box>
-              <SButton style={{maxWidth: '170px', maxHeight: "30px" }}>
-                  Upload
-                </SButton>
-            </Stack>
-          </SidebarSection2>
+         
         </SidebarSectionsWrapper>
       </SectionsWrapper>
     </div>
