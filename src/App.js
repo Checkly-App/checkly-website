@@ -18,6 +18,8 @@ import Contact from './pages/Contact';
 import Settings from './pages/Company/Settings';
 import AddDepartment from './pages/Company/AddDepartment';
 import EditDepartment from './pages/Company/EditDepartment';
+import CreateAnnouncement from './pages/Company/CreateAnnouncement';
+import AddCompany from './pages/Checkly Admin/AddCompany';
 
 const theme = createTheme({
   palette: {
