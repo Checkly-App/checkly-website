@@ -9,6 +9,9 @@ import { format } from 'date-fns';
 import moment from 'moment';
 import { v4 } from 'uuid';
 
+const Container = styled(Wrapper)`
+    margin: 1em 5em;
+`
 const Header = styled.div`
     margin: 2em 2em 0 2em;
     display: flex;
@@ -26,7 +29,7 @@ const SaveButton = styled.button`
     border: none;
     padding: 0.6em 1.5em;
     border-radius: 0.75em;
-    font-weight: 600;
+    font-weight: 500;
 `
 const Section = styled.div`
     background-color: white;
@@ -38,6 +41,7 @@ const Section = styled.div`
     align-items: center;
     padding: 1em;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+    cursor:  ${props => props.active ? 'pointer' : 'auto'};;
 
     &:first-of-type{
         border-radius: 0.5em 0.5em 0 0;
@@ -46,7 +50,7 @@ const Section = styled.div`
     &:last-of-type{
         border-radius: 0 0 0.5em 0.5em;
     }
-   
+
     @media (max-width: 768px) {
     }
 `
@@ -196,7 +200,7 @@ const Settings = () => {
 
     return (
         loading ? <ChecklyLogo /> :
-            <Wrapper>
+            <Container>
                 <Header>
                     <Title>Settings</Title>
                     <SaveButton onClick={save}>Save</SaveButton>
@@ -214,11 +218,11 @@ const Settings = () => {
                     <SectionTitle>Attendance Settings</SectionTitle>
                     <Subtitle>Changing the following settings will result in updating the dashboard’s calculations and employees attendance marking protocols.
                         Work hours are calculated by the system.</Subtitle>
-                    <Section id={v4()} onClick={() => setOpenCheckIn(true)}>
+                    <Section active id={v4()} onClick={() => setOpenCheckIn(true)}>
                         <Detail active>Check-in</Detail>
                         <Info> {settings[0]['Check-in']}</Info>
                     </Section>
-                    <Section id={v4()} onClick={() => setOpenCheckOut(true)}>
+                    <Section active id={v4()} onClick={() => setOpenCheckOut(true)}>
                         <Detail active>Check-out</Detail>
                         <Info> {settings[1]['Check-out']}</Info>
                     </Section>
@@ -241,7 +245,7 @@ const Settings = () => {
                     updateOpen={setOpenCheckOut}
                     updateTime={updateCheckOut}
                     min={new Date(0, 0, 0, checkIn.getHours() + 1)} />
-            </Wrapper>
+            </Container>
     );
 };
 

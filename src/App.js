@@ -5,11 +5,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Departments from './pages/Company/Departments';
 import Dashboard from './pages/Company/Dashboard';
-import AddEmployee from './pages/Company/AddEmployee';
 import Login from './pages/Authentication/Login';
 import ChecklyProfile from './pages/Checkly Admin/ChecklyProfile';
 import ResetPassword from './pages/Authentication/ResetPassword';
-import AddBatchEmployees from './pages/Company/AddBatchEmployees';
 import Layout from './pages/Company/Layout';
 import Home from './pages/Home';
 import ChecklyLogo from './pages/ChecklyLogo';
@@ -19,7 +17,8 @@ import Settings from './pages/Company/Settings';
 import AddDepartment from './pages/Company/AddDepartment';
 import EditDepartment from './pages/Company/EditDepartment';
 import CreateAnnouncement from './pages/Company/CreateAnnouncement';
-import AddCompany from './pages/Checkly Admin/AddCompany';
+import AddLayout from './pages/Company/Employee/AddLayout';
+
 
 const theme = createTheme({
   palette: {
@@ -68,11 +67,10 @@ function App() {
             <Route exact path="/checkly" element={<ChecklyProfile />} />
             <Route exact path="/admin/dashboard" element={<Layout user={userinfo} children={<Dashboard />} />} />
             <Route exact path="/admin/departments" element={<Layout user={userinfo} children={<Departments />} />} />
-            <Route exact path="/admin/employees" element={<Layout user={userinfo} children={<AddEmployee />} />} />
+            <Route exact path="/admin/employees" element={<Layout user={userinfo} children={<AddLayout />} />} />
             <Route exact path="/admin/timesheets" element={<Layout user={userinfo} children={<TimeSheet />} />} />
             <Route exact path="/admin/settings" element={<Layout user={userinfo} children={<Settings />} />} />
             <Route exact path="/admin/announcement" element={<Layout user={userinfo} children={<CreateAnnouncement />} />} />
-            <Route exact path="/admin/employees/add-batch" element={<Layout user={userinfo} children={<AddBatchEmployees />} />} />
             <Route exact path="/admin/departments/add-department" element={<Layout user={userinfo} children={<AddDepartment />} />} />
             <Route exact path="/admin/departments/edit-department" element={<Layout user={userinfo} children={<EditDepartment />} />} />
             <Route exact path="*" element={<ChecklyLogo />} />

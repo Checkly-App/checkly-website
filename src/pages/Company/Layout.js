@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import { HiOutlineMenuAlt2, HiX } from 'react-icons/hi';
 import { Icon } from '../Home';
+import ChecklyLogo from '../ChecklyLogo';
 
 const Container = styled.div`
     height: 100vh;
@@ -44,7 +45,7 @@ const Layout = ({ children, user }) => {
             <Container>
                 <Sidebar open={open} updateOpen={updateOpen} />
                 <Content>
-                    {children}
+                    {user ? children : <ChecklyLogo />}
                 </Content>
             </Container >
         </>

@@ -1,13 +1,13 @@
 import { React, useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import InputField from '../../components/Forms/InputField';
+import InputField from '../../../components/Forms/InputField';
 import { MdOutlineAlternateEmail } from "react-icons/md";
-import SelectField from '../../components/Forms/SelectField';
-import RadioButtons from '../../components/Forms/RadioButtons';
+import SelectField from '../../../components/Forms/SelectField';
+import RadioButtons from '../../../components/Forms/RadioButtons';
 import { set, ref, onValue } from 'firebase/database';
-import { database, auth, functions, authSignup } from '../../utilities/firebase';
-import DateField from '../../components/Forms/DateField';
+import { database, auth, functions, authSignup } from '../../../utilities/firebase';
+import DateField from '../../../components/Forms/DateField';
 import { format } from 'date-fns';
 import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import styled from 'styled-components';
@@ -26,14 +26,14 @@ const sendEmail = httpsCallable(functions, 'sendEmail');
  */
 const Section = styled.div`
     background-color: white;
-    border-radius: 0.75em;
-    padding: 3em;
+    border-radius: 1em;
+    padding: 1em 3em;
     margin-bottom: 3em;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: 2.5em;
-    row-gap: 0.75em;
+    column-gap: 3em;
+    row-gap: 1em;
 
     @media (max-width: 768px) {
         padding: 1em;
@@ -54,10 +54,6 @@ const SetionsWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    margin: 2em 8em;
-     @media (max-width: 768px) {
-            margin: 2em 3em;
-  }
 `
 const Button = styled.button`
     width: 15em;
@@ -74,56 +70,6 @@ const Button = styled.button`
 const Progress = styled(CircularProgress)`
     margin-left: auto;
 `
-const MainTitle = styled.h1`
-    font-size: 2em;
-    font-weight: 500;
-    color: #2CB1EF;
-    margin: 0.25em 0;
-`
-const Subtitle = styled.h1`
-    font-size: 1em;
-    font-weight: 300;
-`
-const MainWrapper = styled.div`
-    width: 100%;
-    margin: 2em 0;
-`
-const FilterButton1 = styled.button`
-    width: 10em;
-    height: 3em;
-    font-size: 0.7em;
-    font-weight: 500;
-    text-align :center;
-    color: rgba(255,255,255,0.9);
-    border-radius: 5em;
-    border: none;
-    background: linear-gradient(90deg, #56BBEB 0%, #58AAF3 100%);
-    opacity: 0.5;
-    margin-left: auto;
-    margin-bottom: 2em;
-    margin-right: 0.5em;
-    
-`
-const FilterButton2 = styled.button`
-    width: 10em;
-    height: 3em;
-    font-size: 0.7em;
-    font-weight: 500;
-    text-align :center;
-    color: rgba(255,255,255,0.9);
-    border-radius: 5em;
-    border: none;
-    background: linear-gradient(90deg, #56BBEB 0%, #58AAF3 100%);
-    margin-left: auto;
-    margin-bottom: 2em;
-    &:hover {
-        background: #2CB1EF;
-      }
-`
-const ButtonsContainer = styled.div`
-    margin-left: auto;
-`
-
 
 const AddEmployee = () => {
     /**
@@ -148,10 +94,6 @@ const AddEmployee = () => {
     }]);
 
 
-    // to navigate to 'Add Batch'
-    const navigate = useNavigate();
-
-
     /**
      * Use Effect to fecth all of the company's departments
      */
@@ -162,7 +104,7 @@ const AddEmployee = () => {
             for (let id in data) {
                 if (data[id]['company_id'] === auth.currentUser.uid) {
                     const department = {
-                        department: 'dep' + data[id]['dep_id'],
+                        department: data[id]['dep_id'],
                         name: data[id]['name']
                     };
                     departments.push(department)
@@ -250,7 +192,7 @@ const AddEmployee = () => {
      */
     const validationSchema =
         Yup.object({
-            fullName: Yup.string().required('Full Name is required'),
+            fullName: Yup.string().required('Full Name is required').matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
             nationalID: Yup.string().matches(/^(?<=\s|^)\d+(?=\s|$)/, "National ID should consist of numbers only").min(10, 'Must be 10 digits').max(10, 'Must be 10 digits').required('National ID is required'),
             address: Yup.string().required('Address is required'),
             phoneNumber: Yup.string().matches(/^[0]{1}[5]{1}([0-9])*$/, "Invalid phone format must start with 05").min(10, 'Must be 10 digits').max(10, 'Must be 10 digits').required('Phone Number is required'),
@@ -339,14 +281,6 @@ const AddEmployee = () => {
             }}>
             <Form>
                 <SetionsWrapper>
-                    <MainWrapper>
-                        <MainTitle>Add Employee</MainTitle>
-                        <Subtitle>Start by adding an individual employee or a batch of employees</Subtitle>
-                    </MainWrapper>
-                    <ButtonsContainer>
-                        <FilterButton1 disabled={true} >Add Individual</FilterButton1>
-                        <FilterButton2 onClick={() => navigate("/admin/employees/add-batch")}>Add Batch</FilterButton2>
-                    </ButtonsContainer>
                     <Section>
                         <SectionTitle>Personal Information</SectionTitle>
                         <InputField

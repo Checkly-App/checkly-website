@@ -3,7 +3,7 @@ import { React, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Firebase imports
 import { set, ref, onValue } from 'firebase/database';
-import { database, auth, functions, authSignup } from '../../utilities/firebase';
+import { database, auth, functions, authSignup } from '../../../utilities/firebase';
 import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { httpsCallable } from 'firebase/functions';
 // to generate password
@@ -13,9 +13,9 @@ import Papa from 'papaparse';
 // components import
 import { useDropzone } from 'react-dropzone';
 import { Alert, AlertTitle, CircularProgress, Snackbar } from '@mui/material';
-import Table from '../../components/Forms/TableExample';
+import Table from '../../../components/Forms/TableExample';
 // styles imports
-import '../../Styles/Dropzone.css';
+import '../../../Styles/Dropzone.css';
 import styled from 'styled-components';
 
 /**
@@ -28,11 +28,10 @@ const sendEmail = httpsCallable(functions, 'sendEmail');
  */
 const Section = styled.div`
  background-color: white;
- border-radius: 0.75em;
+ border-radius: 1em;
  padding: 3em;
  margin-bottom: 3em;
- box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-
+ box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
 `
 const SectionTitle = styled.h1`
  font-size: 1.05em;
@@ -47,7 +46,6 @@ const SetionsWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    margin: 2em 8em;
      @media (max-width: 768px) {
             margin: 2em 3em;
   }
@@ -399,7 +397,6 @@ const AddBatchEmployees = () => {
             header: true,
             complete: results => {
                 setParsedCsvData(results.data)
-                // console.log(results.data)
             },
         });
     };
@@ -498,7 +495,6 @@ const AddBatchEmployees = () => {
                     setError(true);
                     setIsLoading(false);
                     setOpenSnackbar(true);
-                    console.log(error);
                     return;
                 });
             }).catch((error) => {
@@ -511,7 +507,6 @@ const AddBatchEmployees = () => {
                     setOpenSnackbar(true);
                 }
                 setIsLoading(false);
-                console.log(error);
                 return;
             });
         })
@@ -520,14 +515,6 @@ const AddBatchEmployees = () => {
 
     return (
         <SetionsWrapper>
-            <MainWrapper>
-                <MainTitle>Add Employee</MainTitle>
-                <Subtitle>Start by adding an individual employee or a batch of employees</Subtitle>
-            </MainWrapper>
-            <ButtonsContainer>
-                <FilterButton1 onClick={() => navigate("/admin/employees/")} >Add Individual</FilterButton1>
-                <FilterButton2 disabled={true}>Add Batch</FilterButton2>
-            </ButtonsContainer>
             <Section>
                 <SectionTitle>Upload Employees CSV File</SectionTitle>
                 <Note>In order to ensure successful addition, please follow the example below in the way column headers are written as well as the cells data types.</Note>
