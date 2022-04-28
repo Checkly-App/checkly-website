@@ -160,7 +160,7 @@ const AddBatchEmployees = () => {
             for (let id in data) {
                 if (data[id]['company_id'] === auth.currentUser.uid) {
                     const department = {
-                        department: 'dep' + data[id]['dep_id'],
+                        department: id,
                         name: data[id]['name']
                     };
                     departments.push(department)
@@ -186,7 +186,7 @@ const AddBatchEmployees = () => {
             const data = snapshot.val();
             var employees = [];
             for (let id in data) {
-                if (departmentsKeys.includes(data[id]['department'])) {  //Fetch employees of a given company
+                if (departmentsKeys.includes(data[id]['department']) && data[id]['deleted'] === 'false') {  //Fetch employees of a given company
                     const employee = {
                         national_id: data[id]['national_id'],
                         phone_number: data[id]['phone_number'],
@@ -482,7 +482,8 @@ const AddBatchEmployees = () => {
                         position: employee.position,
                         change_image: 0,
                         image_token: "null",
-                        status: "-"
+                        status: "-",
+                        deleted: "false"
                     });
                     setError(false);
                     setIsLoading(false);
