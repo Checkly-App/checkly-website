@@ -2,7 +2,7 @@ import React from 'react';
 import { useFormikContext } from 'formik';
 import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material'
 
-const RadioButtons = ({ name, ...other }) => {
+const RadioButtons = ({ name,nameg, ...other }) => {
     const { setFieldValue } = useFormikContext();
 
     const handleChange = (e) => {
@@ -11,7 +11,7 @@ const RadioButtons = ({ name, ...other }) => {
 
     const config = {
         ...other,
-        defaultValue: 'Female',
+        defaultValue: nameg? nameg : 'Female',
         onChange: handleChange
     };
 

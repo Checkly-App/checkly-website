@@ -18,7 +18,8 @@ import AddDepartment from './pages/Company/AddDepartment';
 import EditDepartment from './pages/Company/EditDepartment';
 import CreateAnnouncement from './pages/Company/CreateAnnouncement';
 import AddLayout from './pages/Company/Employee/AddLayout';
-
+import ViewEmployees from './pages/Company/Employee/ViewEmployees';
+import EditEmployee from './pages/Company/Employee/EditEmployee';
 
 const theme = createTheme({
   palette: {
@@ -67,7 +68,10 @@ function App() {
             <Route exact path="/checkly" element={<ChecklyProfile />} />
             <Route exact path="/admin/dashboard" element={<Layout user={userinfo} children={<Dashboard />} />} />
             <Route exact path="/admin/departments" element={<Layout user={userinfo} children={<Departments />} />} />
-            <Route exact path="/admin/employees" element={<Layout user={userinfo} children={<AddLayout />} />} />
+            <Route exact path="/admin/Addemployee" element={<Layout user={userinfo} children={<AddLayout />} />} />
+            <Route exact path="/admin/employees" element={<Layout user={userinfo} children={<ViewEmployees />} />} />
+            <Route exact path="/admin/Edit" element={<Layout user={userinfo} children={<EditEmployee />} />} />
+
             <Route exact path="/admin/timesheets" element={<Layout user={userinfo} children={<TimeSheet />} />} />
             <Route exact path="/admin/settings" element={<Layout user={userinfo} children={<Settings />} />} />
             <Route exact path="/admin/announcement" element={<Layout user={userinfo} children={<CreateAnnouncement />} />} />
