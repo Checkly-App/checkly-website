@@ -1,5 +1,6 @@
-import { RiDashboard3Line, RiParentLine, RiBuildingLine, RiTimeLine, RiMailLine} from 'react-icons/ri';
+import { RiDashboard3Line, RiParentLine, RiBuildingLine, RiTimeLine, RiMailLine } from 'react-icons/ri';
 import { FiSettings } from 'react-icons/fi';
+import { IoMegaphoneOutline } from 'react-icons/io5'
 
 export const sideBarData = [
     {
@@ -28,9 +29,9 @@ export const sideBarData = [
         icon: <FiSettings size={20} />,
     },
     {
-        title: 'Announcements',
+        title: 'Announce',
         path: '/admin/announcement',
-        icon: <RiMailLine size={20} />,
+        icon: <IoMegaphoneOutline size={20} />,
     },
 
 ];
