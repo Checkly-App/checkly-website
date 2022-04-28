@@ -83,7 +83,7 @@ const AddEmployee = () => {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [departments, setDepartments] = useState([{
-        department: '',
+        id: '',
         name: ''
     }]);
     const [employees, setEmployees] = useState([{
@@ -104,7 +104,7 @@ const AddEmployee = () => {
             for (let id in data) {
                 if (data[id]['company_id'] === auth.currentUser.uid) {
                     const department = {
-                        department: data[id]['dep_id'],
+                        id: id,
                         name: data[id]['name']
                     };
                     departments.push(department)
@@ -245,7 +245,8 @@ const AddEmployee = () => {
                     position: employee.position,
                     change_image: 0,
                     image_token: "null",
-                    status: "-"
+                    status: "-",
+                    deleted: "false"
                 });
                 setError(false);
                 setIsLoading(false);

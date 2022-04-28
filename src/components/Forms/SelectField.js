@@ -1,16 +1,14 @@
-import {React,useState} from 'react';
+import { React, useState } from 'react';
 import { TextField, MenuItem } from '@mui/material';
 import { useField, useFormikContext } from 'formik';
 
-const SelectField = ({ name,nameID, options, ...other }) => {
+const SelectField = ({ name, nameID, options, ...other }) => {
     const [field, data] = useField(name);
     const { setFieldValue } = useFormikContext();
-    const [selectedIndex, setSelectedIndex] = useState(nameID);
 
     const handleChange = (e) => {
         const { value } = e.target;
         setFieldValue(name, value);
-        setSelectedIndex(value)
     };
 
     const config = {
@@ -22,7 +20,6 @@ const SelectField = ({ name,nameID, options, ...other }) => {
         size: 'small',
         fullWidth: true,
         margin: 'none',
-        value:selectedIndex,
         InputProps: {
             style: { textAlign: 'left' }
         },
@@ -38,7 +35,7 @@ const SelectField = ({ name,nameID, options, ...other }) => {
         <TextField {...config}>
             {options.map((option, pos) => {
                 return (
-                    <MenuItem key={pos} value={option.department}>
+                    <MenuItem key={pos} value={option.id}>
                         {option.name}
                     </MenuItem>
                 );
