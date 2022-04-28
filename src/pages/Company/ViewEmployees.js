@@ -350,7 +350,7 @@ const closeSnackbar = () => {
 
 <div className="input-group" style={input}>
 <i className="fa fa-envelope icon"><MdSearch size="20px"  style={{ marginBottom:"0.1em",marginRight:"0.1em"}}/></i>
-  <input  className="inputsearch"  type="text" placeholder="Search for names or departments or position" onChange={(event)=>{setsearchterm(event.target.value)}}  />
+  <input  className="inputsearch"  type="text" placeholder="Search for names or employeeID or position" onChange={(event)=>{setsearchterm(event.target.value)}}  />
   
 </div>
 
@@ -366,7 +366,7 @@ return emp
     
     return emp
 }
-else if (emp.department.toLowerCase().includes(searchterm.toLowerCase())) {
+else if (emp.employeeID.toLowerCase().includes(searchterm.toLowerCase())) {
     
     return emp
 }
@@ -402,11 +402,13 @@ return (
            {emp.name}
           </Typography>
           <Typography variant="body2" color="text.secondary" textAlign="center">
-        {emp.department}
+        {emp.department} Department 
           </Typography>
+         
           <Typography variant="body2" color="#56BBEB" textAlign="center">
          {emp.position}
           </Typography>
+          
         </CardContent>
       </CardActionArea>
     </Card>
