@@ -309,7 +309,6 @@ const Login = () => {
                   })
                   .catch((error) => {
 
-                    console.log(error)
 
                     setCount("InValid Email /Password")
                     setOpenSnackbar(true);

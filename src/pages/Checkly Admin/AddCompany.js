@@ -15,7 +15,7 @@ import Box from "@mui/material/Box";
 import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
 import InsertPhotoOutlinedIcon from "@mui/icons-material/InsertPhotoOutlined";
 import { ref, uploadBytesResumable } from "firebase/storage";
-import { Alert, AlertTitle, Snackbar } from '@mui/material'; 
+import { Alert, AlertTitle, Snackbar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 // Main COntainer
@@ -318,7 +318,7 @@ const ages = [
 
 const AddCompany = () => {
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   var random_id = Math.ceil(Math.random() * (9999 - 1000) + 100);
 
@@ -352,7 +352,7 @@ const navigate = useNavigate();
   });
 
   const addCompany = (company) => {
-  
+
     createUserWithEmailAndPassword(auth, company.email, "123456")
       .then((result) => {
         set(ref_database(database, "Company/" + result.user.uid), {
@@ -407,19 +407,19 @@ const navigate = useNavigate();
             console.log(values);
             addCompany(values);
             resetForm();
-            setOpenSnackbar(true); 
+            setOpenSnackbar(true);
           }}
         >
           <Form>
-          <Snackbar
-                autoHideDuration={6000}
-                open={openSnackbar}
-                onClose={closeSnackbar}
-                anchorOrigin={{ vertical: 'top', horizontal: 'left' }}>
-                <Alert onClose={closeSnackbar} severity='info' variant='filled'>
-                  <AlertTitle>Comapny has been registered successfully!</AlertTitle>
-                </Alert>
-              </Snackbar>
+            <Snackbar
+              autoHideDuration={6000}
+              open={openSnackbar}
+              onClose={closeSnackbar}
+              anchorOrigin={{ vertical: 'top', horizontal: 'left' }}>
+              <Alert onClose={closeSnackbar} severity='info' variant='filled'>
+                <AlertTitle>Comapny has been registered successfully!</AlertTitle>
+              </Alert>
+            </Snackbar>
             <MainSections>
               {/* header */}
 
@@ -520,7 +520,7 @@ const navigate = useNavigate();
                     </Button>
                   </Box>
                 </label>
-                <SButton style={{maxWidth: '170px', maxHeight: "30px" }} type="submit">
+                <SButton style={{ maxWidth: '170px', maxHeight: "30px" }} type="submit">
                   Upload
                 </SButton>
               </Stack>
@@ -528,7 +528,7 @@ const navigate = useNavigate();
           </SidebarSection1>
 
           {/* end of Upload Logo  */}
-         
+
         </SidebarSectionsWrapper>
       </SectionsWrapper>
     </div>

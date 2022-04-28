@@ -9,7 +9,7 @@ import { format } from 'date-fns';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import styled, { keyframes } from 'styled-components'
 import TitleIcon from '@mui/icons-material/Title';
-import { Alert, AlertTitle, Snackbar } from '@mui/material'; 
+import { Alert, AlertTitle, Snackbar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const Section = styled.div`
@@ -77,7 +77,7 @@ const CreateAnnouncement = () => {
     const [openSnackbar, setOpenSnackbar] = useState(false);
 
     const closeSnackbar = () => {
-      setOpenSnackbar(false);
+        setOpenSnackbar(false);
     };
 
     useEffect(() => {
@@ -93,7 +93,6 @@ const CreateAnnouncement = () => {
                     departments.push(department)
                 }
             }
-            console.log(departments)
             setDepartments(departments);
         });
     }, []);
@@ -113,18 +112,18 @@ const CreateAnnouncement = () => {
 
 
     const addAnnouncement = (announcement) => {
-        
-            const db = getDatabase();
-            const announcementRef = ref(db, 'Announcement');
-            const newAnnouncementRef = push(announcementRef);
-            set(newAnnouncementRef, {
-                title: announcement.Title,
-                body: announcement.announcement,
-                department: announcement.department,
-                author: " " ,//user email
-                date: `${new Date().toLocaleString()}`
-            });
-     
+
+        const db = getDatabase();
+        const announcementRef = ref(db, 'Announcement');
+        const newAnnouncementRef = push(announcementRef);
+        set(newAnnouncementRef, {
+            title: announcement.Title,
+            body: announcement.announcement,
+            department: announcement.department,
+            author: " ",//user email
+            date: `${new Date().toLocaleString()}`
+        });
+
     }
 
     return (
@@ -132,27 +131,26 @@ const CreateAnnouncement = () => {
             initialValues={{ ...initialValues }}
             validationSchema={validationSchema}
             onSubmit={(values, { resetForm }) => {
-                // console.log(values);
                 addAnnouncement(values);
                 resetForm();
                 setOpenSnackbar(true);
                 // alert(JSON.stringify(values, null, 2));
             }}>
             <Form>
-            <Snackbar
-                autoHideDuration={6000}
-                open={openSnackbar}
-                onClose={closeSnackbar}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                <Alert onClose={closeSnackbar} severity='info' variant='filled'>
-                  <AlertTitle>Announcement has been posted successfully!</AlertTitle>
-                </Alert>
-              </Snackbar>
+                <Snackbar
+                    autoHideDuration={6000}
+                    open={openSnackbar}
+                    onClose={closeSnackbar}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                    <Alert onClose={closeSnackbar} severity='info' variant='filled'>
+                        <AlertTitle>Announcement has been posted successfully!</AlertTitle>
+                    </Alert>
+                </Snackbar>
                 <SetionsWrapper>
-                <MainWrapper>
-                <MainTitle>Create Announcement</MainTitle>
-                <Subtitle>Publish an announcement to selected department emplooyes</Subtitle>
-                </MainWrapper>
+                    <MainWrapper>
+                        <MainTitle>Create Announcement</MainTitle>
+                        <Subtitle>Publish an announcement to selected department emplooyes</Subtitle>
+                    </MainWrapper>
                     <Section>
                         <InputField
                             name='Title'

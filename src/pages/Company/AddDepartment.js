@@ -19,7 +19,7 @@ import TextField from '@mui/material/TextField';
  * Styled Components 
  */
 
- const SetionWrapper = styled.div`
+const SetionWrapper = styled.div`
  display: flex;
  flex-direction: column;
  margin: 2em 8em;
@@ -103,14 +103,14 @@ const AddDepartment = () => {
         description: 'Oops! Something went wrong, try again later.',
     });
     const [openSnackbar, setOpenSnackbar] = useState(false);
-    
+
     // to navigate to 'Departments View'
     const navigate = useNavigate();
 
     /**
      * Use Effects
      */
-    
+
     useEffect(() => {
         onValue(ref(database, 'Department'), (snapshot) => {
             const data = snapshot.val();
@@ -135,7 +135,7 @@ const AddDepartment = () => {
 
     // Fetch employees of the logged-in company
     useEffect(() => {
-        
+
         const departmentsKeys = [];
 
         for (let i in departments)
@@ -145,7 +145,7 @@ const AddDepartment = () => {
             const data = snapshot.val();
             var employees = [];
             for (let id in data) {
-                if (departmentsKeys.includes(data[id]['department']) && data[id]['deleted'] === 'false' ) {
+                if (departmentsKeys.includes(data[id]['department']) && data[id]['deleted'] === 'false') {
                     const employee = {
                         value: id,
                         label: data[id]['name'],
@@ -160,14 +160,14 @@ const AddDepartment = () => {
     /**
      * Close snack bar function
      */
-     const closeSnackbar = () => {
+    const closeSnackbar = () => {
         setOpenSnackbar(false);
     };
 
     /**
      * Form's Initial Values
      */
-     const initialValues = {
+    const initialValues = {
         depName: '',
         manager: ''
     };
@@ -176,15 +176,15 @@ const AddDepartment = () => {
      * Form's validation patterns
      */
     const validationSchema =
-     Yup.object({
-        depName: Yup.string().required('Department Name is required'),
-        manager: Yup.object().required('Department Manager is required')
-    });
+        Yup.object({
+            depName: Yup.string().required('Department Name is required'),
+            manager: Yup.object().required('Department Manager is required')
+        });
 
-     // Check if department exists
+    // Check if department exists
     const departmentExists = (department_name) => {
-        for(let i in departments){
-            if(departments[i].name.toLowerCase().trim() === department_name.toLowerCase().trim()){
+        for (let i in departments) {
+            if (departments[i].name.toLowerCase().trim() === department_name.toLowerCase().trim()) {
                 setErrorDetails({
                     title: 'Invalid Department',
                     description: 'Department exists within the company'
@@ -196,10 +196,8 @@ const AddDepartment = () => {
 
     // Check if selected employee already manages another department
     const managerExists = (manager_uid) => {
-        console.log(manager_uid)
-        for(let i in departments){
-            console.log(departments[i].manager)
-            if(departments[i].manager_id === manager_uid){
+        for (let i in departments) {
+            if (departments[i].manager_id === manager_uid) {
                 setErrorDetails({
                     title: 'Manager Exists',
                     description: 'The selected employee already manages another department'
@@ -208,112 +206,112 @@ const AddDepartment = () => {
             }
         }
     }
-    
-     /**
-     * Add department function - triggered when the form is submitted
-     * @params department
-     */
+
+    /**
+    * Add department function - triggered when the form is submitted
+    * @params department
+    */
     const addDepartment = (department) => {
 
-        if(departmentExists(department.depName)){
+        if (departmentExists(department.depName)) {
             setError(true);
             setOpenSnackbar(true);
             return;
         }
-        if(managerExists(department.manager.value)){
+        if (managerExists(department.manager.value)) {
             setError(true);
             setOpenSnackbar(true);
             return;
         }
 
-       // push department to DB 
-       var dep = push(ref(database));
-       set(ref(database, 'Department/'+ dep.key),{
-        company_id: auth.currentUser.uid,
-        dep_id: dep.key,
-        name : department.depName,
-        manager: department.manager.value, 
-       })
+        // push department to DB 
+        var dep = push(ref(database));
+        set(ref(database, 'Department/' + dep.key), {
+            company_id: auth.currentUser.uid,
+            dep_id: dep.key,
+            name: department.depName,
+            manager: department.manager.value,
+        })
 
-       setError(false);
-       setOpenSnackbar(true);
-       // navigate to departments view
-       setTimeout(()=> {
-        navigate("/admin/departments");
-       }, 3000);
+        setError(false);
+        setOpenSnackbar(true);
+        // navigate to departments view
+        setTimeout(() => {
+            navigate("/admin/departments");
+        }, 3000);
     }
 
     return (
         <Formik
-        initialValues={{ ...initialValues }}
-        validationSchema={validationSchema}
-        onSubmit={(values) => {
-            addDepartment(values);
-        }}
+            initialValues={{ ...initialValues }}
+            validationSchema={validationSchema}
+            onSubmit={(values) => {
+                addDepartment(values);
+            }}
         >
-       
+
             {({ handleChange, setFieldValue, handleBlur, errors, touched }) => (
                 <Form>
-                <SetionWrapper>
-                <MainWrapper>
-                    <MainTitle>Add Department</MainTitle>
-                    <Subtitle>Add Department Information</Subtitle>
-                </MainWrapper>
-                <Section>
-                    <SectionTitle> Department Information </SectionTitle>
-                    <InputField
-                    name='depName'
-                    id='depName'
-                    label='Department Name'
-                    />
+                    <SetionWrapper>
+                        <MainWrapper>
+                            <MainTitle>Add Department</MainTitle>
+                            <Subtitle>Add Department Information</Subtitle>
+                        </MainWrapper>
+                        <Section>
+                            <SectionTitle> Department Information </SectionTitle>
+                            <InputField
+                                name='depName'
+                                id='depName'
+                                label='Department Name'
+                            />
 
-                    <Autocomplete
-                    name= "manager"
-                    id="manager"
-                    onChange={(e, value) => {
-                        console.log(value)
-                        setFieldValue("manager", value !== null ? value : initialValues.manager)}
-                    }
-                    options={companyEmployees}
-                    onBlur={handleBlur}
-                    isOptionEqualToValue={(option, value) => option.id === value.id}
-                    renderInput={(params) => 
-                    <TextField {...params}
-                        name= "manager"
-                        label= "Manager"
-                        size= "small"
-                        error={Boolean(touched.manager && errors.manager)}
-                        helperText={touched.manager && errors.manager}
-                        variant= 'outlined'
-                          />}
-                    />
-                </Section>
-                <CustomButton type='submit' >Submit</CustomButton>
-            </SetionWrapper>
-            {error ?
-                    (<Snackbar
-                        autoHideDuration={6000}
-                        open={openSnackbar}
-                        onClose={closeSnackbar}
-                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                        <Alert onClose={closeSnackbar} severity='error' variant='filled'>
-                            <AlertTitle>{errorDetails.title}</AlertTitle>
-                            {errorDetails.description}
-                        </Alert>
-                    </Snackbar>) :
-                    (<Snackbar
-                        open={openSnackbar}
-                        autoHideDuration={6000}
-                        onClose={closeSnackbar}
-                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
-                        <Alert severity='success' variant='filled'>
-                            <AlertTitle>Success!</AlertTitle>
-                            Department has been added successfully
-                        </Alert>
-                    </Snackbar>)}
-            </Form>
-            )} 
-                
+                            <Autocomplete
+                                name="manager"
+                                id="manager"
+                                onChange={(e, value) => {
+                                    setFieldValue("manager", value !== null ? value : initialValues.manager)
+                                }
+                                }
+                                options={companyEmployees}
+                                onBlur={handleBlur}
+                                isOptionEqualToValue={(option, value) => option.id === value.id}
+                                renderInput={(params) =>
+                                    <TextField {...params}
+                                        name="manager"
+                                        label="Manager"
+                                        size="small"
+                                        error={Boolean(touched.manager && errors.manager)}
+                                        helperText={touched.manager && errors.manager}
+                                        variant='outlined'
+                                    />}
+                            />
+                        </Section>
+                        <CustomButton type='submit' >Submit</CustomButton>
+                    </SetionWrapper>
+                    {error ?
+                        (<Snackbar
+                            autoHideDuration={6000}
+                            open={openSnackbar}
+                            onClose={closeSnackbar}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                            <Alert onClose={closeSnackbar} severity='error' variant='filled'>
+                                <AlertTitle>{errorDetails.title}</AlertTitle>
+                                {errorDetails.description}
+                            </Alert>
+                        </Snackbar>) :
+                        (<Snackbar
+                            open={openSnackbar}
+                            autoHideDuration={6000}
+                            onClose={closeSnackbar}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
+                            <Alert severity='success' variant='filled'>
+                                <AlertTitle>Success!</AlertTitle>
+                                Department has been added successfully
+                            </Alert>
+                        </Snackbar>)}
+                </Form>
+            )}
+
         </Formik>
     );
 }

@@ -8,7 +8,6 @@ const GeneralSelectField = ({ name, options, ...other }) => {
 
     const handleChange = (e) => {
         const { value } = e.target;
-        console.log(value)
         setFieldValue(name, value);
     };
 

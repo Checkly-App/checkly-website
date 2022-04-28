@@ -1,4 +1,4 @@
-import { RiDashboard3Line, RiParentLine, RiBuildingLine, RiTimeLine, RiMailLine } from 'react-icons/ri';
+import { RiDashboard3Line, RiParentLine, RiBuildingLine, RiTimeLine } from 'react-icons/ri';
 import { FiSettings } from 'react-icons/fi';
 import { IoMegaphoneOutline } from 'react-icons/io5'
 

@@ -186,7 +186,6 @@ const Settings = () => {
         ];
 
         setSettings(update)
-        console.log(checkOut)
 
     }
 

@@ -4,11 +4,10 @@ import '../Styles/LogoAnimation.css';
 import { useNavigate } from 'react-router-dom';
 
 const ChecklyLogo = () => {
-    const navigate = useNavigate();
 
     return (
         <div className="App-logo-container">
-            <img onClick={() => navigate("/login")} role="button" src={logo} className="App-logo" alt="logo" />
+            <img src={logo} className="App-logo" alt="logo" />
         </div>
     );
 };

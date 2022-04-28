@@ -18,7 +18,7 @@ import TextField from '@mui/material/TextField';
  * Styled Components 
  */
 
- const SetionWrapper = styled.div`
+const SetionWrapper = styled.div`
     display: flex;
     flex-direction: column;
     margin: 2em 8em;
@@ -80,12 +80,12 @@ const CustomButton = styled.button`
 `
 
 const EditDepartment = () => {
-    
+
     /**
      * Use States
      */
 
-     const [departments, setDepartments] = useState([{
+    const [departments, setDepartments] = useState([{
         department: '',
         name: '',
         manager_id: ''
@@ -101,7 +101,6 @@ const EditDepartment = () => {
     });
     // get passed info
     const location = useLocation();
-    console.log(location.state);
 
     const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -111,7 +110,7 @@ const EditDepartment = () => {
     /**
      * Use Effects
      */
-    
+
     useEffect(() => {
         onValue(ref(database, 'Department'), (snapshot) => {
             const data = snapshot.val();
@@ -123,7 +122,6 @@ const EditDepartment = () => {
                         name: data[id]['name'],
                         manager_id: data[id]['manager']
                     };
-                    // console.log(department)
                     departments.push(department)
                 }
             }
@@ -138,7 +136,7 @@ const EditDepartment = () => {
 
     // Fetch employees of the logged-in company
     useEffect(() => {
-        
+
         const departmentsKeys = [];
 
         for (let i in departments)
@@ -148,7 +146,7 @@ const EditDepartment = () => {
             const data = snapshot.val();
             var employees = [];
             for (let id in data) {
-                if (departmentsKeys.includes(data[id]['department']) && data[id]['deleted'] === 'false' ) { 
+                if (departmentsKeys.includes(data[id]['department']) && data[id]['deleted'] === 'false') {
                     const employee = {
                         value: id,
                         label: data[id]['name'],
@@ -163,14 +161,14 @@ const EditDepartment = () => {
     /**
      * Close snack bar function
      */
-     const closeSnackbar = () => {
+    const closeSnackbar = () => {
         setOpenSnackbar(false);
     };
 
     /**
      * Form's Initial Values
      */
-     const initialValues = {
+    const initialValues = {
         depName: location.state.department_name,
         manager: location.state.manager,
     };
@@ -178,17 +176,17 @@ const EditDepartment = () => {
     /**
      * Form's validation patterns
      */
-     const validationSchema =
-     Yup.object({
-        depName: Yup.string().required('Department Name is required'),
-        manager: Yup.object().required('Department Manager is required')
-     });
+    const validationSchema =
+        Yup.object({
+            depName: Yup.string().required('Department Name is required'),
+            manager: Yup.object().required('Department Manager is required')
+        });
 
     // Check if department exists
     const departmentExists = (department_name) => {
-        for(let i in departments){
-            if(departments[i].name.toLowerCase().trim() === department_name.toLowerCase().trim() 
-            && departments[i].name.toLowerCase().trim() !== location.state.department_name.toLowerCase().trim()){
+        for (let i in departments) {
+            if (departments[i].name.toLowerCase().trim() === department_name.toLowerCase().trim()
+                && departments[i].name.toLowerCase().trim() !== location.state.department_name.toLowerCase().trim()) {
                 setErrorDetails({
                     title: 'Invalid Department',
                     description: 'Department exists within the company'
@@ -200,8 +198,8 @@ const EditDepartment = () => {
 
     // Check if selected employee already manages another department
     const managerExists = (manager_uid) => {
-        for(let i in departments){
-            if(departments[i].manager_id === manager_uid && departments[i].manager_id !== location.state.manager.value){
+        for (let i in departments) {
+            if (departments[i].manager_id === manager_uid && departments[i].manager_id !== location.state.manager.value) {
                 setErrorDetails({
                     title: 'Manager Exists',
                     description: 'The selected employee already manages another department'
@@ -215,106 +213,107 @@ const EditDepartment = () => {
      * Edit department function - triggered when the form is submitted
      * @params department
      */
-     const editDepartment = (department) => {
+    const editDepartment = (department) => {
 
-        if(departmentExists(department.depName)){
+        if (departmentExists(department.depName)) {
             setError(true);
             setOpenSnackbar(true);
             return;
         }
 
-        if(managerExists(department.manager.value)){
+        if (managerExists(department.manager.value)) {
             setError(true);
             setOpenSnackbar(true);
             return;
         }
 
-       // Update department to DB 
-       update(ref(database, 'Department/'+ location.state.department_id),{
-        company_id: auth.currentUser.uid,
-        dep_id: location.state.department_id, 
-        name : department.depName,
-        manager: department.manager.value,
+        // Update department to DB 
+        update(ref(database, 'Department/' + location.state.department_id), {
+            company_id: auth.currentUser.uid,
+            dep_id: location.state.department_id,
+            name: department.depName,
+            manager: department.manager.value,
         })
-       setError(false);
-       setOpenSnackbar(true);
-       // navigate to departments view
-       setTimeout(()=> {
-        navigate("/admin/departments");
-       }, 3000);
+        setError(false);
+        setOpenSnackbar(true);
+        // navigate to departments view
+        setTimeout(() => {
+            navigate("/admin/departments");
+        }, 3000);
     }
 
-    return(
+    return (
         <Formik
-        initialValues={{ ...initialValues }}
-        validationSchema={validationSchema}
-        onSubmit={(values) => {
-            editDepartment(values);
-        }}
+            initialValues={{ ...initialValues }}
+            validationSchema={validationSchema}
+            onSubmit={(values) => {
+                editDepartment(values);
+            }}
         >
-       
+
             {({ handleChange, setFieldValue, handleBlur, errors, touched }) => (
                 <Form>
-                <SetionWrapper>
-                <MainWrapper>
-                    <MainTitle>Edit Department</MainTitle>
-                    <Subtitle>Edit Department Information</Subtitle>
-                </MainWrapper>
-                <Section>
-                    <SectionTitle> Department Information </SectionTitle>
-                    <InputField
-                    name='depName'
-                    id='depName'
-                    label='Department Name'
-                    />
+                    <SetionWrapper>
+                        <MainWrapper>
+                            <MainTitle>Edit Department</MainTitle>
+                            <Subtitle>Edit Department Information</Subtitle>
+                        </MainWrapper>
+                        <Section>
+                            <SectionTitle> Department Information </SectionTitle>
+                            <InputField
+                                name='depName'
+                                id='depName'
+                                label='Department Name'
+                            />
 
-                    <Autocomplete
-                    name= "manager"
-                    id="manager"
-                    defaultValue={ location.state.manager }
-                    onChange={(e, value) => {
-                        setFieldValue("manager", value !== null ? value : initialValues.manager)}
-                    }
-                    options={companyEmployees}
-                    onBlur={handleBlur}
-                    isOptionEqualToValue={(option, value) => option.id === value.id}
-                    renderInput={(params) => 
-                    <TextField {...params}
-                        name= "manager"
-                        label= "Manager"
-                        size= "small"
-                        error={Boolean(touched.manager && errors.manager)}
-                        helperText={touched.manager && errors.manager}
-                        variant= 'outlined'
-                          />}
-                    />
-                </Section>
-                <CustomButton type='submit' >Save</CustomButton>
-            </SetionWrapper>
-            {error ?
-                    (<Snackbar
-                        autoHideDuration={6000}
-                        open={openSnackbar}
-                        onClose={closeSnackbar}
-                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                        <Alert onClose={closeSnackbar} severity='error' variant='filled'>
-                            <AlertTitle>{errorDetails.title}</AlertTitle>
-                            {errorDetails.description}
-                        </Alert>
-                    </Snackbar>) :
-                    (<Snackbar
-                        open={openSnackbar}
-                        autoHideDuration={6000}
-                        onClose={closeSnackbar}
-                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
-                        <Alert severity='success' variant='filled'>
-                            <AlertTitle>Success!</AlertTitle>
-                            Department has been updated successfully
-                        </Alert>
-                    </Snackbar>)}
-            </Form>
-            )} 
-                
+                            <Autocomplete
+                                name="manager"
+                                id="manager"
+                                defaultValue={location.state.manager}
+                                onChange={(e, value) => {
+                                    setFieldValue("manager", value !== null ? value : initialValues.manager)
+                                }
+                                }
+                                options={companyEmployees}
+                                onBlur={handleBlur}
+                                isOptionEqualToValue={(option, value) => option.id === value.id}
+                                renderInput={(params) =>
+                                    <TextField {...params}
+                                        name="manager"
+                                        label="Manager"
+                                        size="small"
+                                        error={Boolean(touched.manager && errors.manager)}
+                                        helperText={touched.manager && errors.manager}
+                                        variant='outlined'
+                                    />}
+                            />
+                        </Section>
+                        <CustomButton type='submit' >Save</CustomButton>
+                    </SetionWrapper>
+                    {error ?
+                        (<Snackbar
+                            autoHideDuration={6000}
+                            open={openSnackbar}
+                            onClose={closeSnackbar}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                            <Alert onClose={closeSnackbar} severity='error' variant='filled'>
+                                <AlertTitle>{errorDetails.title}</AlertTitle>
+                                {errorDetails.description}
+                            </Alert>
+                        </Snackbar>) :
+                        (<Snackbar
+                            open={openSnackbar}
+                            autoHideDuration={6000}
+                            onClose={closeSnackbar}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
+                            <Alert severity='success' variant='filled'>
+                                <AlertTitle>Success!</AlertTitle>
+                                Department has been updated successfully
+                            </Alert>
+                        </Snackbar>)}
+                </Form>
+            )}
+
         </Formik>
     );
 }
