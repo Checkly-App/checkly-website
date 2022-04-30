@@ -85,7 +85,7 @@ const CreateAnnouncement = () => {
             const data = snapshot.val();
             var departments = [];
             for (let id in data) {
-                if (data[id]['company_id'] === '8LV3qeYQpsf8lMrcS2EAc9T4tTp2') { // TODO: - company's id
+                if (data[id]['company_id'] === auth.currentUser.uid) { // TODO: - company's id
                     const department = {
                         department: 'dep' + data[id]['dep_id'],
                         name: data[id]['name']
