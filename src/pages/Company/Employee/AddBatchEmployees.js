@@ -1,6 +1,5 @@
 
 import { React, useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
 // Firebase imports
 import { set, ref, onValue } from 'firebase/database';
 import { database, auth, functions, authSignup } from '../../../utilities/firebase';
@@ -50,20 +49,7 @@ const SetionsWrapper = styled.div`
             margin: 2em 3em;
   }
 `
-const MainWrapper = styled.div`
-    width: 100%;
-    margin: 2em 0;
-`
-const MainTitle = styled.h1`
-    font-size: 2em;
-    font-weight: 500;
-    color: #2CB1EF;
-    margin: 0.25em 0;
-`
-const Subtitle = styled.h1`
-    font-size: 1em;
-    font-weight: 300;
-`
+
 const Note = styled.p`
     font-size: 0.85em;
     color: #A3A1A1;
@@ -78,40 +64,6 @@ const CustomButton = styled.button`
     border-radius: 0.5em;
     border: none;
     background: linear-gradient(90deg, #56BBEB 0%, #58AAF3 100%);
-    margin-left: auto;
-`
-const FilterButton1 = styled.button`
-    width: 10em;
-    height: 3em;
-    font-size: 0.7em;
-    font-weight: 500;
-    text-align :center;
-    color: rgba(255,255,255,0.9);
-    border-radius: 5em;
-    border: none;
-    background: linear-gradient(90deg, #56BBEB 0%, #58AAF3 100%);
-    margin-left: auto;
-    margin-bottom: 2em;
-    margin-right: 0.5em;
-    &:hover {
-        background: #2CB1EF;
-      }
-`
-const FilterButton2 = styled.button`
-    width: 10em;
-    height: 3em;
-    font-size: 0.7em;
-    font-weight: 500;
-    text-align :center;
-    color: rgba(255,255,255,0.9);
-    border-radius: 5em;
-    border: none;
-    background: linear-gradient(90deg, #56BBEB 0%, #58AAF3 100%);
-    opacity: 0.5;
-    margin-left: auto;
-    margin-bottom: 2em;
-`
-const ButtonsContainer = styled.div`
     margin-left: auto;
 `
 const Progress = styled(CircularProgress)`
@@ -145,7 +97,6 @@ const AddBatchEmployees = () => {
     }]);
 
     // to navigate to 'Add Individual'
-    const navigate = useNavigate();
 
     /**
      * Use ِEffects

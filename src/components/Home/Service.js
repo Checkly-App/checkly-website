@@ -1,14 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ReactComponent as MeetingDesign } from '../../assets/images/MeetingsDesign.svg';
-import { ReactComponent as TabletFrame } from '../../assets/images/TabletFrameSample.svg';
+import MeetingMockup from '../../assets/images/MeetingsMockUp.png';
+import TimesheetMockup from '../../assets/images/TimesheetsMockUp.png';
+import AttendanceMockup from '../../assets/images/AttendanceHistoryMockUp.png'
 
 const Section = styled.div`
     display: flex;
     flex-direction: ${props => props.reverse ? 'row-reverse' : 'row'};
     justify-content: center;
     align-items: center;
-    margin-top: 1em;
+    margin-top: 1.75em;
 
     @media (max-width: 768px) {
         width: 100vw;
@@ -35,46 +36,49 @@ const Details = styled.p`
     flex: 3;
     text-align: justify;
 `
-const Design1 = styled(MeetingDesign)`
-    padding-right: 2em;
-    height: 50vh;
-    width: auto;
-
+const Meeting = styled.img`
+    margin-right: 2em;
+    height: 60vh;
     @media (max-width: 768px) {
         display: none;
     }
 `
-const Design2 = styled(TabletFrame)`
-    padding-left: 2em;
-    height: 50vh;
-    width: auto;
+const Attendance = styled.img`
+    margin-right: 2em;
+    height: 60vh;
     @media (max-width: 768px) {
         display: none;
     }
 `
-
+const Timesheets = styled.img`
+    margin: 0 2em;
+    height: 50vh;
+    @media (max-width: 768px) {
+        display: none;
+    }
+`
 const Service = () => {
     return (
         <>
             <Section>
-                <Design1 />
+                <Meeting src={MeetingMockup} alt='Meeting Mockup' />
                 <Content>
-                    <Title> Meetings </Title>
-                    <Details>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Amet tortor nibh quam condimentum sed. Eget egestas consectetur tempor neque facilisis. </Details>
+                    <Title> Meetings Management </Title>
+                    <Details> Easily schedule meetings, send and receive meeting invitations, track participants attendance and send an automated Minutes of Meeting (MoM) report. </Details>
                 </Content>
             </Section>
             <Section reverse>
-                <Design2 />
+                <Timesheets src={TimesheetMockup} alt='Timesheets Mockup' />
                 <Content >
-                    <Title> Meetings </Title>
-                    <Details>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Amet tortor nibh quam condimentum sed. Eget egestas consectetur tempor neque facilisis. </Details>
+                    <Title> Automated Timesheets </Title>
+                    <Details>Automatically generate attendance sheets, filter them by date range or employee information, and export them.</Details>
                 </Content>
             </Section>
             <Section>
-                <Design1 />
+                <Attendance src={AttendanceMockup} alt='Attendance History Mockup' />
                 <Content>
-                    <Title> Meetings </Title>
-                    <Details>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Amet tortor nibh quam condimentum sed. Eget egestas consectetur tempor neque facilisis. </Details>
+                    <Title> Attendance History </Title>
+                    <Details>Gain insight into your attendance information from your check-in/out times to your overtime hours.  </Details>
                 </Content>
             </Section>
         </>

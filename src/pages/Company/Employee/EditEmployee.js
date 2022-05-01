@@ -127,15 +127,15 @@ const EditEmployessInformaton = () => {
     useEffect(() => {
 
 
-      //  console.log(auth.currentUser.uid)
+        //  console.log(auth.currentUser.uid)
         onValue(ref(database, 'Department'), (snapshot) => {
             const data = snapshot.val();
             var departments = [];
             for (let id in data) {
                 if (data[id]['company_id'] === auth.currentUser.uid) {
                     const department = {
-                        department:  data[id]['dep_id'],
-                        name: data[id]['name']
+                        id: data[id]['dep_id'],
+                        department: data[id]['name']
                     };
                     departments.push(department)
                 }
@@ -195,7 +195,7 @@ const EditEmployessInformaton = () => {
                 }
             }
         });
-       
+
         for (let i in employees) {
             if (emp.nationalID === employees[i].nationalID) {
                 console.log("")
@@ -291,14 +291,14 @@ const EditEmployessInformaton = () => {
             setOpenSnackbar(true);
             return;
         }
-       
+
         if (location.state.email !== employee.email) {
             updateUserEmail({
                 email: employee.email,
                 uid: location.state.id,
 
             }).then(() => {
-               
+
                 update(ref(database, 'Employee/' + location.state.id), {
                     email: employee.email,
                 }
@@ -329,8 +329,8 @@ const EditEmployessInformaton = () => {
         setIsLoading(false);
         setOpenSnackbar(true);
         return;
-       
-      
+
+
 
     }
 
@@ -340,7 +340,7 @@ const EditEmployessInformaton = () => {
             validationSchema={validationSchema}
             onSubmit={(values) => {
                 EditEmployee(values);
-              
+
             }}>
             <Form>
                 <SetionsWrapper>
@@ -395,7 +395,7 @@ const EditEmployessInformaton = () => {
                             id='department'
                             label='Department'
                             options={departments}
-                            
+
                             nameID={location.state.departmentID}
                         // value = "dep2" 
                         />

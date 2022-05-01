@@ -3,6 +3,8 @@ import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { Link } from 'react-scroll';
 import { ReactComponent as ChecklyLogo } from '../../assets/images/logo.svg';
+import ChecklyLogoMobile from '../../assets/images/logo.svg';
+
 
 const Wrapper = styled.div`
     display: flex;
@@ -32,21 +34,34 @@ const Logo = styled(ChecklyLogo)`
     width: 4rem;
     height: auto;
 
+    @media  (max-width: 768px) {
+        display: none;
+    }
+`
+const MobileLogo = styled.img`
+    display: none;
+    
+    @media  (max-width: 768px) {
+        display: block;
+        width: 40vw;
+    }
+
 `
 const Navigation = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    flex: 2;
+    flex: 1;
 
     @media (max-width: 768px) {
         justify-content: space-around;
-        flex-flow: column nowrap;
+        flex-flow: column;
         color: #35435E ;
         font-size: 1.5em;
         margin-top: 1em;
-        flex: 1;
+        padding: 0;
+        flex: none;
     }
 `
 const NavigationItem = styled(Link)`
@@ -56,7 +71,7 @@ const NavigationItem = styled(Link)`
     position: relative;
 
     @media  (max-width: 768px) {
-        margin: 0 0.5em;
+        margin: 1.5em 0;
         color: #35435E ;
     }
 
@@ -111,11 +126,12 @@ const Actions = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
-    flex: 2;
+    flex: 1;
 
     @media  (max-width: 768px) {
         flex-direction: column;
-        flex: 1;
+        padding: 0;
+        flex: none;
         justify-content: flex-start;
     }
 `
@@ -202,6 +218,7 @@ const HeaderMain = ({ open, updateOpen }) => {
 
     return (
         <Wrapper open={open} background={scroll.background} shrink={scroll.shrink} shadow={scroll.shadow}>
+            <MobileLogo src={ChecklyLogoMobile} />
             <Navigation color={scroll.color}>
                 <NavigationItem onClick={() => updateOpen(false)} color={scroll.color} to="home" spy={true} smooth={true} offset={0} duration={500}>Home</NavigationItem>
                 <NavigationItem onClick={() => updateOpen(false)} color={scroll.color} to="about" spy={true} smooth={true} offset={-100} duration={500}>About</NavigationItem>

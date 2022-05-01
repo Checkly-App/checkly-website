@@ -1,5 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
+import { ref, onValue, get, set } from 'firebase/database';
+import { database, auth } from '../../utilities/firebase';
+import { groupBy } from 'lodash';
+import moment from 'moment';
 import CheckIn from '../../components/Charts/CheckIn';
 import Overtime from '../../components/Charts/Overtime';
 import Timeline from '../../components/Charts/Timeline';
@@ -11,22 +15,11 @@ import Arrival from '../../components/Charts/Arrival';
 import Departure from '../../components/Charts/Departure';
 import General from '../../components/Charts/General';
 import ChecklyLogo from '../ChecklyLogo';
-import { groupBy } from 'lodash';
-import moment from 'moment';
-import { ref, onValue, get, set } from 'firebase/database';
-import { database, auth } from '../../utilities/firebase';
 import { MdCalendarToday } from 'react-icons/md';
 import { HiOutlineDownload } from 'react-icons/hi';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 
-
-export const Construction = styled.div`
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`
 export const Title = styled.h1`
     font-size: 2em;
     font-weight: 500;
@@ -47,9 +40,21 @@ export const Wrapper = styled.div`
     padding: 1em 3rem;
 
     @media (max-width: 768px) {
-            margin: 0;
+            margin: 0.25em;
             padding: 0;
     }
+`
+export const Header = styled.div`
+    margin: 0 2em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2em;
+`
+export const HeaderMain = styled.div`
+    display: flex;
+    flex-direction: column;
 `
 const DateWrapper = styled.div`
     display: flex;
@@ -79,6 +84,26 @@ export const toDate = (string) => {
     return new Date(year, month, day, 0, 0, 0, 0, 0);
 }
 
+// Function that gets the missing dates 
+export const getDates = (startDate, endDate) => {
+    const dates = []
+    let currentDate = startDate
+    currentDate.setDate(currentDate.getDate() + 1)
+
+    const addDays = function (days) {
+        const date = new Date(this.valueOf())
+        date.setDate(date.getDate() + days)
+        return date
+    }
+
+    while (currentDate < endDate) {
+        dates.push(currentDate)
+        currentDate = addDays.call(currentDate, 1)
+    }
+
+    return dates
+}
+
 const Container = styled.div`
     padding: 0;
     margin: 0;
@@ -101,25 +126,13 @@ const Container = styled.div`
             padding: 1rem;
             grid-gap: 1em;
             grid-template-columns: 100%; 
-            grid-template-rows: repeat(3, 5%) repeat(2, 5%) 15% repeat(5, 10%) repeat(2, 5%);
+            grid-template-rows: repeat(5, 10em) 40em repeat(5,25em) repeat(2, 15em);
             grid-template-areas:'cell0' 'cell01' 'cell02' 
                                 'cell1' 'cell2' 'cell3' 
                                 'cell4' 'cell5' 'cell6' 
                                 'cell7' 'cell8' 'cell9' 
                                 'cell10';
     }
-`
-const Header = styled.div`
-    margin: 0 2em;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2em;
-`
-const HeaderMain = styled.div`
-    display: flex;
-    flex-direction: column;
 `
 const PDFButton = styled.button`
     background-color: rgba(60,180,255,0.25);
@@ -151,7 +164,7 @@ const Dashboard = () => {
     const [companyAttendance, setcompanyAttendance] = useState([]);
     const [companyLate, setcompanyLate] = useState();
     const [refrenceHours, setRefrenceHours] = useState(6);
-    const [refrenceCheckIn, setRefrenceCheckIn] = useState(new Date(1776, 6, 4, 8, 30, 0, 0));// TODO
+    const [refrenceCheckIn, setRefrenceCheckIn] = useState(new Date(1776, 6, 4, 8, 30, 0, 0));
     const [weeklyData, setWeeklyData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [departments, setDepartments] = useState([]);
@@ -254,6 +267,9 @@ const Dashboard = () => {
             departmentsListener();
             attendanceListener();
             settingsListener();
+            setData();
+            setCompany();
+            setLoading();
         }
 
     }, []);
@@ -283,7 +299,10 @@ const Dashboard = () => {
             }
             setEmployees(employees);
 
-            return () => { employeesListener(); }
+            return () => {
+                employeesListener();
+                setEmployees();
+            }
 
         });
     }, [departments])
@@ -311,7 +330,10 @@ const Dashboard = () => {
             }
             setMeetings(meetings);
 
-            return () => { meetingsListener(); }
+            return () => {
+                meetingsListener();
+                setMeetings();
+            }
 
         });
     }, [employees])
@@ -370,6 +392,14 @@ const Dashboard = () => {
         setcompanyLate(lateArray);
         setAbscence(abscenceArray.length);
         setAttendance(attendanceArray.length);
+
+        return () => {
+            setCompanyAbscences();
+            setcompanyAttendance();
+            setcompanyLate();
+            setAbscence();
+            setAttendance();
+        }
     }, [data, refrenceHours]);
 
     useEffect(() => {
@@ -392,27 +422,11 @@ const Dashboard = () => {
         }
 
         setWeeklyData(weekly)
+
+        return () => {
+            setWeeklyData();
+        }
     }, [companyAttendance, companyAbscences, companyLate]);
-
-    // Function that gets the missing dates 
-    const getDates = (startDate, endDate) => {
-        const dates = []
-        let currentDate = startDate
-        currentDate.setDate(currentDate.getDate() + 1)
-
-        const addDays = function (days) {
-            const date = new Date(this.valueOf())
-            date.setDate(date.getDate() + days)
-            return date
-        }
-
-        while (currentDate < endDate) {
-            dates.push(currentDate)
-            currentDate = addDays.call(currentDate, 1)
-        }
-
-        return dates
-    }
 
     const printDocument = () => {
         html2canvas(inputRef.current).then((canvas) => {

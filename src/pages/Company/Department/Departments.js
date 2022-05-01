@@ -3,27 +3,23 @@ import { React, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Firebase imports
 import { ref, onValue } from 'firebase/database';
-import { database, auth } from '../../utilities/firebase';
+import { database, auth } from '../../../utilities/firebase';
 // styles & icons imports
 import styled from 'styled-components';
 import { MdPeopleOutline } from 'react-icons/md'
+import { Subtitle, Title, Wrapper } from '../Dashboard';
+import { Header, MainWrapper } from '../Employee/AddLayout';
 
 
 /**
  * Styled Components 
  */
-
-const SetionWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    margin: 2em 8em;
-`
-
 const BoxesContainer = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
+    margin-top: 1em;
 `
 
 const Box = styled.div`
@@ -48,39 +44,16 @@ const DepartmentName = styled.p`
     margin: 0.1em 0;
 `
 
-const MainWrapper = styled.div`
-    width: 100%;
-    margin: 2em 0;
-`
-
-const MainTitle = styled.h1`
-    font-size: 2em;
-    font-weight: 500;
-    color: #2CB1EF;
-    margin: 0.25em 0;
-`
-
-const Subtitle = styled.p`
-    font-size: 0.75em;
-    color: #A3A1A1;
-`
-
 const AddButton = styled.button`
-width: 10em;
-height: 3em;
-font-size: 0.7em;
-font-weight: 500;
-text-align :center;
-color: rgba(255,255,255,0.9);
-border-radius: 5em;
-border: none;
-background: linear-gradient(90deg, #56BBEB 0%, #58AAF3 100%);
-margin-left: auto;
-margin-bottom: 2em;
-margin-right: 4em;
-&:hover {
-    background: #2CB1EF;
-  }
+    background-color: rgba(60,180,255,0.25);
+    color: #3CB4FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    padding: 0.6em 1.5em;
+    border-radius: 0.75em;
+    font-weight: 500;
 `
 
 const SmallText = styled.p`
@@ -220,7 +193,7 @@ const Departments = () => {
 
     // Navigate to Edit Department and pass dep info
     const toEditDepartment = (department) => {
-        navigate('/admin/departments/edit-department', {
+        navigate('/admin/departments/edit', {
             state: {
                 department_id: department.department_id,
                 department_name: department.name,
@@ -230,18 +203,17 @@ const Departments = () => {
     }
 
     return (
-        <SetionWrapper>
-
-            <MainWrapper>
-                <MainTitle>Departments</MainTitle>
-                <Subtitle>List of the Company's Departments</Subtitle>
-            </MainWrapper>
-
-            <AddButton onClick={() => navigate("/admin/departments/add-department")} >Add Department</AddButton>
+        <Wrapper>
+            <Header>
+                <MainWrapper>
+                    <Title>Departments</Title>
+                    <Subtitle>List of the Company's Departments</Subtitle>
+                </MainWrapper>
+                <AddButton onClick={() => navigate("/admin/departments/add")} >Add Department</AddButton>
+            </Header>
 
             {updatedCompanyDepartments.length ?
                 <BoxesContainer>
-
                     {updatedCompanyDepartments.map((department) => (
                         <Box onClick={() => toEditDepartment(department)} key={department.department_id}>
                             <DepartmentName>
@@ -270,8 +242,7 @@ const Departments = () => {
                 : <LoadingNote>No Departments..Start By adding one!</LoadingNote>
             }
 
-        </SetionWrapper>
-
+        </Wrapper>
     );
 };
 

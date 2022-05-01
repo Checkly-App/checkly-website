@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React } from 'react';
 import { TextField, MenuItem } from '@mui/material';
 import { useField, useFormikContext } from 'formik';
 
@@ -36,7 +36,7 @@ const SelectField = ({ name, nameID, options, ...other }) => {
             {options.map((option, pos) => {
                 return (
                     <MenuItem key={pos} value={option.id}>
-                        {option.name}
+                        {option.department}
                     </MenuItem>
                 );
             })}

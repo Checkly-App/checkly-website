@@ -4,20 +4,18 @@ import * as Yup from 'yup';
 import InputField from '../../components/Forms/InputField';
 import SelectField from '../../components/Forms/SelectField';
 import { set, ref, onValue, getDatabase, push } from 'firebase/database';
-import { database, auth } from '../../utilities/firebase';
-import { format } from 'date-fns';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import styled, { keyframes } from 'styled-components'
+import { database } from '../../utilities/firebase';
+import styled from 'styled-components'
 import TitleIcon from '@mui/icons-material/Title';
 import { Alert, AlertTitle, Snackbar } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Subtitle, Title, Wrapper } from './Dashboard';
 
 const Section = styled.div`
     background-color: white;
     border-radius: 0.75em;
     padding: 3em;
     margin-bottom: 3em;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 1.5em;
@@ -27,18 +25,6 @@ const Section = styled.div`
   }
 `
 
-const SectionTitle = styled.h1`
-    font-size: 1em;
-    font-weight: 600;
-    margin: 1em 0em 1em 0em;
-    grid-column: 1 / 3;
-    @media (max-width: 768px) {
-           grid-column: 1;
-  }
-`
-const SetionsWrapper = styled.div`
-    margin: 5em;
-`
 const Button = styled.button`
     width: 15em;
     height: 3em;
@@ -50,24 +36,14 @@ const Button = styled.button`
     border: none;
     background: linear-gradient(90deg, #56BBEB 0%, #58AAF3 100%);
 `
-const MainTitle = styled.h1`
-    font-size: 2em;
-    font-weight: 500;
-    color: #2CB1EF;
-    margin: 0.25em 0;
-`
+
 const MainWrapper = styled.div`
     width: 100%;
     margin: 2em 0;
 `
-const Subtitle = styled.h1`
-    font-size: 1em;
-    font-weight: 300;
-`
+
 
 const CreateAnnouncement = () => {
-
-    const navigate = useNavigate();
 
     const [departments, setDepartments] = useState([{
         department: '',
@@ -146,9 +122,9 @@ const CreateAnnouncement = () => {
                         <AlertTitle>Announcement has been posted successfully!</AlertTitle>
                     </Alert>
                 </Snackbar>
-                <SetionsWrapper>
+                <Wrapper>
                     <MainWrapper>
-                        <MainTitle>Create Announcement</MainTitle>
+                        <Title>Create Announcement</Title>
                         <Subtitle>Publish an announcement to selected department emplooyes</Subtitle>
                     </MainWrapper>
                     <Section>
@@ -173,7 +149,7 @@ const CreateAnnouncement = () => {
                         />
                     </Section>
                     <Button type='submit'>  Publish Announcement </Button>
-                </SetionsWrapper>
+                </Wrapper>
             </Form>
         </Formik>
     );

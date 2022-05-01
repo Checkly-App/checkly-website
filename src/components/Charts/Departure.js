@@ -44,7 +44,7 @@ const ChartTitle = styled.h1`
 const Departure = (props) => {
     const [value, setValue] = useState(new Date(1776, 6, 4, 12, 30, 0, 0));
     const [hour, setHour] = useState(5);
-    const [minute, setMinute] = useState(20);
+    const [minute, setMinute] = useState(21);
     const [abbreviation, setAbbreviation] = useState('pm');
 
     useEffect(() => {
@@ -64,9 +64,12 @@ const Departure = (props) => {
 
         const avgHours = Math.floor(totalSeconds / 3600);
         totalSeconds %= 3600;
-        const avgMinutes = Math.floor(totalSeconds / 60);
+        let avgMinutes = Math.floor(totalSeconds / 60);
+
+        avgMinutes = avgMinutes.toString().length === 1 ? avgMinutes * 10 : avgMinutes;
 
         const date = new Date(1776, 6, 4, avgHours ? avgHours : 0, avgMinutes ? avgMinutes : 0, 0, 0);
+
 
         if (data.length <= 0) {
             setHour(4);

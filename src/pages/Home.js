@@ -4,7 +4,7 @@ import HeaderMain from '../components/Header/HeaderMain';
 import Hero from '../components/Home/Hero';
 import About from '../components/Home/About';
 import Services from '../components/Home/Services';
-import { ReactComponent as TabletFrame } from '../assets/images/TabletFrameSample.svg';
+import { ReactComponent as TabletFrame } from '../assets/images/TabletFrame.svg';
 import { HiOutlineMenuAlt2, HiX } from 'react-icons/hi';
 import { IconButton } from '@mui/material';
 import { ReactComponent as SemiCircleA } from '../assets/images/SemiCircleA.svg';
@@ -37,10 +37,10 @@ const Wrapper = styled.div`
     justify-content: center;
     align-items: center;
     overflow-x: hidden;
+    width: 100vw;
 `
 export const Icon = styled(IconButton)`
     display: none !important;
-
     @media  (max-width: 768px) {
         display: block !important;
         position: fixed !important;
@@ -59,7 +59,6 @@ const Tablet = styled(TabletFrame)`
     transform: translate(-50%, -50%);
     z-index: 100;
     padding: 0 0 2em 0;
-
      @media  (max-width: 768px) {
         display: none;
     }

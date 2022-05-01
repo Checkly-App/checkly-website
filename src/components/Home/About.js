@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
     width: 100vw;
-    height: 80vh;  
+    height: 100vh;  
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,6 +12,7 @@ const Wrapper = styled.div`
 const Section = styled.div`
     display: flex;
     flex-direction: column;
+    margin-top: 1em;
 `
 export const SectionTitle = styled.h1`
     font-weight: 700;
@@ -44,6 +45,14 @@ const SectionParagraph = styled.p`
     font-size: large;
     text-align: center;
     margin-top: 0.75em;
+
+     @media (max-width: 768px) {
+        width: fit-content;
+        padding: 0.5em;
+    }
+`
+const Detail = styled.a`
+    color: #A3A3A1;
 `
 
 const About = () => {
@@ -54,9 +63,13 @@ const About = () => {
                     About us
                 </SectionTitle>
                 <SectionParagraph>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Lacinia quisque congue suspendisse.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Lacinia quisque congue suspendisse.
+                    Employees lining up in queues to mark their attendance is the contrary of productive.
+                    <br />
+                    It is well-known that one of the main factors influencing employees’ productivity is their job satisfaction.
+                    <br /><br />
+                    We wanted to create a solution that aims to facilitate the attendance recording process for employees. Specifically, to improve their every-day work experience by allowing more time for actual tasks and less time for tedious/repetitive tasks.
+                    <br /><br />
+                    Checkly is a graduation project, kindly check <Detail href='https://github.com/Checkly-App'> this link  </Detail> for more information about the project.
                 </SectionParagraph>
             </Section>
         </Wrapper>

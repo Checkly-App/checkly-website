@@ -1,6 +1,5 @@
-import { React, useState, useEffect } from 'react';
+import { React, useEffect } from 'react';
 import { useNavigate } from "react-router-dom"
-import { signOut } from "firebase/auth";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import AddCompany from '../../pages/Checkly Admin/AddCompany';
 import styled from "styled-components";
@@ -27,7 +26,7 @@ const Container = styled.div`
 
 const ChecklyProfile = () => {
 
-  
+
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, userAuth => {
@@ -35,7 +34,7 @@ const ChecklyProfile = () => {
         const index = userAuth?.email.indexOf("@")
         const subst = userAuth?.email.substring(index)
 
-        if (subst == "@checkly.org") {
+        if (subst === "@checkly.org") {
           navigate("/checkly")
         }
         else {
@@ -48,33 +47,22 @@ const ChecklyProfile = () => {
       }
     })
     return unsubscribe
-  }, [])
+  }, [navigate])
 
 
   // const navigate = useNavigate();
-  const auth = getAuth();
-  const user = auth.currentUser;
-
   const navigate = useNavigate()
 
-  const logout = () => {
-    const auth = getAuth();
-    signOut(auth).then(() => {
-      window.history.replaceState(null, null, "/login");
-      navigate("/login")
-      window.location.reload(false);
-    });
-  }
 
   return (
 
     <>
-    <Container>
-     <Sidebar/>  
-   </Container>
-    <AddCompany />
+      <Container>
+        <Sidebar />
+      </Container>
+      <AddCompany />
     </>
-    
+
   )
 };
 

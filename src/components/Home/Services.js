@@ -8,12 +8,13 @@ const Wrapper = styled.div`
     height: auto;  
     display: flex;
     justify-content: center;
-    margin-top: 20vh;
+    margin-top: 10vh;
 `
 const Section = styled.div`
     display: flex;
     flex-direction: column;
-    margin-bottom: 1em;
+    margin: 2em 0;
+
 `
 
 const Services = () => {

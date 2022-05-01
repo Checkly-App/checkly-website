@@ -24,14 +24,13 @@ export const sideBarData = [
         icon: <RiTimeLine size={20} />,
     },
     {
-        title: 'Settings',
-        path: '/admin/settings',
-        icon: <FiSettings size={20} />,
-    },
-    {
         title: 'Announce',
         path: '/admin/announcement',
         icon: <IoMegaphoneOutline size={20} />,
     },
-
+    {
+        title: 'Settings',
+        path: '/admin/settings',
+        icon: <FiSettings size={20} />,
+    }
 ];

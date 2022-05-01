@@ -1,45 +1,27 @@
+
 import { React, useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // Firebase imports
-import { ref, onValue, update } from 'firebase/database';
-import { database, auth } from '../../utilities/firebase';
+import { ref, onValue, push, set } from 'firebase/database';
+import { database, auth } from '../../../utilities/firebase';
 // styles imports
 import styled from 'styled-components';
+import { Subtitle, Title, Wrapper } from '../Dashboard';
+import { Header, MainWrapper } from '../Employee/AddLayout';
 // form components imports
 import { Formik, Form } from 'formik';
-import InputField from '../../components/Forms/InputField';
+import InputField from '../../../components/Forms/InputField';
 import * as Yup from 'yup';
 import { Alert, AlertTitle, Snackbar } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 
 
+
 /**
  * Styled Components 
  */
 
-const SetionWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    margin: 2em 8em;
-`
-
-const MainWrapper = styled.div`
-    width: 100%;
-    margin: 2em 0;
-`
-
-const MainTitle = styled.h1`
-    font-size: 2em;
-    font-weight: 500;
-    color: #2CB1EF;
-    margin: 0.25em 0;
-`
-
-const Subtitle = styled.p`
-    font-size: 0.75em;
-    color: #A3A1A1;
-`
 
 const Section = styled.div`
     background-color: white;
@@ -57,6 +39,7 @@ const Section = styled.div`
         gap: 0.5em
     }
 `
+
 const SectionTitle = styled.h1`
     font-size: 1.05em;
     font-weight: 600;
@@ -66,6 +49,7 @@ const SectionTitle = styled.h1`
         grid-column: 1;
     }
 `
+
 const CustomButton = styled.button`
     width: 10em;
     height: 3em;
@@ -79,7 +63,7 @@ const CustomButton = styled.button`
     margin-left: auto;
 `
 
-const EditDepartment = () => {
+const AddDepartment = () => {
 
     /**
      * Use States
@@ -99,9 +83,6 @@ const EditDepartment = () => {
         title: 'error',
         description: 'Oops! Something went wrong, try again later.',
     });
-    // get passed info
-    const location = useLocation();
-
     const [openSnackbar, setOpenSnackbar] = useState(false);
 
     // to navigate to 'Departments View'
@@ -132,7 +113,6 @@ const EditDepartment = () => {
             setCompanyEmployees([]);
         }
     }, []);
-
 
     // Fetch employees of the logged-in company
     useEffect(() => {
@@ -169,8 +149,8 @@ const EditDepartment = () => {
      * Form's Initial Values
      */
     const initialValues = {
-        depName: location.state.department_name,
-        manager: location.state.manager,
+        depName: '',
+        manager: ''
     };
 
     /**
@@ -185,8 +165,7 @@ const EditDepartment = () => {
     // Check if department exists
     const departmentExists = (department_name) => {
         for (let i in departments) {
-            if (departments[i].name.toLowerCase().trim() === department_name.toLowerCase().trim()
-                && departments[i].name.toLowerCase().trim() !== location.state.department_name.toLowerCase().trim()) {
+            if (departments[i].name.toLowerCase().trim() === department_name.toLowerCase().trim()) {
                 setErrorDetails({
                     title: 'Invalid Department',
                     description: 'Department exists within the company'
@@ -199,7 +178,7 @@ const EditDepartment = () => {
     // Check if selected employee already manages another department
     const managerExists = (manager_uid) => {
         for (let i in departments) {
-            if (departments[i].manager_id === manager_uid && departments[i].manager_id !== location.state.manager.value) {
+            if (departments[i].manager_id === manager_uid) {
                 setErrorDetails({
                     title: 'Manager Exists',
                     description: 'The selected employee already manages another department'
@@ -210,30 +189,31 @@ const EditDepartment = () => {
     }
 
     /**
-     * Edit department function - triggered when the form is submitted
-     * @params department
-     */
-    const editDepartment = (department) => {
+    * Add department function - triggered when the form is submitted
+    * @params department
+    */
+    const addDepartment = (department) => {
 
         if (departmentExists(department.depName)) {
             setError(true);
             setOpenSnackbar(true);
             return;
         }
-
         if (managerExists(department.manager.value)) {
             setError(true);
             setOpenSnackbar(true);
             return;
         }
 
-        // Update department to DB 
-        update(ref(database, 'Department/' + location.state.department_id), {
+        // push department to DB 
+        var dep = push(ref(database));
+        set(ref(database, 'Department/' + dep.key), {
             company_id: auth.currentUser.uid,
-            dep_id: location.state.department_id,
+            dep_id: dep.key,
             name: department.depName,
             manager: department.manager.value,
         })
+
         setError(false);
         setOpenSnackbar(true);
         // navigate to departments view
@@ -247,17 +227,20 @@ const EditDepartment = () => {
             initialValues={{ ...initialValues }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
-                editDepartment(values);
+                addDepartment(values);
             }}
         >
 
             {({ handleChange, setFieldValue, handleBlur, errors, touched }) => (
                 <Form>
-                    <SetionWrapper>
-                        <MainWrapper>
-                            <MainTitle>Edit Department</MainTitle>
-                            <Subtitle>Edit Department Information</Subtitle>
-                        </MainWrapper>
+                    <Wrapper>
+                        <Header>
+                            <MainWrapper>
+                                <Title>Add Department</Title>
+                                <Subtitle>Add Department Information</Subtitle>
+                            </MainWrapper>
+                        </Header>
+
                         <Section>
                             <SectionTitle> Department Information </SectionTitle>
                             <InputField
@@ -269,7 +252,6 @@ const EditDepartment = () => {
                             <Autocomplete
                                 name="manager"
                                 id="manager"
-                                defaultValue={location.state.manager}
                                 onChange={(e, value) => {
                                     setFieldValue("manager", value !== null ? value : initialValues.manager)
                                 }
@@ -288,8 +270,8 @@ const EditDepartment = () => {
                                     />}
                             />
                         </Section>
-                        <CustomButton type='submit' >Save</CustomButton>
-                    </SetionWrapper>
+                        <CustomButton type='submit' >Submit</CustomButton>
+                    </Wrapper>
                     {error ?
                         (<Snackbar
                             autoHideDuration={6000}
@@ -308,7 +290,7 @@ const EditDepartment = () => {
                             anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
                             <Alert severity='success' variant='filled'>
                                 <AlertTitle>Success!</AlertTitle>
-                                Department has been updated successfully
+                                Department has been added successfully
                             </Alert>
                         </Snackbar>)}
                 </Form>
@@ -317,5 +299,4 @@ const EditDepartment = () => {
         </Formik>
     );
 }
-
-export default EditDepartment;
+export default AddDepartment;

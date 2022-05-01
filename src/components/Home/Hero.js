@@ -44,10 +44,10 @@ const HeadLine = styled.h1`
     font-size: 4em;
     font-weight:bold;
     text-align: center;
-    margin: 2em 0 1em 0;
+    margin: 2em 0 0.5em 0;
     
     @media (max-width: 768px) {
-        margin: 2em 0 0.5em 0;
+        margin: 1em 0 0.5em 0;
         font-size: 12vw;
     }
 `
@@ -80,9 +80,8 @@ const Hero = () => {
                     Employee Managemnt <br />Software
                 </HeadLine>
                 <Paragraph>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Lacinia quisque congue suspendisse.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Lacinia quisque congue suspendisse.
+                    Our goal is to transform manual and tedious employee management operations.
+                    Checkly tracks and measures employee’s attendance, generates reports and analytics and provides many services catering to employee and attendance management.
                 </Paragraph>
             </Content>
         </Wrapper>

@@ -4,14 +4,11 @@ import * as Yup from 'yup';
 import InputField from '../../components/Forms/InputField';
 import { MdOutlineAlternateEmail, MdHttps } from "react-icons/md";
 import { auth } from '../../utilities/firebase';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { ref, onValue } from 'firebase/database';
 import { database } from '../../utilities/firebase';
 import { Alert, AlertTitle, Snackbar } from '@mui/material';
-
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import styled from 'styled-components';
 import HeaderSecondary from '../../components/Header/HeaderSecondary';
@@ -19,13 +16,6 @@ import { ReactComponent as LineShape } from '../../assets/images/LineShapeC.svg'
 import { ReactComponent as SemiCircle } from '../../assets/images/SemiCircleD.svg';
 import { HiOutlineMenuAlt2, HiX } from 'react-icons/hi';
 import { Icon } from '../Home';
-
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-  integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-  crossorigin="anonymous"
-/>
 
 const Wrapper = styled.div`
     display: flex;

@@ -65,9 +65,11 @@ const Arrival = (props) => {
 
         const avgHours = Math.floor(totalSeconds / 3600);
         totalSeconds %= 3600;
-        const avgMinutes = Math.floor(totalSeconds / 60);
+        let avgMinutes = Math.floor(totalSeconds / 60);
 
-        const date = new Date(1776, 6, 4, avgHours ? avgHours : 8, avgMinutes ? avgMinutes : 0, 0, 0);
+        avgMinutes = avgMinutes.toString().length === 1 ? avgMinutes * 10 : avgMinutes;
+
+        const date = new Date(1776, 6, 4, avgHours ? avgHours : 8, avgMinutes ? avgMinutes : 0);
 
         if (data.length <= 0) {
             setHour(8);

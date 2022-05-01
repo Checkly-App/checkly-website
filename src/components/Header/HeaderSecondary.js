@@ -17,7 +17,6 @@ const Wrapper = styled.div`
     z-index: 101;
     transition: all .3s ease-in-out;
     box-shadow: none;
-
     @media  (max-width: 768px) {
         padding: 1em 3em;
         height: 100vh;

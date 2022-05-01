@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ReactComponent as ChecklyLogo } from '../../assets/images/logo.svg';
+import ChecklyLogo from '../../assets/images/logo.svg';
 
 const Container = styled.div`
     background-color: rgba(196, 196, 196, 0.1);
@@ -23,18 +23,19 @@ const App = styled.div`
     align-items: center;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
 `
-const Logo = styled(ChecklyLogo)`
+const Logo = styled.img`
     height: 2.5em;
     width: auto;
 `
 const Details = styled.div`
     width: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: row ;
     justify-content: center;
     align-items: center;
     color: #A3A3A1;
     margin-top: 2em;
+
 `
 const Detail = styled.a`
     color: #A3A3A1;
@@ -48,7 +49,7 @@ const Footer = () => {
     return (
         <Container>
             <App>
-                <Logo />
+                <Logo src={ChecklyLogo} alt='logo' />
             </App>
             <Details>
                 <Detail> Privacy Policy </Detail>

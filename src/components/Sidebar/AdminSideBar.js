@@ -4,7 +4,6 @@ import logo from '../../assets/images/logo.svg';
 import side from '../../assets/images/sidePiece.svg';
 import { RiLogoutCircleLine } from 'react-icons/ri'
 import { NavLink } from 'react-router-dom';
-import { sideBarData } from './Data';
 import { useNavigate } from "react-router-dom"
 import { signOut } from "firebase/auth";
 import { getAuth } from "firebase/auth";
@@ -159,10 +158,10 @@ const AdminSideBar = ({ open, updateOpen }) => {
                 </ImageLink>
             </Wrapper>
             <Wrapper>
-                <Subtitle>  
-                    Register a new company to Checkly by filling the following form     
+                <Subtitle>
+                    Register a new company to Checkly by filling the following form
                 </Subtitle>
-                <Subtitle>  
+                <Subtitle>
                     Please note the all fields are mandatory except for the logo field
                 </Subtitle>
             </Wrapper>

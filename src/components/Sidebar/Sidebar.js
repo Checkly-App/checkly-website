@@ -22,14 +22,6 @@ const SideBarWrapper = styled.div`
     margin: 0 1em 0 0;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
 
-     /* @media  (max-width: 768px) {
-        padding: 1em 3em;
-        height: 100vh;
-        background-color: white;
-        flex-direction: column;
-        color: #35435E ;
-        display: ${props => props.open ? 'flex' : 'none'};
-    } */
     @media  (max-width: 768px) {
         display: flex;
         border-radius: 0;
@@ -56,7 +48,7 @@ const Wrapper = styled.div`
 `
 const NavItem = styled.li`
     width: 100%;
-    margin-bottom: 1.5em;
+    margin-bottom: 1em;
     list-style: none;
     display: flex;
     justify-content: center;
@@ -145,7 +137,7 @@ const Sidebar = ({ open, updateOpen }) => {
         <SideBarWrapper open={open}>
             <Wrapper>
                 <ImageLink to='/'>
-                    <Logo src={logo} />
+                    <Logo src={logo} alt="logo" />
                 </ImageLink>
             </Wrapper>
             <Wrapper nav>

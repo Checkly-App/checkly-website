@@ -11,6 +11,10 @@ import { v4 } from 'uuid';
 
 const Container = styled(Wrapper)`
     margin: 1em 5em;
+
+    @media (max-width: 768px) {
+    margin: 0.25em ;
+    }
 `
 const Header = styled.div`
     margin: 2em 2em 0 2em;
@@ -19,6 +23,7 @@ const Header = styled.div`
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2em;
+    
 `
 const SaveButton = styled.button`
     background-color: rgba(60,180,255,0.25);
@@ -41,7 +46,7 @@ const Section = styled.div`
     align-items: center;
     padding: 1em;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
-    cursor:  ${props => props.active ? 'pointer' : 'auto'};;
+    cursor:  ${props => props.active ? 'pointer' : 'auto'};
 
     &:first-of-type{
         border-radius: 0.5em 0.5em 0 0;
@@ -51,8 +56,6 @@ const Section = styled.div`
         border-radius: 0 0 0.5em 0.5em;
     }
 
-    @media (max-width: 768px) {
-    }
 `
 const Detail = styled.p`
     padding: 0;
@@ -60,12 +63,22 @@ const Detail = styled.p`
     color: ${props => props.active ? '#000' : '#A3A3A1'};
     font-weight: ${props => props.active ? '500' : '400'};;
     font-size: 1.05em;
+
+    @media (max-width: 768px) {
+         font-size: 0.8em;
+    }
 `
 const Info = styled.p`
     padding: 0;
     margin: 0;
     color: #A3A3A1;
     font-weight: 350;
+
+    @media (max-width: 768px) {
+         font-size: 0.7em;
+         text-align: right;
+    }
+    
 `
 const SectionTitle = styled.h1`
     font-size: 1.05em;
