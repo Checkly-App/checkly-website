@@ -13,6 +13,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import * as React from 'react';
+import { Subtitle, Title } from '../Dashboard';
+import { Header, MainWrapper } from '../Employee/AddLayout';
+
 import { Alert, AlertTitle, Snackbar } from '@mui/material';
 
 
@@ -60,20 +63,14 @@ const Button = styled.button`
 
 `
 
-const MainTitle = styled.h1`
-    font-size: 2em;
-    font-weight: 500;
-    color: #2CB1EF;
-    margin: 0.25em 0;
-`
-const Subtitle = styled.p`
-    font-size: 0.75em;
-    color: #A3A1A1;
-`
-const MainWrapper = styled.div`
-    width: 100%;
-    margin: 2em 0;
-`
+// const Subtitle = styled.p`
+//     font-size: 0.75em;
+//     color: #A3A1A1;
+// `
+// const MainWrapper = styled.div`
+//     width: 100%;
+//     margin: 2em 0;
+// `
 
 const ViewEmployees = () => {
 
@@ -127,6 +124,17 @@ const ViewEmployees = () => {
     border: " 1px solid white",
     cursor: "pointer",
   };
+  const AddButton = styled.button`
+    background-color: rgba(60,180,255,0.25);
+    color: #3CB4FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    padding: 0.6em 1.5em;
+    border-radius: 0.75em;
+    font-weight: 500;
+`
 
   const [errorDetails] = useState({
     title: 'error',
@@ -320,16 +328,15 @@ const ViewEmployees = () => {
     <SetionsWrapper>
       <div className="container">
         <div className="row">
-          <div className="col-6 col-md-6">
-            <MainWrapper>
-              <MainTitle> Employees</MainTitle>
-              <Subtitle>Here is the list of employee’s that work at the Company </Subtitle>
-
-            </MainWrapper>
-          </div>
-          <div className="col-6 col-md-6" style={{ padding: "5%", paddingLeft: "40%", marginLeft: "auto" }}>
-            <Button onClick={emp}>  Add new employee </Button>
-          </div>
+         
+            <Header>
+                <MainWrapper>
+                    <Title>Employees</Title>
+                    <Subtitle>Here is the list of employee’s that work at the Company</Subtitle>
+                </MainWrapper>
+                <AddButton  onClick={emp}>  Add employee</AddButton>
+            </Header>
+          
 
         </div></div>
       {error ?
