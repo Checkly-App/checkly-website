@@ -15,7 +15,6 @@ import { useTheme } from '@mui/material/styles';
 import * as React from 'react';
 import { Subtitle, Title } from '../Dashboard';
 import { Header, MainWrapper } from '../Employee/AddLayout';
-
 import { Alert, AlertTitle, Snackbar } from '@mui/material';
 
 
@@ -63,10 +62,13 @@ const Button = styled.button`
 
 `
 
-// const Subtitle = styled.p`
-//     font-size: 0.75em;
-//     color: #A3A1A1;
-// `
+const Subtitle1 = styled.p`
+    font-size: 1em;
+    color: #A3A1A1;
+    text-align:center;
+    padding-top:0.5em;
+    
+`
 // const MainWrapper = styled.div`
 //     width: 100%;
 //     margin: 2em 0;
@@ -300,6 +302,8 @@ const ViewEmployees = () => {
 
     setOpen(false);
   };
+  
+
 
   const ManagerExists = (index1) => {
 
@@ -363,12 +367,13 @@ const ViewEmployees = () => {
         </div>
 
         <div className="row">
-
+      
+{employees.length ? null:<Subtitle1>There is no employee</Subtitle1> } 
 
           {load === false && employees.filter((emp) => {
 
             if (searchterm === "") {
-
+              
               return emp
             } else if (emp.name.toLowerCase().includes(searchterm.toLowerCase())) {
 
@@ -439,8 +444,7 @@ const ViewEmployees = () => {
             )
           })
           }
-
-
+        
         </div>
         <Dialog
           fullScreen={fullScreen}
