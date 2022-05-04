@@ -298,7 +298,7 @@ const Contact = () => {
                         <Subtitle>for your interest in us</Subtitle>
                         <Quote>
                             <EmDash> &mdash; </EmDash>
-                            <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit.     Faucibus urna dictum magna volutpat morbi. Volutpat tincidunt fermentum sit lobortis imperdiet egestas tellus tempus. Pretium tellus etiam porttitor massa rhoncus.</p>
+                            <p> “The secret of change is to focus all your energy not on fighting the old but on building the new.”</p>
                         </Quote>
                     </ThankYou>
                 </Right>
