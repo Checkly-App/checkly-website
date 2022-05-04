@@ -1,16 +1,25 @@
-import * as firebase from 'firebase';
+import { initializeApp } from 'firebase/app';
+import { getDatabase } from 'firebase/database';
+import { getAuth } from 'firebase/auth';
+import { getFunctions } from 'firebase/functions';
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-    databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
-    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.REACT_APP_FIREBASE_SENDER_ID,
-    appId: process.env.REACT_APP_FIREBASE_APP_ID
+    apiKey: "AIzaSyBuw-T0G2smroeMGAWU_KBcnM-ScQm5Los",
+    authDomain: "checkly-292d2.firebaseapp.com",
+    databaseURL: "https://checkly-292d2-default-rtdb.firebaseio.com",
+    projectId: "checkly-292d2",
+    storageBucket: "checkly-292d2.appspot.com",
+    messagingSenderId: "353673577648",
+    appId: "1=353673577648=web=b95a407566358730d22775",
+    measurementId: "G-B6G6HBCDVC"
 }
 
-firebase.initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+export const app = initializeApp(firebaseConfig);
+const uauthenticatedApp = initializeApp(firebaseConfig, "Secondary");
+export const auth = getAuth(app);
+export const authSignup = getAuth(uauthenticatedApp);
+export const database = getDatabase(app);
+export const functions = getFunctions(app);
+export const storage = getStorage(app);
 
-export default firebase;

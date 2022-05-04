@@ -1,0 +1,27 @@
+.App-logo {
+    height: 20vmin;
+}
+
+.App-logo-container{
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin 2s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: scale(1.0);
+  }
+  to {
+    transform: scale(1.25);
+  }
+}
+
+
