@@ -17,10 +17,11 @@ color: #58AAF3;
  
 .flip-card {
     background-color: transparent;
-    width: 250px;
+    width: 280px;
     height: 260px;
     perspective: 1000px;
     border-radius: 25px;
+    margin-bottom: 2em;
   }
   
   .flip-card-inner {

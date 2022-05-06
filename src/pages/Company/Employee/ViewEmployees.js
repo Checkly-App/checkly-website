@@ -23,7 +23,6 @@ import CardContent from '@mui/material/CardContent';
 
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
-import { Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import { functions } from '../../../utilities/firebase';
@@ -207,7 +206,7 @@ const ViewEmployees = () => {
 
 
           }
-
+          setload(false)
 
         });
 
@@ -216,7 +215,7 @@ const ViewEmployees = () => {
 
       //setEmployees(employsarray)
 
-      setload(false)
+    //  setload(false)
     }
 
     );
@@ -394,9 +393,9 @@ const ViewEmployees = () => {
           ).map((emp, Index) => {
 
             return (
-              <Grid item xs={4} style={{ paddingBottom: "1em" }} key={Index} >
+              
 
-                <div className="flip-card" tabIndex="0">
+                <div className="flip-card" tabIndex="0" key={Index}>
                   <div className="flip-card-inner">
                     <div className="flip-card-front">
 
@@ -439,7 +438,7 @@ const ViewEmployees = () => {
                   </div>
 
                 </div>
-              </ Grid >
+            
 
             )
           })
