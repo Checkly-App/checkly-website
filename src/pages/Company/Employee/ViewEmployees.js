@@ -16,7 +16,8 @@ import * as React from 'react';
 import { Subtitle, Title } from '../Dashboard';
 import { Header, MainWrapper } from '../Employee/AddLayout';
 import { Alert, AlertTitle, Snackbar } from '@mui/material';
-
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -141,8 +142,7 @@ const ViewEmployees = () => {
     title: 'error',
     description: 'Oops! This employee is manager for one of the departments .',
   });
-  const [error, setError] = useState(false);
-
+  const [error, setError] = useState(false); 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [setIsLoading] = useState(false);
   const closeSnackbar = () => {
@@ -287,6 +287,7 @@ const ViewEmployees = () => {
       return
     }
     else {
+     
       DeleteEmployee({
 
         uid: index.id
@@ -329,6 +330,13 @@ const ViewEmployees = () => {
   return (
 
     <SetionsWrapper>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={load}
+        
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <div className="container">
         <div className="row">
          
