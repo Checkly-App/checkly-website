@@ -36,6 +36,7 @@ const Worked = (props) => {
     ]
 
     useEffect(() => {
+
         function calculateWorked(companyAttendance, formatString, type) {
             let attendance = groupBy(companyAttendance, (dt) => moment(dt['date']).format(formatString));
 

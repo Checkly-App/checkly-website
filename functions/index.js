@@ -1,7 +1,8 @@
 const functions = require('firebase-functions');
 const sgMail = require('@sendgrid/mail');
-const cors = require('cors')({ origin: 'http://localhost:3000' });
+const cors = require('cors')({ origin: 'https://checkly-292d2.web.app' });
 const serviceAccount = require('./AccountKey.json');
+const admin = require('firebase-admin');
 
 require('dotenv').config()
 
@@ -11,6 +12,7 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://checkly-292d2-default-rtdb.firebaseio.com"
 });
+
 exports.sendEmail = functions.https.onRequest((req, res) => {
     cors(req, res, () => {
         const email = req.body.data.email;

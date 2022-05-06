@@ -9,6 +9,7 @@ import styled from 'styled-components'
 import TitleIcon from '@mui/icons-material/Title';
 import { Alert, AlertTitle, Snackbar } from '@mui/material';
 import { Subtitle, Title, Wrapper } from './Dashboard';
+import { auth } from '../../utilities/firebase';
 
 const Section = styled.div`
     background-color: white;

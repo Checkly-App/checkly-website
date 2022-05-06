@@ -27,8 +27,7 @@ export default function FormModal({ open, updateOpen, title, value, updateTime, 
             <DialogTitle>Choose time</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    To subscribe to this website, please enter your email address here. We
-                    will send updates occasionally.
+                    Select the check-in/out time and the system will calculate the resulting work hours accordingly.
                 </DialogContentText>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <StaticTimePicker

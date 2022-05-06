@@ -80,6 +80,7 @@ const Timeline = (props) => {
 
             setData(data)
         }
+
         if (timelineFilter === 'Daily')
             calculateTimeline(props.abscenceData, props.attendanceData, 'DD MMM', 'daily');
         if (timelineFilter === 'Weekly')
