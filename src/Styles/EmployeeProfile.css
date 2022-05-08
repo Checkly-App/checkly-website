@@ -1,6 +1,6 @@
 .cardProfile{
     width: 400px;
-    height: 500px;
+    height: 600px;
     background-color: white;
     border-radius: 10px;
     box-shadow: 0px 1px 10px 1px rgba(0, 0, 0, 0.3);
@@ -23,19 +23,29 @@
     transform: translate(95px 45px);
 }
 
- .imgProfile{
-    border: 2px solid blue;
-} 
-
  .lower-containerProfile{
     height: 300px;
     background-color: white;
     padding: 32px;
  }
 
-.lower-containerProfile .h4,.p{
+
+ .EmployeeProfileSubHeader{
     text-align: left;
     display: inline;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    /* margin-top: 30px; */
+    /* padding-bottom: 30px; */
+    font-size: 20px;
+ }
+
+ .EmployeeProfileHeader{
+    font-size: 25px;
+ }
+
+.employeeInfo{
+    text-align: left;
+    display: inline;
+    /* padding-top: 30px; */
+    /* padding-bottom: 30px; */
+    font-size: 15px;
 } 

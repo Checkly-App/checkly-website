@@ -1,79 +1,80 @@
 import { React, useState, useEffect } from 'react'
- import {ref, getDatabase } from 'firebase/database';
 import "../../../Styles/EmployeeProfile.css"
-
-// import { ref, onValue,getDatabase } from 'firebase/database';
-// import { database, auth } from '../../../utilities/firebase';
-import { ContentCutOutlined } from '@mui/icons-material';
-// const [loading, setLoading] = useState(false);
+import { ref, onValue } from 'firebase/database';
+import { database } from '../../../utilities/firebase';
 
 const EmployeeProfile = (props) => {
+    
+    const [name, setName] = useState('d');
+    const [position, setPosition] = useState('d');
+    const [department, setDepartment] = useState('d');
+    const [email, setEmail] = useState('d');
+    const [phone, setPhone] = useState('d');
+    const [id, setId] = useState('d');
+    const [address, setAddress] = useState('d');
+    const [birthdate, setBirthdate] = useState('d');
+    const [gender, setGender] = useState('d');
 
-    const [name, setName] = useState('');
-    const [position, setPosition] = useState('');
-    const [department, setDepartment] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
-    const [id, setId] = useState('');
-    const [address, setAddress] = useState('');
-    const [birthdate, setBirthdate] = useState('');
-    const [gender, setGender] = useState('');
-
-    const fetchEmployeeInfo = () => {
-        const db = getDatabase();
-        const name = '';
-        const position = '';
-        const department = '';
-        const email = '';
-        const phone = '';
-        const id = '';
-        const address = '';
-        const birthdate = '';
-        const gender = '';
-        const EmployeeNode = ref(db, 'Employee/'+props.uid); // TODO: - UserID to be passed from shahad
-        EmployeeNode.on('value', snapshot => {
-            
-            name = snapshot.val().name;
-         
-                  
+    //MARK: - search for employee with props.uid
+    useEffect(() =>{
+        onValue(ref(database, 'Employee/'+props.uid), (snapshot) => {
+            const data = snapshot.val();
+            //1-Employee name
+            const name = data.name;    
             setName(name);
-            position = snapshot.val().position;
+            //2-Employee position
+            const position = data.position;
             setPosition(position);
-            department = snapshot.val().department;
+            //3-Employee department
+            const department = data.department;
             setDepartment(department);
-            email = snapshot.val().email;
+            //4-Employee email
+            const email = data.email;
             setEmail(email);
-            phone = snapshot.val().phone;
+            //Employee phone
+            const phone = data.phone_number;
             setPhone(phone);
-            id = snapshot.val().employee_id;
+            //5-Employee id
+            const id = data.employee_id;
             setId(id);
-            address = snapshot.val().address;
+            //6-Employee address
+            const address = data.address;
             setAddress(address);
-            birthdate = snapshot.val().birthdate;
+            //7-Employee birthdate
+            const birthdate = data.birthdate;
             setBirthdate(birthdate);
-            gender = snapshot.val().gender;
+            //8-Employee gender
+            const gender = data.gender;
             setGender(gender);
         });
-    }
-
-    useEffect(() =>{
-      let  uid = props.uid
-        //fetchEmployeeInfo();
     }, [props.uid]);
+
+
+
+    //MARK: - fetching department info
+    useEffect(() =>{
+        onValue(ref(database, 'Department/'+department), (snapshot) => {
+            const data = snapshot.val();
+            //9- Department name
+            const department = data.name;
+            setDepartment(department);
+        });
+    });
+
 
     return (
         <div className='cardProfile'>
             <div className='upper-containerProfile'></div>
             <div className='lower-containerProfile'>
-                <h1 >name</h1>
-                <h4 className="h4">Position:</h4> <p className="p">{position}</p><br></br><br></br>
-                <h4 className="h4">Department:</h4> <p className="p">{department}</p><br></br><br></br>
-                <h4 className="h4">Email:</h4> <p className="p">{email}</p><br></br><br></br>
-                <h4 className="h4">Phone number:</h4> <p className="p">{phone}</p><br></br><br></br>
-                <h4 className="h4">Employee ID:</h4> <p className="p">{id}</p><br></br><br></br>
-                <h4 className="h4">Address: </h4> <p className="p">{address}</p><br></br><br></br>
-                <h4 className="h4">Birthdate: </h4> <p className="p">{birthdate}</p><br></br><br></br>
-                <h4 className="h4">gender: </h4> <p className="p">{gender}</p><br></br><br></br>
+                <h1 className="EmployeeProfileHeader">{name}</h1> <br></br>
+                <h4 className="EmployeeProfileSubHeader">Position:  </h4> <p className="employeeInfo">{position}</p><br></br><br></br>
+                <h4 className="EmployeeProfileSubHeader">Department:  </h4> <p className="employeeInfo">{department}</p><br></br><br></br>
+                <h4 className="EmployeeProfileSubHeader">Email:  </h4> <p className="employeeInfo">{email}</p><br></br><br></br>
+                <h4 className="EmployeeProfileSubHeader">Phone number:  </h4> <p className="employeeInfo">{phone}</p><br></br><br></br>
+                <h4 className="EmployeeProfileSubHeader">Employee ID:  </h4> <p className="employeeInfo">{id}</p><br></br><br></br>
+                <h4 className="EmployeeProfileSubHeader">Address:  </h4> <p className="employeeInfo">{address}</p><br></br><br></br>
+                <h4 className="EmployeeProfileSubHeader">Birthdate:  </h4> <p className="employeeInfo">{birthdate}</p><br></br><br></br>
+                <h4 className="EmployeeProfileSubHeader">gender:  </h4> <p className="employeeInfo">{gender}</p><br></br><br></br>
             </div>
         </div>
     )
