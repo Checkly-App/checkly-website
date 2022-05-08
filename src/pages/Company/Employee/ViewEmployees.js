@@ -287,7 +287,7 @@ const ViewEmployees = () => {
       return
     }
     else {
-     
+     setload(true)
       DeleteEmployee({
 
         uid: index.id
