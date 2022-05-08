@@ -3,6 +3,7 @@ import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { Subtitle, Title, Wrapper } from '../Dashboard';
 import { MainWrapper, Header } from './AddLayout';
 import EmployeeStatistics from './EmployeeStatistics';
+import EmployeeProfile from './EmployeeProfile';
 import { useLocation } from 'react-router-dom';
 
 const ViewLayout = () => {
@@ -36,7 +37,7 @@ const ViewLayout = () => {
                     <ToggleButton value="profile">View Profile</ToggleButton>
                 </ToggleButtonGroup>
             </Header>
-            {alignment === 'statistics' ? <EmployeeStatistics uid={employee.id} /> : <></>}
+            {alignment === 'statistics' ? <EmployeeStatistics uid={employee.id} /> : <EmployeeProfile uid={employee.id}/>}
         </Wrapper>
     );
 };
