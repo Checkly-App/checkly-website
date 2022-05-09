@@ -22,6 +22,13 @@ const FilterWrapper = styled.div`
     justify-content: space-between;
     align-items: center;
 `
+export const NoRecords = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
 const Timeline = (props) => {
     const [timelineFilter, setTimelineFilter] = useState('Monthly');
     const [data, setData] = useState();
@@ -105,31 +112,34 @@ const Timeline = (props) => {
                     val={timelineFilter}
                     handleChange={(event) => { setTimelineFilter(event.target.value) }} />
             </FilterWrapper>
-            <ResponsiveContainer width='100%' height='100%'>
-                <LineChart data={data}
-                    margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
-                    <CartesianGrid
-                        vertical={false}
-                        strokeDasharray='3 3' />
-                    <XAxis dataKey='name' tick={{ fontSize: 12 }} />
-                    <YAxis tick={{ fontSize: 12 }} width={30} />
-                    <Tooltip cursor={{ fill: 'rgba(206, 206, 206, 0.2)' }} />
-                    <Legend
-                        iconSize={12}
-                        verticalAlign='top'
-                        align='left'
-                        wrapperStyle={{ fontSize: '12px', paddingBottom: '20px' }}
-                        margin={{ top: 0, left: 0, right: 0, bottom: 10 }} />
-                    <Line
-                        dataKey='Attendance'
-                        stroke='#28B7EB'
-                        strokeWidth={2} />
-                    <Line
-                        dataKey='Abscence'
-                        stroke='#F65786'
-                        strokeWidth={2} />
-                </LineChart>
-            </ResponsiveContainer>
+            {props.attendanceData.length === 0 ?
+                <NoRecords> No records </NoRecords> :
+                <ResponsiveContainer width='100%' height='100%'>
+                    <LineChart data={data}
+                        margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
+                        <CartesianGrid
+                            vertical={false}
+                            strokeDasharray='3 3' />
+                        <XAxis dataKey='name' tick={{ fontSize: 12 }} />
+                        <YAxis tick={{ fontSize: 12 }} width={30} />
+                        <Tooltip cursor={{ fill: 'rgba(206, 206, 206, 0.2)' }} />
+                        <Legend
+                            iconSize={12}
+                            verticalAlign='top'
+                            align='left'
+                            wrapperStyle={{ fontSize: '12px', paddingBottom: '20px' }}
+                            margin={{ top: 0, left: 0, right: 0, bottom: 10 }} />
+                        <Line
+                            dataKey='Attendance'
+                            stroke='#28B7EB'
+                            strokeWidth={2} />
+                        <Line
+                            dataKey='Abscence'
+                            stroke='#F65786'
+                            strokeWidth={2} />
+                    </LineChart>
+                </ResponsiveContainer>
+            }
 
         </ChartContainer>
     );

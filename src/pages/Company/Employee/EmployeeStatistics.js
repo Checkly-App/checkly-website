@@ -81,8 +81,9 @@ const EmployeeStatistics = (props) => {
             const dataArray = snapshot.val();
             var dataStructured = [];
             for (let k in dataArray) {
-                if (k !== props.uid + '-' + auth.currentUser.uid) // look for the employee's node
+                if (k !== `emp${props.uid}-Attendance`) // look for the employee's node
                     continue;
+
                 const userArray = [];
                 for (let i in dataArray[k]) {
                     const attendance = {
@@ -92,6 +93,9 @@ const EmployeeStatistics = (props) => {
                         "status": dataArray[k][i]["status"],
                         "working-hours": dataArray[k][i]["working-hours"],
                     }
+                    if (attendance['check-out'] === 'TBD') //if employee has not checked-out do not include it in the analytics
+                        continue;
+
                     userArray.push(attendance);
 
                 }

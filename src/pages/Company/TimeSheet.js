@@ -110,10 +110,14 @@ const TimeSheet = () => {
             const dataArray = snapshot.val();
             var dataStructured = [];
             for (let k in dataArray) {
-                const uid = k.slice(0, k.indexOf('-'));
+                const uid = k.slice(3).slice(0, -11);
+
                 var userArray = [];
                 if (employeesIds.includes(uid)) {
                     for (let i in dataArray[k]) {
+                        if (dataArray[k][i]["check-out"] === 'TBD') //if employee has not checked-out do not include it in the analytics
+                            continue;
+
                         const check_out = moment(dataArray[k][i]["check-out"].toLowerCase(), "hh:mm A");
                         const check_in = moment(dataArray[k][i]["check-in"].toLowerCase(), "hh:mm A");
 

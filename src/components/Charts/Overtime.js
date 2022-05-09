@@ -4,6 +4,7 @@ import Filter from '../../components/Charts/Filter';
 import { XAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { groupBy } from 'lodash';
 import moment from 'moment';
+import { NoRecords } from './Timeline';
 
 const ChartTitle = styled.h1`
     font-size: 1em;
@@ -113,34 +114,37 @@ const Overtime = (props) => {
                     val={overTimeFilter}
                     handleChange={(event) => { setOvertimeFilter(event.target.value) }} />
             </FilterWrapper>
-            <ResponsiveContainer width="100%" height="90%">
-                <BarChart
-                    barSize={20}
-                    margin={{ top: 15, right: 5, left: 5, bottom: 0 }}
-                    data={data}>
-                    <defs>
-                        <linearGradient
-                            id="overTime"
-                            x1="0"
-                            y1="0"
-                            x2="0%"
-                            y2="100%"
-                            spreadMethod="reflect">
-                            <stop offset="25%" stopColor="#3CB4FF" />
-                            <stop offset="75%" stopColor="#3DA3F0" />
-                            <stop offset="125%" stopColor="#5A82F9" />
-                        </linearGradient>
-                    </defs>
-                    <XAxis
-                        tick={{ fontSize: 10 }}
-                        dataKey='name' />
-                    <Tooltip cursor={{ fill: 'rgba(206, 206, 206, 0.2)' }} />
-                    <Bar
-                        dataKey="Average Overtime"
-                        fill="url(#overTime)"
-                        radius={[5, 5, 0, 0]} />
-                </BarChart>
-            </ResponsiveContainer>
+            {props.attendanceData.length === 0 ?
+                <NoRecords> No records </NoRecords> :
+                <ResponsiveContainer width="100%" height="90%">
+                    <BarChart
+                        barSize={20}
+                        margin={{ top: 15, right: 5, left: 5, bottom: 0 }}
+                        data={data}>
+                        <defs>
+                            <linearGradient
+                                id="overTime"
+                                x1="0"
+                                y1="0"
+                                x2="0%"
+                                y2="100%"
+                                spreadMethod="reflect">
+                                <stop offset="25%" stopColor="#3CB4FF" />
+                                <stop offset="75%" stopColor="#3DA3F0" />
+                                <stop offset="125%" stopColor="#5A82F9" />
+                            </linearGradient>
+                        </defs>
+                        <XAxis
+                            tick={{ fontSize: 10 }}
+                            dataKey='name' />
+                        <Tooltip cursor={{ fill: 'rgba(206, 206, 206, 0.2)' }} />
+                        <Bar
+                            dataKey="Average Overtime"
+                            fill="url(#overTime)"
+                            radius={[5, 5, 0, 0]} />
+                    </BarChart>
+                </ResponsiveContainer>
+            }
         </ChartContainer>
     );
 };

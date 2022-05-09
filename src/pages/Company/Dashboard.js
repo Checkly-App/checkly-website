@@ -237,35 +237,9 @@ const Dashboard = () => {
             setDepartments(departments);
         });
 
-        // Fetch the attendance based on the company's employees
-        const attendanceListener = onValue(ref(database, 'LocationAttendance'), (snapshot) => {
-            const dataArray = snapshot.val();
-            var dataStructured = [];
-            for (let k in dataArray) {
-                if (k.slice(k.indexOf('-') + 1) !== auth.currentUser.uid)
-                    continue;
-
-                const userArray = [];
-                for (let i in dataArray[k]) {
-                    const attendance = {
-                        "date": i,
-                        "check-in": dataArray[k][i]["check-in"],
-                        "check-out": dataArray[k][i]["check-out"],
-                        "status": dataArray[k][i]["status"],
-                        "working-hours": dataArray[k][i]["working-hours"],
-                    }
-                    userArray.push(attendance);
-                }
-                dataStructured.push(userArray)
-            }
-            setData(dataStructured);
-            setLoading(false);
-        });
-
 
         return () => {
             departmentsListener();
-            attendanceListener();
             settingsListener();
             setData();
             setCompany();
@@ -313,6 +287,38 @@ const Dashboard = () => {
         for (let i in employees)
             employeesKeys.push(employees[i]['uid'])
 
+        // Fetch the attendance based on the company's employees
+        const attendanceListener = onValue(ref(database, 'LocationAttendance'), (snapshot) => {
+            const dataArray = snapshot.val();
+            var dataStructured = [];
+            for (let k in dataArray) {
+                let uid = k.slice(3).slice(0, -11);
+
+                if (!employeesKeys.includes(uid))
+                    continue;
+
+                const userArray = [];
+                for (let i in dataArray[k]) {
+                    const attendance = {
+                        "date": i,
+                        "check-in": dataArray[k][i]["check-in"],
+                        "check-out": dataArray[k][i]["check-out"],
+                        "status": dataArray[k][i]["status"],
+                        "working-hours": dataArray[k][i]["working-hours"],
+                    }
+
+                    if (attendance['check-out'] === 'TBD') //if employee has not checked-out do not include it in the analytics
+                        continue;
+
+                    userArray.push(attendance);
+                }
+                dataStructured.push(userArray);
+            }
+            setData(dataStructured);
+            setLoading(false);
+        });
+
+
         // Fetch the company's meetings    
         const meetingsListener = onValue(ref(database, 'Meetings'), (snapshot) => {
             const data = snapshot.val();
@@ -332,6 +338,7 @@ const Dashboard = () => {
 
             return () => {
                 meetingsListener();
+                attendanceListener();
                 setMeetings();
             }
 

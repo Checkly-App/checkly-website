@@ -4,7 +4,7 @@ import { ref, onValue } from 'firebase/database';
 import { database } from '../../../utilities/firebase';
 
 const EmployeeProfile = (props) => {
-    
+
     const [name, setName] = useState('');
     const [position, setPosition] = useState('');
     const [departmentID, setDepartmentID] = useState('');
@@ -20,26 +20,26 @@ const EmployeeProfile = (props) => {
     let today = new Date();
     var date = "";
 
-    if(today.getDate() < 10){
+    if (today.getDate() < 10) {
         date = "0" + today.getDate() + "-";
-    }else{
+    } else {
         date = today.getDate() + "-";
     }
 
-    if(parseInt(today.getMonth()+1) < 10){
-        date = date + "0" + parseInt(today.getMonth()+1) + "-";
-    }else{
-        date = date + parseInt(today.getMonth()+1) + "-";
+    if (parseInt(today.getMonth() + 1) < 10) {
+        date = date + "0" + parseInt(today.getMonth() + 1) + "-";
+    } else {
+        date = date + parseInt(today.getMonth() + 1) + "-";
     }
 
     date = date + today.getFullYear();
 
     //MARK: - search for employee with props.uid
-    useEffect(() =>{
-        onValue(ref(database, 'Employee/'+props.uid), (snapshot) => {
+    useEffect(() => {
+        onValue(ref(database, 'Employee/' + props.uid), (snapshot) => {
             const data = snapshot.val();
             //1-Employee name
-            const name = data.name;    
+            const name = data.name;
             setName(name);
             //2-Employee position
             const position = data.position;
@@ -71,8 +71,8 @@ const EmployeeProfile = (props) => {
 
 
     //MARK: - fetching department info
-    useEffect(() =>{
-        onValue(ref(database, 'Department/'+departmentID), (snapshot) => {
+    useEffect(() => {
+        onValue(ref(database, 'Department/' + departmentID), (snapshot) => {
             const data = snapshot.val();
             //9- Department name
             const dep = data.name;
@@ -82,24 +82,24 @@ const EmployeeProfile = (props) => {
 
 
     //MARK: - fetching attendance info
-    useEffect(() =>{
+    useEffect(() => {
         console.log('USER ID: ' + props.uid);
         onValue(ref(database, 'LocationAttendance'), (snapshot) => {
-            if(snapshot.hasChild('emp'+props.uid+'-Attendance')){
-                if(snapshot.hasChild('emp'+props.uid+'-Attendance/'+date)){
+            if (snapshot.hasChild('emp' + props.uid + '-Attendance')) {
+                if (snapshot.hasChild('emp' + props.uid + '-Attendance/' + date)) {
                     // employee is checked in for the day
-                    if(snapshot.child('emp'+props.uid+'-Attendance/'+date).val()['check-out'] != "TBD"){
+                    if (snapshot.child('emp' + props.uid + '-Attendance/' + date).val()['check-out'] != "TBD") {
                         setCheckIn("Employee is checked out");
-                    }else{
-                        setCheckIn("Emplyee is checked In");
+                    } else {
+                        setCheckIn("Employee is checked In");
                     }
-                }else{
+                } else {
                     //employee haven't checked in for the day
-                    setCheckIn('Emplyee havn\'t checked in for the day');
+                    setCheckIn('Employee haven\'t checked in for the day');
                 }
-            }else{
+            } else {
                 //new employee that have no record
-                setCheckIn('New emplyee that have no record yet');
+                setCheckIn('New employee that have no record yet');
             }
         });
 

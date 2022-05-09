@@ -4,6 +4,7 @@ import Filter from '../../components/Charts/Filter';
 import { XAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { groupBy } from 'lodash';
 import moment from 'moment';
+import { NoRecords } from './Timeline';
 
 const ChartTitle = styled.h1`
     font-size: 1em;
@@ -115,35 +116,38 @@ const Worked = (props) => {
                     val={workedFilter}
                     handleChange={(event) => { setWorkedFilter(event.target.value) }} />
             </FilterWrapper>
-            <ResponsiveContainer width="100%" height="90%">
-                <BarChart
-                    barSize={20}
-                    margin={{ top: 15, right: 5, left: 5, bottom: 0 }}
-                    data={data}>
-                    <defs>
-                        <linearGradient
-                            id="workedHours"
-                            x1="0"
-                            y1="0"
-                            x2="0%"
-                            y2="100%"
-                            spreadMethod="reflect">
-                            <stop offset="25%" stopColor="#7B5EFF" />
-                            <stop offset="75%" stopColor="#664EF8" />
-                            <stop offset="125%" stopColor="#4D21E6" />
-                        </linearGradient>
-                    </defs>
-                    <XAxis
-                        tick={{ fontSize: 10 }}
-                        dataKey='name'
-                    />
-                    <Tooltip cursor={{ fill: 'rgba(206, 206, 206, 0.2)' }} />
-                    <Bar
-                        dataKey="Average Worked"
-                        fill="url(#workedHours)"
-                        radius={[5, 5, 0, 0]} />
-                </BarChart>
-            </ResponsiveContainer>
+            {props.attendanceData.length === 0 ?
+                <NoRecords> No records </NoRecords> :
+                <ResponsiveContainer width="100%" height="90%">
+                    <BarChart
+                        barSize={20}
+                        margin={{ top: 15, right: 5, left: 5, bottom: 0 }}
+                        data={data}>
+                        <defs>
+                            <linearGradient
+                                id="workedHours"
+                                x1="0"
+                                y1="0"
+                                x2="0%"
+                                y2="100%"
+                                spreadMethod="reflect">
+                                <stop offset="25%" stopColor="#7B5EFF" />
+                                <stop offset="75%" stopColor="#664EF8" />
+                                <stop offset="125%" stopColor="#4D21E6" />
+                            </linearGradient>
+                        </defs>
+                        <XAxis
+                            tick={{ fontSize: 10 }}
+                            dataKey='name'
+                        />
+                        <Tooltip cursor={{ fill: 'rgba(206, 206, 206, 0.2)' }} />
+                        <Bar
+                            dataKey="Average Worked"
+                            fill="url(#workedHours)"
+                            radius={[5, 5, 0, 0]} />
+                    </BarChart>
+                </ResponsiveContainer>
+            }
         </ChartContainer>
     );
 };

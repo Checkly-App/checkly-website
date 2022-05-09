@@ -4,6 +4,7 @@ import Filter from '../../components/Charts/Filter';
 import { CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { groupBy } from 'lodash';
 import moment from 'moment';
+import { NoRecords } from './Timeline';
 
 const ChartContainer = styled.div`
     padding: 2em;
@@ -116,36 +117,40 @@ const LateMinutes = (props) => {
                     val={lateMinutesFilter}
                     handleChange={(event) => { setLateMinutesFilter(event.target.value) }} />
             </FilterWrapper>
-            <ResponsiveContainer width='100%' height='100%'>
-                <AreaChart
-                    data={data}
-                    margin={{ top: 15, right: 5, left: 15, bottom: 5 }}>
-                    <defs>
-                        <linearGradient
-                            id="linearGradient"
-                            x1="0"
-                            y1="0"
-                            x2="0%"
-                            y2="100%"
-                            spreadMethod="reflect">
-                            <stop offset="25%" stopColor="#F7AC68" />
-                            <stop offset="100%" stopColor="#F7AC6800" opacity={0} />
-                        </linearGradient>
-                    </defs>
-                    <CartesianGrid
-                        vertical={false}
-                        strokeDasharray='3 3' />
-                    <XAxis dataKey='name' tick={{ fontSize: 12 }} />
-                    <YAxis tick={{ fontSize: 12 }} width={20} />
-                    <Tooltip />
-                    <Area
-                        type="monotone"
-                        dataKey='Average Late Minutes'
-                        stroke='#F7AC68'
-                        fill='#F7AC6865'
-                        strokeWidth={2} />
-                </AreaChart>
-            </ResponsiveContainer>
+            {props.lateData.length === 0 ?
+                <NoRecords> No records </NoRecords>
+                :
+                <ResponsiveContainer width='100%' height='100%'>
+                    <AreaChart
+                        data={data}
+                        margin={{ top: 15, right: 5, left: 15, bottom: 5 }}>
+                        <defs>
+                            <linearGradient
+                                id="linearGradient"
+                                x1="0"
+                                y1="0"
+                                x2="0%"
+                                y2="100%"
+                                spreadMethod="reflect">
+                                <stop offset="25%" stopColor="#F7AC68" />
+                                <stop offset="100%" stopColor="#F7AC6800" opacity={0} />
+                            </linearGradient>
+                        </defs>
+                        <CartesianGrid
+                            vertical={false}
+                            strokeDasharray='3 3' />
+                        <XAxis dataKey='name' tick={{ fontSize: 12 }} />
+                        <YAxis tick={{ fontSize: 12 }} width={20} />
+                        <Tooltip />
+                        <Area
+                            type="monotone"
+                            dataKey='Average Late Minutes'
+                            stroke='#F7AC68'
+                            fill='#F7AC6865'
+                            strokeWidth={2} />
+                    </AreaChart>
+                </ResponsiveContainer>
+            }
         </ChartContainer>
     );
 };

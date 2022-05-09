@@ -35,7 +35,6 @@ const Details = styled.div`
     align-items: center;
     color: #A3A3A1;
     margin-top: 2em;
-
 `
 const Detail = styled.a`
     color: #A3A3A1;
@@ -52,9 +51,7 @@ const Footer = () => {
                 <Logo src={ChecklyLogo} alt='logo' />
             </App>
             <Details>
-                <Detail> Privacy Policy </Detail>
-                <Seperator> — </Seperator>
-                <Detail> Terms and Conditions </Detail>
+                <Detail href='mailto:checkly.services@gmail.com'> checkly.services@gmail.com </Detail>
                 <Seperator> — </Seperator>
                 <Detail href='https://github.com/Checkly-App'> Github </Detail>
             </Details>
