@@ -19,13 +19,19 @@ const EmployeeProfile = (props) => {
 
     let today = new Date();
     var date = "";
-    if(parseInt(today.getMonth()+1) < 10){
-        date = "0" + parseInt(today.getMonth()+1) + "-";
-    }
 
     if(today.getDate() < 10){
-        date = date + "0" + today.getDate() + "-";
+        date = "0" + today.getDate() + "-";
+    }else{
+        date = today.getDate() + "-";
     }
+
+    if(parseInt(today.getMonth()+1) < 10){
+        date = date + "0" + parseInt(today.getMonth()+1) + "-";
+    }else{
+        date = date + parseInt(today.getMonth()+1) + "-";
+    }
+
     date = date + today.getFullYear();
 
     //MARK: - search for employee with props.uid
@@ -77,13 +83,34 @@ const EmployeeProfile = (props) => {
 
     //MARK: - fetching attendance info
     useEffect(() =>{
-        onValue(ref(database, 'LocationAttendance/ emp'+props.uid+'-Attendance/'+date), (snapshot) => {
-            if(snapshot.val()['check-out'] != "TBD"){
-                setCheckIn("Employee is checked out");
+        console.log('USER ID: ' + props.uid);
+        onValue(ref(database, 'LocationAttendance'), (snapshot) => {
+            if(snapshot.hasChild('emp'+props.uid+'-Attendance')){
+                if(snapshot.hasChild('emp'+props.uid+'-Attendance/'+date)){
+                    // employee is checked in for the day
+                    if(snapshot.child('emp'+props.uid+'-Attendance/'+date).val()['check-out'] != "TBD"){
+                        setCheckIn("Employee is checked out");
+                    }else{
+                        setCheckIn("Emplyee is checked In");
+                    }
+                }else{
+                    //employee haven't checked in for the day
+                    setCheckIn('Emplyee havn\'t checked in for the day');
+                }
             }else{
-                setCheckIn("Emplyee is checked In");
+                //new employee that have no record
+                setCheckIn('New emplyee that have no record yet');
             }
         });
+
+
+        // onValue(ref(database, 'LocationAttendance/emp'+props.uid+'-Attendance/'+date), (snapshot) => {
+        //     if(snapshot.val()['check-out'] != "TBD"){
+        //         setCheckIn("Employee is checked out");
+        //     }else{
+        //         setCheckIn("Emplyee is checked In");
+        //     }
+        // });
     });
 
     return (
